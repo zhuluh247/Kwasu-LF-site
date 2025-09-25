@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KWASU Lost & Found Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #2980b9;
+            --accent-color: #f39c12;
+            --light-bg: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero-section h1 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .search-results {
+            margin-top: 2rem;
+        }
+        
+        .result-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .result-item h5 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-item .meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-item .meta i {
+            margin-right: 5px;
+        }
+        
+        .badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+        }
+        
+        .badge-lost {
+            background-color: #e74c3c;
+        }
+        
+        .badge-found {
+            background-color: #2ecc71;
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+        
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .toast-success {
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .toast-error {
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .platform-icons {
+            margin-top: 1rem;
+        }
+        
+        .platform-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .platform-icons a:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1>KWASU Lost & Found Portal</h1>
+            <p>Report lost items, found items, or search for your belongings across all platforms</p>
+            <div class="platform-icons">
+                <a href="#" title="Telegram Bot"><i class="bi bi-telegram"></i></a>
+                <a href="#" title="WhatsApp Bot"><i class="bi bi-whatsapp"></i></a>
+                <a href="#" title="Website Portal"><i class="bi bi-globe"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Report Lost Item Section -->
+            <div class="col-lg-6 mb-4">
+                <div class="section-card">
+                    <h3 class="section-title">
+                        <i class="bi bi-search"></i> Report Lost Item
+                    </h3>
+                    <form id="lost-item-form">
+                        <div class="mb-3">
+                            <label for="lost-item" class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="lost-item" placeholder="e.g., Water Bottle, Wallet, Phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lost-location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="lost-location" placeholder="e.g., Library, Cafeteria, Lecture Hall" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lost-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="lost-description" rows="3" placeholder="Provide details about your item (color, brand, unique features, etc.)" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lost-contact" class="form-label">Your Contact Information</label>
+                            <input type="text" class="form-control" id="lost-contact" placeholder="Phone number or email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Report Lost Item</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Report Found Item Section -->
+            <div class="col-lg-6 mb-4">
+                <div class="section-card">
+                    <h3 class="section-title">
+                        <i class="bi bi-gift"></i> Report Found Item
+                    </h3>
+                    <form id="found-item-form">
+                        <div class="mb-3">
+                            <label for="found-item" class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="found-item" placeholder="e.g., Keys, ID Card, Notebook" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="found-location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="found-location" placeholder="e.g., Parking Lot, Classroom, Sports Complex" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="found-contact" class="form-label">Your Contact Phone</label>
+                            <input type="tel" class="form-control" id="found-contact" placeholder="08012345678" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="found-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="found-description" rows="3" placeholder="Describe the item and where it was found"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Report Found Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="section-card">
+            <h3 class="section-title">
+                <i class="bi bi-search"></i> Search for Items
+            </h3>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search-input" placeholder="Enter keywords (e.g., water, keys, bag)">
+                        <button class="btn btn-primary" type="button" id="search-btn">Search</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="filter-type">
+                        <option value="all">All Items</option>
+                        <option value="lost">Lost Items Only</option>
+                        <option value="found">Found Items Only</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="loading-spinner" id="search-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Searching for items...</p>
+            </div>
+            
+            <div class="search-results" id="search-results"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
+            <p>For support: <a href="tel:09038323588">09038323588</a></p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            databaseURL: "YOUR_FIREBASE_DATABASE_URL"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // DOM Elements
+        const lostItemForm = document.getElementById('lost-item-form');
+        const foundItemForm = document.getElementById('found-item-form');
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const filterType = document.getElementById('filter-type');
+        const searchResults = document.getElementById('search-results');
+        const searchLoading = document.getElementById('search-loading');
+        const toastContainer = document.querySelector('.toast-container');
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toastId = 'toast-' + Date.now();
+            const toastHtml = `
+                <div id="${toastId}" class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="bi bi-${type === 'success' ? 'check-circle-fill text-success' : 'exclamation-triangle-fill text-danger'} me-2"></i>
+                        <strong class="me-auto">KWASU Lost & Found</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+        }
+        
+        // Report Lost Item
+        lostItemForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const item = document.getElementById('lost-item').value;
+            const location = document.getElementById('lost-location').value;
+            const description = document.getElementById('lost-description').value;
+            const contact = document.getElementById('lost-contact').value;
+            
+            try {
+                const newReportRef = database.ref('reports').push();
+                await newReportRef.set({
+                    type: 'lost',
+                    item,
+                    location,
+                    description,
+                    contact_info: contact,
+                    reporter: 'website',
+                    timestamp: new Date().toISOString()
+                });
+                
+                lostItemForm.reset();
+                showToast('Your lost item has been reported successfully!');
+                
+                // Check for matching found items
+                const matchingItems = await findMatchingItems(item, 'found');
+                if (matchingItems.length > 0) {
+                    let matchMessage = `We found ${matchingItems.length} matching item(s) that were reported found:\n\n`;
+                    matchingItems.forEach((item, index) => {
+                        matchMessage += `${index + 1}. ${item.item} at ${item.location}\n`;
+                        matchMessage += `Contact: ${item.contact_phone}\n\n`;
+                    });
+                    showToast(matchMessage, 'success');
+                }
+            } catch (error) {
+                console.error('Error reporting lost item:', error);
+                showToast('Failed to report lost item. Please try again.', 'error');
+            }
+        });
+        
+        // Report Found Item
+        foundItemForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const item = document.getElementById('found-item').value;
+            const location = document.getElementById('found-location').value;
+            const contact = document.getElementById('found-contact').value;
+            const description = document.getElementById('found-description').value;
+            
+            try {
+                const newReportRef = database.ref('reports').push();
+                await newReportRef.set({
+                    type: 'found',
+                    item,
+                    location,
+                    contact_phone: contact,
+                    description,
+                    reporter: 'website',
+                    timestamp: new Date().toISOString()
+                });
+                
+                foundItemForm.reset();
+                showToast('Your found item has been reported successfully!');
+                
+                // Show safety warning
+                const safetyMessage = `IMPORTANT: When someone contacts you to claim this item, please ask for verification details (color, brand, unique features) to confirm ownership. Do not return the item without proper verification.`;
+                showToast(safetyMessage, 'success');
+            } catch (error) {
+                console.error('Error reporting found item:', error);
+                showToast('Failed to report found item. Please try again.', 'error');
+            }
+        });
+        
+        // Search for Items
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+        
+        async function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const filter = filterType.value;
+            
+            if (!searchTerm) {
+                showToast('Please enter a search term', 'error');
+                return;
+            }
+            
+            searchLoading.style.display = 'block';
+            searchResults.innerHTML = '';
+            
+            try {
+                const snapshot = await database.ref('reports').once('value');
+                const reports = snapshot.val();
+                
+                if (!reports) {
+                    searchResults.innerHTML = '<p class="text-center">No items found in the database.</p>';
+                    searchLoading.style.display = 'none';
+                    return;
+                }
+                
+                const results = [];
+                
+                Object.entries(reports).forEach(([key, report]) => {
+                    if (filter !== 'all' && report.type !== filter) return;
+                    
+                    const searchText = `${report.item} ${report.location} ${report.description || ''}`.toLowerCase();
+                    if (searchText.includes(searchTerm)) {
+                        results.push({ ...report, id: key });
+                    }
+                });
+                
+                if (results.length === 0) {
+                    searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
+                } else {
+                    let resultsHtml = `<h4 class="mb-3">Found ${results.length} item(s) matching "${searchTerm}":</h4>`;
+                    
+                    results.forEach(report => {
+                        const date = new Date(report.timestamp).toLocaleString();
+                        const badgeClass = report.type === 'lost' ? 'badge-lost' : 'badge-found';
+                        const badgeText = report.type === 'lost' ? 'Lost' : 'Found';
+                        
+                        resultsHtml += `
+                            <div class="result-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5>${report.item}</h5>
+                                        <div class="meta">
+                                            <i class="bi bi-geo-alt"></i> ${report.location}
+                                        </div>
+                                        <div class="meta">
+                                            <i class="bi bi-clock"></i> ${date}
+                                        </div>
+                                        <p class="mt-2">${report.description || 'No description provided'}</p>
+                                    </div>
+                                    <span class="badge ${badgeClass}">${badgeText}</span>
+                                </div>
+                                ${report.type === 'found' ? 
+                                    `<div class="mt-3">
+                                        <i class="bi bi-telephone"></i> 
+                                        <a href="tel:${report.contact_phone}" class="fw-bold">${report.contact_phone}</a>
+                                    </div>` : 
+                                    report.contact_info ? 
+                                    `<div class="mt-3">
+                                        <i class="bi bi-person"></i> 
+                                        Contact: ${report.contact_info}
+                                    </div>` : ''
+                                }
+                            </div>
+                        `;
+                    });
+                    
+                    searchResults.innerHTML = resultsHtml;
+                }
+            } catch (error) {
+                console.error('Error searching items:', error);
+                showToast('Failed to search items. Please try again.', 'error');
+            } finally {
+                searchLoading.style.display = 'none';
+            }
+        }
+        
+        // Find matching items (for lost item reporting)
+        async function findMatchingItems(searchItem, type) {
+            try {
+                const snapshot = await database.ref('reports').once('value');
+                const reports = snapshot.val();
+                
+                if (!reports) return [];
+                
+                const searchKeywords = searchItem.toLowerCase().split(' ');
+                const matchingItems = [];
+                
+                Object.entries(reports).forEach(([key, report]) => {
+                    if (report.type === type) {
+                        const reportText = `${report.item} ${report.description || ''}`.toLowerCase();
+                        const matchScore = searchKeywords.reduce((score, keyword) => {
+                            return score + (reportText.includes(keyword) ? 1 : 0);
+                        }, 0);
+                        
+                        if (matchScore > 0) {
+                            matchingItems.push({...report, matchScore});
+                        }
+                    }
+                });
+                
+                return matchingItems.sort((a, b) => b.matchScore - a.matchScore);
+            } catch (error) {
+                console.error('Error finding matching items:', error);
+                return [];
+            }
+        }
+        
+        // Initialize with sample data (if needed)
+        window.addEventListener('load', () => {
+            // You can add initialization code here if needed
+        });
+    </script>
+</body>
+</html>
