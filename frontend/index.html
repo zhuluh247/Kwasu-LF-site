@@ -182,6 +182,46 @@
         .platform-icons a:hover {
             transform: scale(1.2);
         }
+        
+        .whatsapp-note {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        
+        .safety-tips {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .safety-tips h5 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .safety-tips ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+        
+        .safety-tips li {
+            margin-bottom: 8px;
+            color: #856404;
+        }
+        
+        .safety-tips li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .safety-tips i {
+            color: #ffc107;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -191,9 +231,8 @@
             <h1>KWASU Lost & Found Portal</h1>
             <p>Report lost items, found items, or search for your belongings across all platforms</p>
             <div class="platform-icons">
-                <a href="#" title="Telegram Bot"><i class="bi bi-telegram"></i></a>
-                <a href="#" title="WhatsApp Bot"><i class="bi bi-whatsapp"></i></a>
-                <a href="#" title="Website Portal"><i class="bi bi-globe"></i></a>
+                <a href="https://t.me/KwasuLostFound_Bot" target="_blank" title="Telegram Bot"><i class="bi bi-telegram"></i></a>
+                <a href="https://wa.link/9765zr" target="_blank" title="WhatsApp Bot"><i class="bi bi-whatsapp"></i></a>
             </div>
         </div>
     </section>
@@ -206,6 +245,9 @@
                     <h3 class="section-title">
                         <i class="bi bi-search"></i> Report Lost Item
                     </h3>
+                    <div class="whatsapp-note">
+                        <i class="bi bi-whatsapp"></i> <strong>Important:</strong> Please provide your WhatsApp number for faster communication.
+                    </div>
                     <form id="lost-item-form">
                         <div class="mb-3">
                             <label for="lost-item" class="form-label">Item Name</label>
@@ -220,8 +262,8 @@
                             <textarea class="form-control" id="lost-description" rows="3" placeholder="Provide details about your item (color, brand, unique features, etc.)" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="lost-contact" class="form-label">Your Contact Information</label>
-                            <input type="text" class="form-control" id="lost-contact" placeholder="Phone number or email" required>
+                            <label for="lost-contact" class="form-label">Your WhatsApp Number</label>
+                            <input type="tel" class="form-control" id="lost-contact" placeholder="e.g., 08012345678" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Report Lost Item</button>
                     </form>
@@ -234,6 +276,9 @@
                     <h3 class="section-title">
                         <i class="bi bi-gift"></i> Report Found Item
                     </h3>
+                    <div class="whatsapp-note">
+                        <i class="bi bi-whatsapp"></i> <strong>Important:</strong> Please provide your WhatsApp number for faster communication.
+                    </div>
                     <form id="found-item-form">
                         <div class="mb-3">
                             <label for="found-item" class="form-label">Item Name</label>
@@ -244,12 +289,8 @@
                             <input type="text" class="form-control" id="found-location" placeholder="e.g., Parking Lot, Classroom, Sports Complex" required>
                         </div>
                         <div class="mb-3">
-                            <label for="found-contact" class="form-label">Your Contact Phone</label>
-                            <input type="tel" class="form-control" id="found-contact" placeholder="08012345678" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="found-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="found-description" rows="3" placeholder="Describe the item and where it was found"></textarea>
+                            <label for="found-contact" class="form-label">Your WhatsApp Number</label>
+                            <input type="tel" class="form-control" id="found-contact" placeholder="e.g., 08012345678" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Report Found Item</button>
                     </form>
@@ -286,6 +327,50 @@
             </div>
             
             <div class="search-results" id="search-results"></div>
+        </div>
+
+        <!-- Safety Tips Section -->
+        <div class="section-card">
+            <h3 class="section-title">
+                <i class="bi bi-shield-check"></i> Safety Tips
+            </h3>
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle-fill"></i> <strong>Important:</strong> These safety guidelines are for school safety and to prevent scams. Please follow them carefully.
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="safety-tips">
+                        <h5><i class="bi bi-person-x"></i> For Lost Item Reporters</h5>
+                        <ul>
+                            <li>When someone contacts you claiming to have found your item, ask for specific details to verify ownership</li>
+                            <li>Never share personal information beyond what is necessary</li>
+                            <li>Meet in a safe, public place on campus to retrieve your item</li>
+                            <li>If you suspect a scam, report the person's number to KWASU Safety Unit or contact the developer</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="safety-tips">
+                        <h5><i class="bi bi-person-check"></i> For Found Item Reporters</h5>
+                        <ul>
+                            <li>When someone claims an item, ask for evidence of ownership (specific details, photos, etc.)</li>
+                            <li>Do not return the item until you are confident about the claimant's identity</li>
+                            <li>If you notice a false claim, report the person's number to KWASU Safety Unit immediately</li>
+                            <li>You can also contact the developer for assistance in reporting false claimants</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3 p-3 bg-light rounded">
+                <h6 class="text-center"><i class="bi bi-info-circle"></i> How to Report Suspicious Activity</h6>
+                <p class="mb-0 text-center">
+                    <strong>KWASU Safety Unit:</strong> Contact campus security | 
+                    <strong>Developer:</strong> <a href="tel:09038323588">09038323588</a>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -383,7 +468,7 @@
                     let matchMessage = `We found ${matchingItems.length} matching item(s) that were reported found:\n\n`;
                     matchingItems.forEach((item, index) => {
                         matchMessage += `${index + 1}. ${item.item} at ${item.location}\n`;
-                        matchMessage += `Contact: ${item.contact_phone}\n\n`;
+                        matchMessage += `WhatsApp: ${item.contact_phone}\n\n`;
                     });
                     showToast(matchMessage, 'success');
                 }
@@ -400,7 +485,6 @@
             const item = document.getElementById('found-item').value;
             const location = document.getElementById('found-location').value;
             const contact = document.getElementById('found-contact').value;
-            const description = document.getElementById('found-description').value;
             
             try {
                 const newReportRef = database.ref('reports').push();
@@ -409,7 +493,6 @@
                     item,
                     location,
                     contact_phone: contact,
-                    description,
                     reporter: 'website',
                     timestamp: new Date().toISOString()
                 });
@@ -486,19 +569,19 @@
                                         <div class="meta">
                                             <i class="bi bi-clock"></i> ${date}
                                         </div>
-                                        <p class="mt-2">${report.description || 'No description provided'}</p>
+                                        ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
                                     </div>
                                     <span class="badge ${badgeClass}">${badgeText}</span>
                                 </div>
                                 ${report.type === 'found' ? 
                                     `<div class="mt-3">
-                                        <i class="bi bi-telephone"></i> 
-                                        <a href="tel:${report.contact_phone}" class="fw-bold">${report.contact_phone}</a>
+                                        <i class="bi bi-whatsapp"></i> 
+                                        <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
                                     </div>` : 
                                     report.contact_info ? 
                                     `<div class="mt-3">
-                                        <i class="bi bi-person"></i> 
-                                        Contact: ${report.contact_info}
+                                        <i class="bi bi-whatsapp"></i> 
+                                        <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
                                     </div>` : ''
                                 }
                             </div>
