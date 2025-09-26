@@ -12,6 +12,7 @@
             --secondary-color: #2980b9;
             --accent-color: #f39c12;
             --light-bg: #ecf0f1;
+            --supporter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         
         body {
@@ -222,6 +223,207 @@
             color: #ffc107;
             margin-right: 8px;
         }
+        
+        /* Simple Section Break */
+        .section-break {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #ddd, transparent);
+            margin: 3rem 0;
+        }
+        
+        /* Enhanced Supporters Section */
+        .supporters-section {
+            background: var(--supporter-gradient);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 1rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .supporters-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        
+        .supporters-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .supporters-counter {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            display: inline-block;
+            min-width: 80px;
+        }
+        
+        .supporters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .supporter-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .supporter-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .supporter-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .supporter-avatar::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6ec7, #7873f5, #4bcffa, #f093fb);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .supporter-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .supporter-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .supporter-department {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+        
+        .toggle-supporters-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toggle-supporters-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .collapse {
+            transition: max-height 0.5s ease;
+        }
+        
+        .supporter-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Floating particles animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -372,6 +574,115 @@
                 </p>
             </div>
         </div>
+
+        <!-- Simple Section Break -->
+        <div class="section-break"></div>
+
+        <!-- Top Supporters Section -->
+        <div class="section-card">
+            <h3 class="section-title">
+                <i class="bi bi-people"></i> Top Supporters
+            </h3>
+            <p>We extend our heartfelt gratitude to the following individuals who supported this project:</p>
+            
+            <div class="supporters-section">
+                <div class="particles" id="particles"></div>
+                
+                <div class="supporters-header">
+                    <p>Meet our amazing supporters</p>
+                    <div class="supporters-counter" id="supporters-counter">0</div>
+                    <p>Incredible Contributors</p>
+                    
+                    <button class="btn toggle-supporters-btn" type="button" data-bs-toggle="collapse" data-bs-target="#supporters-list" aria-expanded="false" aria-controls="supporters-list">
+                        <i class="bi bi-chevron-down"></i> <span id="toggle-text">View Supporters</span>
+                    </button>
+                </div>
+                
+                <div class="collapse mt-4" id="supporters-list">
+                    <div class="supporters-grid">
+                        <div class="supporter-card">
+                            <div class="supporter-badge">1</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name One</div>
+                            <div class="supporter-role">Project Mentor</div>
+                            <div class="supporter-department">(Computer Science Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">2</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Two</div>
+                            <div class="supporter-role">Technical Advisor</div>
+                            <div class="supporter-department">(Mass Comm. Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">3</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Three</div>
+                            <div class="supporter-role">Design Contributor</div>
+                            <div class="supporter-department">(Fine Arts Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">4</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Four</div>
+                            <div class="supporter-role">Content Creator</div>
+                            <div class="supporter-department">(English Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">5</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Five</div>
+                            <div class="supporter-role">Community Manager</div>
+                            <div class="supporter-department">(Sociology Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">6</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Six</div>
+                            <div class="supporter-role">Beta Tester</div>
+                            <div class="supporter-department">(Mathematics Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">7</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Seven</div>
+                            <div class="supporter-role">Marketing Support</div>
+                            <div class="supporter-department">(Business Admin Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">8</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Eight</div>
+                            <div class="supporter-role">Documentation</div>
+                            <div class="supporter-department">(Library Science Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">9</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Nine</div>
+                            <div class="supporter-role">Feedback Provider</div>
+                            <div class="supporter-department">(Psychology Dpt.)</div>
+                        </div>
+                        
+                        <div class="supporter-card">
+                            <div class="supporter-badge">10</div>
+                            <div class="supporter-avatar">FN</div>
+                            <div class="supporter-name">Full Name Ten</div>
+                            <div class="supporter-role">Evangelist</div>
+                            <div class="supporter-department">(Political Science Dpt.)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -411,6 +722,56 @@
         const searchResults = document.getElementById('search-results');
         const searchLoading = document.getElementById('search-loading');
         const toastContainer = document.querySelector('.toast-container');
+        const toggleText = document.getElementById('toggle-text');
+        const supportersList = document.getElementById('supporters-list');
+        const supportersCounter = document.getElementById('supporters-counter');
+        const particles = document.getElementById('particles');
+        
+        // Create floating particles
+        function createParticles() {
+            const particleCount = 20;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 5 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animation = 'float linear infinite';
+                
+                particles.appendChild(particle);
+            }
+        }
+        
+        // Animate counter
+        function animateCounter(target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    supportersCounter.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    supportersCounter.textContent = Math.floor(start);
+                }
+            }, 16);
+        }
+        
+        // Toggle Supporters List
+        supportersList.addEventListener('show.bs.collapse', function () {
+            toggleText.textContent = 'Hide Supporters';
+            animateCounter(10);
+        });
+        
+        supportersList.addEventListener('hide.bs.collapse', function () {
+            toggleText.textContent = 'View Supporters';
+            supportersCounter.textContent = '0';
+        });
         
         // Show toast notification
         function showToast(message, type = 'success') {
@@ -629,9 +990,9 @@
             }
         }
         
-        // Initialize with sample data (if needed)
+        // Initialize
         window.addEventListener('load', () => {
-            // You can add initialization code here if needed
+            createParticles();
         });
     </script>
 </body>
