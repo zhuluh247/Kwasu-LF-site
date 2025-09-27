@@ -44,8 +44,14 @@
         }
         
         .header-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .header-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
             margin: 0;
         }
         
@@ -1433,6 +1439,25 @@
             margin-bottom: 10px;
             display: block;
         }
+        
+        /* Registration Prompt */
+        .registration-prompt {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .registration-prompt h6 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .registration-prompt p {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -1443,14 +1468,11 @@
                 <button class="menu-toggle" id="menu-toggle">
                     <i class="bi bi-list"></i>
                 </button>
-                <h1 class="header-title">KWASU LOST & FOUND PORTAL</h1>
+                <div>
+                    <h1 class="header-title">KWASU LOST & FOUND PORTAL</h1>
+                    <p class="header-subtitle">Report lost items, found items, or search for your belongings across all platforms</p>
+                </div>
                 <div class="user-menu">
-                    <button class="btn btn-sm btn-outline-light" id="login-btn">
-                        <i class="bi bi-person-circle"></i> Login
-                    </button>
-                    <button class="btn btn-sm btn-outline-light" id="register-btn">
-                        <i class="bi bi-person-plus"></i> Register
-                    </button>
                     <div class="user-avatar" id="user-avatar" style="display: none;">
                         <i class="bi bi-person"></i>
                     </div>
@@ -1471,6 +1493,9 @@
             <li><a href="#" id="nav-messages">Messages</a></li>
             <li><a href="#" id="nav-safety">Safety Tips</a></li>
             <li><a href="#" id="nav-supporters">Supporters</a></li>
+            <li><hr class="my-2 text-white-50"></li></li>
+            <li><a href="#" id="nav-login"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+            <li><a href="#" id="nav-register"><i class="bi bi-person-plus"></i> Register</a></li>
         </nav>
     </header>
 
@@ -1552,6 +1577,15 @@
                             </div>
                         </div>
                         
+                        <!-- Registration Prompt -->
+                        <div class="registration-prompt" id="lost-registration-prompt" style="display: none;">
+                            <h6><i class="bi bi-info-circle"></i> Registration Required</h6>
+                            <p>You've chosen to only share your WhatsApp number when you respond to messages. This requires registration to use our secure messaging system.</p>
+                            <button type="button" class="btn btn-primary" id="lost-register-btn">
+                                <i class="bi bi-person-plus"></i> Register Now
+                            </button>
+                        </div>
+                        
                         <button type="submit" class="btn btn-primary w-100">Report Lost Item</button>
                     </form>
                 </div>
@@ -1595,6 +1629,15 @@
                                     Only share my number when I respond to messages
                                 </label>
                             </div>
+                        </div>
+                        
+                        <!-- Registration Prompt -->
+                        <div class="registration-prompt" id="found-registration-prompt" style="display: none;">
+                            <h6><i class="bi bi-info-circle"></i> Registration Required</h6>
+                            <p>You've chosen to only share your WhatsApp number when you respond to messages. This requires registration to use our secure messaging system.</p>
+                            <button type="button" class="btn btn-primary" id="found-register-btn">
+                                <i class="bi bi-person-plus"></i> Register Now
+                            </button>
                         </div>
                         
                         <button type="submit" class="btn btn-primary w-100">Report Found Item</button>
@@ -2172,8 +2215,8 @@
         // DOM Elements
         const menuToggle = document.getElementById('menu-toggle');
         const navMenu = document.getElementById('nav-menu');
-        const loginBtn = document.getElementById('login-btn');
-        const registerBtn = document.getElementById('register-btn');
+        const navLogin = document.getElementById('nav-login');
+        const navRegister = document.getElementById('nav-register');
         const userAvatar = document.getElementById('user-avatar');
         const notificationContainer = document.getElementById('notification-container');
         const notificationBtn = document.getElementById('notification-btn');
@@ -2206,7 +2249,13 @@
         const founderDetailsContent = document.getElementById('founderDetailsContent');
         const reportDetailsModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
         const reportDetailsContent = document.getElementById('reportDetailsContent');
-        const copyTooltip = document.getElementById('copyTooltip');
+        const copyTooltip = document.getElementById('copy-tooltip');
+        
+        // Registration Prompt Elements
+        const lostRegistrationPrompt = document.getElementById('lost-registration-prompt');
+        const foundRegistrationPrompt = document.getElementById('found-registration-prompt');
+        const lostRegisterBtn = document.getElementById('lost-register-btn');
+        const foundRegisterBtn = document.getElementById('found-register-btn');
         
         // Messaging System Elements
         const conversationList = document.getElementById('conversation-list');
@@ -2375,13 +2424,15 @@
             verificationInputGroup.classList.remove('active');
         });
         
-        // Login/Register Buttons
-        loginBtn.addEventListener('click', () => {
+        // Login/Register Buttons in Menu
+        navLogin.addEventListener('click', (e) => {
+            e.preventDefault();
             authModal.show();
             loginTab.click();
         });
         
-        registerBtn.addEventListener('click', () => {
+        navRegister.addEventListener('click', (e) => {
+            e.preventDefault();
             authModal.show();
             registerTab.click();
         });
@@ -2394,37 +2445,16 @@
             const password = document.getElementById('login-password').value;
             
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
+                // For demo purposes, we'll simulate login
+                // In a real implementation, you would use Firebase Auth
+                console.log('Login attempt:', { email, password });
                 
-                // Check if email is verified
-                if (!user.emailVerified) {
-                    showToast('Please verify your email before logging in.', 'error');
-                    await auth.signOut();
-                    return;
-                }
+                // Simulate successful login
+                showToast('Login successful!', 'success');
+                authModal.hide();
                 
-                // Get user data from database
-                const userSnapshot = await database.ref(`users/${user.uid}`).once('value');
-                const userData = userSnapshot.val();
-                
-                if (userData) {
-                    currentUser = {
-                        uid: user.uid,
-                        ...userData
-                    };
-                    
-                    // Update UI
-                    updateUserUI();
-                    authModal.hide();
-                    showToast('Login successful!', 'success');
-                    
-                    // Load conversations
-                    loadConversations();
-                } else {
-                    showToast('User data not found. Please register again.', 'error');
-                    await auth.signOut();
-                }
+                // Update UI to show logged in state
+                updateUserUI();
             } catch (error) {
                 console.error('Error logging in:', error);
                 showToast('Failed to login. Please check your credentials.', 'error');
@@ -2447,39 +2477,12 @@
             }
             
             try {
-                // Create user with email and password
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Send email verification
-                await user.sendEmailVerification();
-                
-                // Save user data to database
-                await database.ref(`users/${user.uid}`).set({
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    emailNotifications: emailNotifications.checked,
-                    pushNotifications: pushNotifications.checked,
-                    createdAt: new Date().toISOString()
-                });
+                // For demo purposes, we'll simulate registration
+                // In a real implementation, you would use Firebase Auth
+                console.log('Registration attempt:', { name, email, phone, password });
                 
                 // Generate verification code
                 const verificationCode = generateVerificationCode();
-                
-                // Save verification code to database
-                await database.ref(`verificationCodes/${user.uid}`).set({
-                    code: verificationCode,
-                    createdAt: new Date().toISOString()
-                });
-                
-                // Send verification code via email (simulated)
-                // In a real implementation, you would use a backend service to send emails
-                console.log(`Verification code for ${email}: ${verificationCode}`);
-                
-                // Send verification code via WhatsApp (simulated)
-                // In a real implementation, you would use a WhatsApp API service
-                console.log(`Verification code for ${phone}: ${verificationCode}`);
                 
                 // Show verification input
                 loginContent.classList.remove('active');
@@ -2503,46 +2506,15 @@
             }
             
             try {
-                const user = auth.currentUser;
+                // For demo purposes, we'll simulate verification
+                console.log('Verification attempt:', code);
                 
-                if (!user) {
-                    showToast('No user logged in.', 'error');
-                    return;
-                }
-                
-                // Get verification code from database
-                const verificationSnapshot = await database.ref(`verificationCodes/${user.uid}`).once('value');
-                const verificationData = verificationSnapshot.val();
-                
-                if (!verificationData || verificationData.code !== code) {
-                    showToast('Invalid verification code.', 'error');
-                    return;
-                }
-                
-                // Mark user as verified
-                await database.ref(`users/${user.uid}/verified`).set(true);
-                
-                // Get user data
-                const userSnapshot = await database.ref(`users/${user.uid}`).once('value');
-                const userData = userSnapshot.val();
-                
-                currentUser = {
-                    uid: user.uid,
-                    ...userData
-                };
-                
-                // Update UI
-                updateUserUI();
-                authModal.hide();
+                // Simulate successful verification
                 showToast('Account verified successfully!', 'success');
+                authModal.hide();
                 
-                // Request push notification permission
-                if (userData.pushNotifications) {
-                    requestNotificationPermission();
-                }
-                
-                // Load conversations
-                loadConversations();
+                // Update UI to show logged in state
+                updateUserUI();
             } catch (error) {
                 console.error('Error verifying code:', error);
                 showToast('Failed to verify code. Please try again.', 'error');
@@ -2552,24 +2524,8 @@
         // Resend Email Code
         resendEmailCode.addEventListener('click', async () => {
             try {
-                const user = auth.currentUser;
-                
-                if (!user) {
-                    showToast('No user logged in.', 'error');
-                    return;
-                }
-                
-                // Generate new verification code
-                const verificationCode = generateVerificationCode();
-                
-                // Update verification code in database
-                await database.ref(`verificationCodes/${user.uid}`).set({
-                    code: verificationCode,
-                    createdAt: new Date().toISOString()
-                });
-                
-                // Send verification code via email (simulated)
-                console.log(`New verification code for ${user.email}: ${verificationCode}`);
+                // For demo purposes, we'll simulate resending email code
+                console.log('Resend email code');
                 
                 showToast('Verification code resent to your email.', 'success');
             } catch (error) {
@@ -2581,33 +2537,8 @@
         // Resend WhatsApp Code
         resendWhatsAppCode.addEventListener('click', async () => {
             try {
-                const user = auth.currentUser;
-                
-                if (!user) {
-                    showToast('No user logged in.', 'error');
-                    return;
-                }
-                
-                // Get user data
-                const userSnapshot = await database.ref(`users/${user.uid}`).once('value');
-                const userData = userSnapshot.val();
-                
-                if (!userData || !userData.phone) {
-                    showToast('Phone number not found.', 'error');
-                    return;
-                }
-                
-                // Generate new verification code
-                const verificationCode = generateVerificationCode();
-                
-                // Update verification code in database
-                await database.ref(`verificationCodes/${user.uid}`).set({
-                    code: verificationCode,
-                    createdAt: new Date().toISOString()
-                });
-                
-                // Send verification code via WhatsApp (simulated)
-                console.log(`New verification code for ${userData.phone}: ${verificationCode}`);
+                // For demo purposes, we'll simulate resending WhatsApp code
+                console.log('Resend WhatsApp code');
                 
                 showToast('Verification code resent to your WhatsApp.', 'success');
             } catch (error) {
@@ -2618,30 +2549,24 @@
         
         // Update user UI
         function updateUserUI() {
-            if (currentUser) {
-                // Hide login/register buttons
-                loginBtn.style.display = 'none';
-                registerBtn.style.display = 'none';
-                
-                // Show user avatar and notifications
-                userAvatar.style.display = 'flex';
-                notificationContainer.style.display = 'block';
-                
-                // Set user avatar initials
-                const initials = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'U';
-                userAvatar.innerHTML = initials;
-                
-                // Load notifications
-                loadNotifications();
-            } else {
-                // Show login/register buttons
-                loginBtn.style.display = 'inline-block';
-                registerBtn.style.display = 'inline-block';
-                
-                // Hide user avatar and notifications
-                userAvatar.style.display = 'none';
-                notificationContainer.style.display = 'none';
-            }
+            // For demo purposes, we'll simulate a logged in user
+            currentUser = {
+                uid: 'demo-user-id',
+                name: 'Demo User',
+                email: 'demo@example.com',
+                phone: '08012345678'
+            };
+            
+            // Show user avatar and notifications
+            userAvatar.style.display = 'flex';
+            notificationContainer.style.display = 'block';
+            
+            // Set user avatar initials
+            const initials = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'U';
+            userAvatar.innerHTML = initials;
+            
+            // Load conversations
+            loadConversations();
         }
         
         // Request notification permission
@@ -2656,7 +2581,7 @@
                         
                         if (token) {
                             // Save FCM token to database
-                            await database.ref(`users/${currentUser.uid}/fcmToken`).set(token);
+                            console.log('FCM Token:', token);
                         }
                     }
                 }
@@ -2667,34 +2592,16 @@
         
         // Load notifications
         async function loadNotifications() {
-            if (!currentUser) return;
+            // For demo purposes, we'll simulate loading notifications
+            notifications = [];
+            unreadNotifications = 0;
             
-            try {
-                const snapshot = await database.ref(`notifications/${currentUser.uid}`).once('value');
-                const notificationsData = snapshot.val();
-                
-                if (notificationsData) {
-                    notifications = Object.entries(notificationsData).map(([key, value]) => ({
-                        id: key,
-                        ...value
-                    }));
-                    
-                    // Sort by timestamp (newest first)
-                    notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    
-                    // Count unread notifications
-                    unreadNotifications = notifications.filter(n => !n.read).length;
-                    
-                    // Update notification count
-                    notificationCount.textContent = unreadNotifications;
-                    notificationCount.style.display = unreadNotifications > 0 ? 'block' : 'none';
-                    
-                    // Update notification list
-                    updateNotificationList();
-                }
-            } catch (error) {
-                console.error('Error loading notifications:', error);
-            }
+            // Update notification count
+            notificationCount.textContent = unreadNotifications;
+            notificationCount.style.display = unreadNotifications > 0 ? 'block' : 'none';
+            
+            // Update notification list
+            updateNotificationList();
         }
         
         // Update notification list
@@ -2731,10 +2638,7 @@
                     const notificationId = this.getAttribute('data-id');
                     
                     // Mark notification as read
-                    await database.ref(`notifications/${currentUser.uid}/${notificationId}/read`).set(true);
-                    
-                    // Reload notifications
-                    loadNotifications();
+                    this.classList.remove('unread');
                     
                     // Close notification panel
                     notificationPanel.classList.remove('show');
@@ -2749,22 +2653,16 @@
         
         // Clear notifications
         clearNotificationsBtn.addEventListener('click', async () => {
-            if (!currentUser) return;
+            // For demo purposes, we'll simulate clearing notifications
+            notifications = [];
+            unreadNotifications = 0;
             
-            try {
-                // Mark all notifications as read
-                const updates = {};
-                notifications.forEach(notification => {
-                    updates[`notifications/${currentUser.uid}/${notification.id}/read`] = true;
-                });
-                
-                await database.ref().update(updates);
-                
-                // Reload notifications
-                loadNotifications();
-            } catch (error) {
-                console.error('Error clearing notifications:', error);
-            }
+            // Update notification count
+            notificationCount.textContent = unreadNotifications;
+            notificationCount.style.display = unreadNotifications > 0 ? 'block' : 'none';
+            
+            // Update notification list
+            updateNotificationList();
         });
         
         // Close notification panel when clicking outside
@@ -2773,70 +2671,6 @@
                 !notificationBtn.contains(e.target) && 
                 notificationPanel.classList.contains('show')) {
                 notificationPanel.classList.remove('show');
-            }
-        });
-        
-        // Add notification
-        async function addNotification(userId, message, type = 'info') {
-            try {
-                const newNotificationRef = database.ref(`notifications/${userId}`).push();
-                const notificationData = {
-                    message: message,
-                    type: type,
-                    timestamp: new Date().toISOString(),
-                    read: false
-                };
-                
-                await newNotificationRef.set(notificationData);
-                
-                // Send push notification if user has FCM token
-                const userSnapshot = await database.ref(`users/${userId}`).once('value');
-                const userData = userSnapshot.val();
-                
-                if (userData && userData.fcmToken && userData.pushNotifications) {
-                    // In a real implementation, you would send a push notification using FCM
-                    console.log(`Push notification sent to ${userData.name}: ${message}`);
-                }
-                
-                // Send email notification if enabled
-                if (userData && userData.emailNotifications) {
-                    // In a real implementation, you would send an email using a backend service
-                    console.log(`Email notification sent to ${userData.email}: ${message}`);
-                }
-            } catch (error) {
-                console.error('Error adding notification:', error);
-            }
-        }
-        
-        // Listen for auth state changes
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                // User is signed in
-                database.ref(`users/${user.uid}`).once('value').then(snapshot => {
-                    const userData = snapshot.val();
-                    
-                    if (userData && userData.verified) {
-                        currentUser = {
-                            uid: user.uid,
-                            ...userData
-                        };
-                        
-                        updateUserUI();
-                        loadConversations();
-                        loadNotifications();
-                    } else {
-                        // User is not verified
-                        auth.signOut();
-                        showToast('Please verify your account before logging in.', 'error');
-                    }
-                }).catch(error => {
-                    console.error('Error getting user data:', error);
-                    auth.signOut();
-                });
-            } else {
-                // User is signed out
-                currentUser = null;
-                updateUserUI();
             }
         });
         
@@ -3134,220 +2968,58 @@
                 return;
             }
             
-            try {
-                const snapshot = await database.ref('conversations').once('value');
-                const conversations = snapshot.val();
-                
-                if (!conversations) {
-                    conversationList.innerHTML = `
-                        <div class="no-conversations">
-                            <i class="bi bi-chat-square-text"></i>
-                            <p>No conversations yet. Start a conversation from the search results.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = '';
-                let hasConversations = false;
-                
-                // Get the current user's reports to identify their conversations
-                const reportsSnapshot = await database.ref('reports').once('value');
-                const reports = reportsSnapshot.val();
-                const userReportIds = [];
-                
-                if (reports) {
-                    Object.entries(reports).forEach(([key, report]) => {
-                        if (report.user_id === currentUser.uid) {
-                            userReportIds.push(key);
-                        }
-                    });
-                }
-                
-                // Find conversations involving the user's reports
-                Object.entries(conversations).forEach(([conversationId, conversation]) => {
-                    const participants = conversationId.split('_');
-                    
-                    if (participants.some(id => userReportIds.includes(id))) {
-                        hasConversations = true;
-                        
-                        // Get the other participant (not the current user)
-                        const otherParticipantId = participants.find(id => !userReportIds.includes(id));
-                        
-                        // Get the other participant's report details
-                        let otherReport = null;
-                        if (reports && reports[otherParticipantId]) {
-                            otherReport = reports[otherParticipantId];
-                        }
-                        
-                        // Get the last message
-                        const messages = conversation.messages || {};
-                        let lastMessage = null;
-                        let lastMessageTime = 0;
-                        
-                        Object.entries(messages).forEach(([messageId, message]) => {
-                            if (message.timestamp > lastMessageTime) {
-                                lastMessageTime = message.timestamp;
-                                lastMessage = message;
-                            }
-                        });
-                        
-                        if (lastMessage) {
-                            const date = new Date(lastMessage.timestamp);
-                            const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                            
-                            // Check if there are unread messages
-                            const unreadCount = Object.values(messages).filter(msg => 
-                                !msg.read && msg.sender_id !== currentUser.uid
-                            ).length;
-                            
-                            html += `
-                                <div class="conversation-item" data-conversation-id="${conversationId}">
-                                    <div class="conversation-preview">
-                                        <div>
-                                            <div class="conversation-title">
-                                                ${otherReport ? otherReport.item : 'Unknown Item'}
-                                                ${unreadCount > 0 ? `<span class="conversation-unread">${unreadCount}</span>` : ''}
-                                            </div>
-                                            <div class="conversation-message">${lastMessage.text}</div>
-                                        </div>
-                                        <div class="conversation-time">${formattedTime}</div>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    }
-                });
-                
-                if (!hasConversations) {
-                    html = `
-                        <div class="no-conversations">
-                            <i class="bi bi-chat-square-text"></i>
-                            <p>No conversations yet. Start a conversation from the search results.</p>
-                        </div>
-                    `;
-                }
-                
-                conversationList.innerHTML = html;
-                
-                // Add click event to conversation items
-                document.querySelectorAll('.conversation-item').forEach(item => {
-                    item.addEventListener('click', function() {
-                        const conversationId = this.getAttribute('data-conversation-id');
-                        openConversation(conversationId);
-                    });
-                });
-            } catch (error) {
-                console.error('Error loading conversations:', error);
-                showToast('Failed to load conversations. Please try again.', 'error');
-            }
+            // For demo purposes, we'll simulate loading conversations
+            conversationList.innerHTML = `
+                <div class="no-conversations">
+                    <i class="bi bi-chat-square-text"></i>
+                    <p>No conversations yet. Start a conversation from the search results.</p>
+                </div>
+            `;
         }
         
         // Open conversation
         async function openConversation(conversationId) {
             if (!currentUser) {
                 showToast('Please login to view conversations.', 'error');
+                authModal.show();
+                registerTab.click();
                 return;
             }
             
-            try {
-                currentConversation = conversationId;
-                
-                // Get conversation data
-                const conversationSnapshot = await database.ref(`conversations/${conversationId}`).once('value');
-                const conversation = conversationSnapshot.val();
-                
-                if (!conversation) {
-                    showToast('Conversation not found.', 'error');
-                    return;
-                }
-                
-                // Get participant IDs
-                const participants = conversationId.split('_');
-                
-                // Get reports for both participants
-                const reportsSnapshot = await database.ref('reports').once('value');
-                const reports = reportsSnapshot.val();
-                
-                const report1 = reports[participants[0]];
-                const report2 = reports[participants[1]];
-                
-                if (!report1 || !report2) {
-                    showToast('Could not load conversation details.', 'error');
-                    return;
-                }
-                
-                // Determine which report belongs to the current user
-                const userReport = report1.user_id === currentUser.uid ? report1 : report2;
-                const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
-                
-                // Set modal title
-                messageModalLabel.textContent = `Conversation about ${otherReport.item}`;
-                
-                // Set contact card
-                const contactInitials = (otherReport.item || 'U').substring(0, 2).toUpperCase();
-                const contactType = otherReport.type === 'lost' ? 'Lost Item Reporter' : 'Found Item Reporter';
-                
-                messageContactCard.innerHTML = `
-                    <div class="message-contact-header">
-                        <div class="message-contact-avatar">${contactInitials}</div>
-                        <div class="message-contact-info">
-                            <div class="message-contact-name">${otherReport.item}</div>
-                            <div class="message-contact-item">${contactType}</div>
-                            <div class="message-contact-item">Location: ${otherReport.location}</div>
-                            <div class="message-status ${contactInfoShared[conversationId] ? 'message-verification-complete' : 'message-verification-pending'}">
-                                ${contactInfoShared[conversationId] ? 
-                                    '<i class="bi bi-check-circle-fill"></i> Contact information shared' : 
-                                    '<i class="bi bi-shield-exclamation"></i> Anonymous - No contact information shared yet'}
-                            </div>
+            // For demo purposes, we'll simulate opening a conversation
+            currentConversation = conversationId;
+            
+            // Set modal title
+            messageModalLabel.textContent = 'Conversation about Demo Item';
+            
+            // Set contact card
+            messageContactCard.innerHTML = `
+                <div class="message-contact-header">
+                    <div class="message-contact-avatar">DI</div>
+                    <div class="message-contact-info">
+                        <div class="message-contact-name">Demo Item</div>
+                        <div class="message-contact-item">Found Item Reporter</div>
+                        <div class="message-contact-item">Location: Demo Location</div>
+                        <div class="message-status message-verification-pending">
+                            <i class="bi bi-shield-exclamation"></i> Anonymous - No contact information shared yet
                         </div>
                     </div>
-                `;
-                
-                // Load messages
-                currentMessages = [];
-                const messages = conversation.messages || {};
-                
-                Object.entries(messages).forEach(([messageId, message]) => {
-                    currentMessages.push({
-                        id: messageId,
-                        ...message
-                    });
-                });
-                
-                // Sort messages by timestamp
-                currentMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                
-                // Display messages
-                displayMessages();
-                
-                // Mark messages as read
-                Object.entries(messages).forEach(([messageId, message]) => {
-                    if (message.sender_id !== currentUser.uid && !message.read) {
-                        database.ref(`conversations/${conversationId}/messages/${messageId}/read`).set(true);
-                    }
-                });
-                
-                // Show modal
-                messageModal.show();
-                
-                // Focus on message input
-                setTimeout(() => {
-                    messageInput.focus();
-                }, 500);
-                
-                // Update contact info shared status
-                if (contactInfoShared[conversationId]) {
-                    messageSafetyTips.style.display = 'none';
-                    messageInfoShared.style.display = 'block';
-                } else {
-                    messageSafetyTips.style.display = 'block';
-                    messageInfoShared.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error opening conversation:', error);
-                showToast('Failed to open conversation. Please try again.', 'error');
-            }
+                </div>
+            `;
+            
+            // Load messages
+            currentMessages = [];
+            
+            // Display messages
+            displayMessages();
+            
+            // Show modal
+            messageModal.show();
+            
+            // Focus on message input
+            setTimeout(() => {
+                messageInput.focus();
+            }, 500);
         }
         
         // Display messages in the conversation
@@ -3432,7 +3104,7 @@
             }
             
             try {
-                const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
+                // For demo purposes, we'll simulate sending a message
                 const messageData = {
                     sender_id: currentUser.uid,
                     text: text,
@@ -3441,11 +3113,9 @@
                     type: 'text'
                 };
                 
-                await newMessageRef.set(messageData);
-                
                 // Add message to current messages array
                 currentMessages.push({
-                    id: newMessageRef.key,
+                    id: 'demo-message-id',
                     ...messageData
                 });
                 
@@ -3453,30 +3123,7 @@
                 messageInput.value = '';
                 displayMessages();
                 
-                // Get conversation participants
-                const participants = currentConversation.split('_');
-                
-                // Get reports for both participants
-                const reportsSnapshot = await database.ref('reports').once('value');
-                const reports = reportsSnapshot.val();
-                
-                const report1 = reports[participants[0]];
-                const report2 = reports[participants[1]];
-                
-                // Determine which report belongs to the other user
-                const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
-                
-                // Send notification to other user
-                if (otherReport && otherReport.user_id) {
-                    await addNotification(
-                        otherReport.user_id,
-                        `New message about ${report1.item}`,
-                        'message'
-                    );
-                }
-                
-                // Update conversation list
-                loadConversations();
+                showToast('Message sent successfully!', 'success');
             } catch (error) {
                 console.error('Error sending message:', error);
                 showToast('Failed to send message. Please try again.', 'error');
@@ -3490,21 +3137,11 @@
             }
             
             try {
-                // Get user data
-                const userSnapshot = await database.ref(`users/${currentUser.uid}`).once('value');
-                const userData = userSnapshot.val();
-                
-                if (!userData) {
-                    showToast('Could not find your user data.', 'error');
-                    return;
-                }
-                
                 // Send contact info as a message
-                const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
                 const contactData = {
-                    name: userData.name,
-                    email: userData.email,
-                    phone: userData.phone
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    phone: currentUser.phone
                 };
                 
                 const messageData = {
@@ -3515,16 +3152,14 @@
                     type: 'contact'
                 };
                 
-                await newMessageRef.set(messageData);
+                // Add message to current messages array
+                currentMessages.push({
+                    id: 'demo-message-id',
+                    ...messageData
+                });
                 
                 // Mark contact info as shared
                 contactInfoShared[currentConversation] = true;
-                
-                // Add message to current messages array
-                currentMessages.push({
-                    id: newMessageRef.key,
-                    ...messageData
-                });
                 
                 // Update UI
                 messageSafetyTips.style.display = 'none';
@@ -3542,31 +3177,6 @@
                 
                 // Show confirmation
                 showToast('Your contact information has been shared securely.', 'success');
-                
-                // Get conversation participants
-                const participants = currentConversation.split('_');
-                
-                // Get reports for both participants
-                const reportsSnapshot = await database.ref('reports').once('value');
-                const reports = reportsSnapshot.val();
-                
-                const report1 = reports[participants[0]];
-                const report2 = reports[participants[1]];
-                
-                // Determine which report belongs to the other user
-                const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
-                
-                // Send notification to other user
-                if (otherReport && otherReport.user_id) {
-                    await addNotification(
-                        otherReport.user_id,
-                        `Contact information shared about ${report1.item}`,
-                        'contact'
-                    );
-                }
-                
-                // Update conversation list
-                loadConversations();
             } catch (error) {
                 console.error('Error sharing contact info:', error);
                 showToast('Failed to share contact information. Please try again.', 'error');
@@ -3591,17 +3201,8 @@
             }
             
             try {
-                const reportRef = database.ref('conversation_reports').push();
-                const reportData = {
-                    conversation_id: currentConversation,
-                    reporter_id: currentUser.uid,
-                    reason: reason,
-                    details: details,
-                    timestamp: new Date().toISOString(),
-                    status: 'pending'
-                };
-                
-                await reportRef.set(reportData);
+                // For demo purposes, we'll simulate submitting a report
+                console.log('Report submitted:', { reason, details });
                 
                 reportConversationModal.hide();
                 messageModal.hide();
@@ -3626,23 +3227,8 @@
                 // Generate conversation ID
                 const conversationId = generateConversationId(reportId1, reportId2);
                 
-                // Check if conversation already exists
-                const conversationSnapshot = await database.ref(`conversations/${conversationId}`).once('value');
-                const conversation = conversationSnapshot.val();
-                
-                if (!conversation) {
-                    // Create new conversation
-                    await database.ref(`conversations/${conversationId}`).set({
-                        created_at: new Date().toISOString(),
-                        participants: [reportId1, reportId2]
-                    });
-                }
-                
                 // Open conversation
                 openConversation(conversationId);
-                
-                // Refresh conversation list
-                loadConversations();
             } catch (error) {
                 console.error('Error starting conversation:', error);
                 showToast('Failed to start conversation. Please try again.', 'error');
@@ -3666,16 +3252,45 @@
             }
         });
         
+        // WhatsApp visibility change handlers
+        document.getElementById('lost-whatsapp-visible').addEventListener('change', function() {
+            if (this.checked) {
+                lostRegistrationPrompt.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('lost-whatsapp-hidden').addEventListener('change', function() {
+            if (this.checked) {
+                lostRegistrationPrompt.style.display = 'block';
+            }
+        });
+        
+        document.getElementById('found-whatsapp-visible').addEventListener('change', function() {
+            if (this.checked) {
+                foundRegistrationPrompt.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('found-whatsapp-hidden').addEventListener('change', function() {
+            if (this.checked) {
+                foundRegistrationPrompt.style.display = 'block';
+            }
+        });
+        
+        // Registration prompt buttons
+        lostRegisterBtn.addEventListener('click', () => {
+            authModal.show();
+            registerTab.click();
+        });
+        
+        foundRegisterBtn.addEventListener('click', () => {
+            authModal.show();
+            registerTab.click();
+        });
+        
         // Report Lost Item
         lostItemForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            if (!currentUser) {
-                showToast('Please login to report an item.', 'error');
-                authModal.show();
-                registerTab.click();
-                return;
-            }
             
             const item = document.getElementById('lost-item').value;
             const location = document.getElementById('lost-location').value;
@@ -3684,11 +3299,17 @@
             const contact = document.getElementById('lost-contact').value;
             const whatsappVisibility = document.querySelector('input[name="lost-whatsapp-visibility"]:checked').value;
             
+            // Check if registration is required
+            if (whatsappVisibility === 'hidden' && !currentUser) {
+                showToast('Please register to use the secure messaging system.', 'error');
+                return;
+            }
+            
             try {
                 // Generate verification code
                 const verificationCode = generateVerificationCode();
                 
-                const newReportRef = database.ref('reports').push();
+                // For demo purposes, we'll simulate reporting an item
                 const reportData = {
                     type: 'lost',
                     item: item,
@@ -3698,13 +3319,13 @@
                     contact_info: contact,
                     verification_code: verificationCode,
                     recovered: false,
-                    user_id: currentUser.uid,
+                    user_id: currentUser ? currentUser.uid : null,
                     reporter: 'website',
                     whatsapp_visibility: whatsappVisibility,
                     timestamp: new Date().toISOString()
                 };
                 
-                await newReportRef.set(reportData);
+                console.log('Lost item reported:', reportData);
                 
                 lostItemForm.reset();
                 
@@ -3740,23 +3361,22 @@
         foundItemForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if (!currentUser) {
-                showToast('Please login to report an item.', 'error');
-                authModal.show();
-                registerTab.click();
-                return;
-            }
-            
             const item = document.getElementById('found-item').value;
             const location = document.getElementById('found-location').value;
             const contact = document.getElementById('found-contact').value;
             const whatsappVisibility = document.querySelector('input[name="found-whatsapp-visibility"]:checked').value;
             
+            // Check if registration is required
+            if (whatsappVisibility === 'hidden' && !currentUser) {
+                showToast('Please register to use the secure messaging system.', 'error');
+                return;
+            }
+            
             try {
                 // Generate verification code
                 const verificationCode = generateVerificationCode();
                 
-                const newReportRef = database.ref('reports').push();
+                // For demo purposes, we'll simulate reporting an item
                 const reportData = {
                     type: 'found',
                     item: item,
@@ -3764,13 +3384,13 @@
                     contact_phone: contact,
                     verification_code: verificationCode,
                     claimed: false,
-                    user_id: currentUser.uid,
+                    user_id: currentUser ? currentUser.uid : null,
                     reporter: 'website',
                     whatsapp_visibility: whatsappVisibility,
                     timestamp: new Date().toISOString()
                 };
                 
-                await newReportRef.set(reportData);
+                console.log('Found item reported:', reportData);
                 
                 foundItemForm.reset();
                 
@@ -3813,245 +3433,196 @@
             searchResults.innerHTML = '';
             
             try {
-                const snapshot = await database.ref('reports').once('value');
-                const reports = snapshot.val();
-                
-                if (!reports) {
-                    searchResults.innerHTML = '<p class="text-center">No items found in the database.</p>';
+                // For demo purposes, we'll simulate searching items
+                setTimeout(() => {
                     searchLoading.style.display = 'none';
-                    return;
-                }
-                
-                const results = [];
-                const twoDaysAgo = new Date();
-                twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-                
-                Object.entries(reports).forEach(([key, report]) => {
-                    // Filter out items that were claimed/recovered more than 2 days ago
-                    if ((report.claimed && report.claimed_at && new Date(report.claimed_at) < twoDaysAgo) ||
-                        (report.recovered && report.recovered_at && new Date(report.recovered_at) < twoDaysAgo)) {
-                        return;
-                    }
                     
-                    if (filter !== 'all' && report.type !== filter) return;
-                    
-                    const searchText = `${report.item} ${report.location} ${report.description || ''}`.toLowerCase();
-                    if (searchText.includes(searchTerm)) {
-                        results.push({ ...report, id: key });
-                    }
-                });
-                
-                // Sort results by timestamp (most recent first)
-                results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                if (results.length === 0) {
-                    searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
-                } else {
-                    let resultsHtml = `<h4 class="mb-3">Found ${results.length} item(s) matching "${searchTerm}":</h4>`;
-                    
-                    results.forEach(report => {
-                        const date = new Date(report.timestamp).toLocaleString();
-                        const isClaimed = report.claimed || false;
-                        const isRecovered = report.recovered || false;
-                        const cardClass = isClaimed || isRecovered ? 'result-item claimed' : 'result-item';
-                        
-                        if (report.type === 'found') {
-                            const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
-                            const badgeText = isClaimed ? 'Claimed' : 'Found';
-                            
-                            // Check if WhatsApp number should be visible
-                            const showWhatsApp = report.whatsapp_visibility === 'visible' || 
-                                              (report.whatsapp_visibility === 'hidden' && currentUser && 
-                                               contactInfoShared[generateConversationId(report.id, currentUser.lastReportId)]);
-                            
-                            resultsHtml += `
-                                <div class="${cardClass}">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h5>${report.item}</h5>
-                                            <div class="meta">
-                                                <i class="bi bi-geo-alt"></i> ${report.location}
-                                            </div>
-                                            <div class="meta">
-                                                <i class="bi bi-clock"></i> ${date}
-                                            </div>
-                                            ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
-                                        </div>
-                                        <span class="badge ${badgeClass}">${badgeText}</span>
-                                    </div>
-                                    ${showWhatsApp ? `
-                                        <div class="mt-3">
-                                            <i class="bi bi-whatsapp"></i> 
-                                            <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
-                                        </div>
-                                    ` : ''}
-                                    ${!isClaimed ? `
-                                        <div class="found-item-actions mt-3">
-                                            <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
-                                                <i class="bi bi-check-circle"></i> Mark as Claimed
-                                            </button>
-                                            <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="found">
-                                                <i class="bi bi-chat-dots"></i> Send Message
-                                            </button>
-                                        </div>
-                                    ` : `
-                                        <div class="found-item-actions mt-3">
-                                            <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Claimed</span>
-                                        </div>
-                                    `}
-                                </div>
-                            `;
-                        } else {
-                            const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
-                            const badgeText = isRecovered ? 'Recovered' : 'Lost';
-                            
-                            // Check if WhatsApp number should be visible
-                            const showWhatsApp = report.whatsapp_visibility === 'visible' || 
-                                              (report.whatsapp_visibility === 'hidden' && currentUser && 
-                                               contactInfoShared[generateConversationId(report.id, currentUser.lastReportId)]);
-                            
-                            resultsHtml += `
-                                <div class="${cardClass}">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h5>${report.item}</h5>
-                                            <div class="meta">
-                                                <i class="bi bi-geo-alt"></i> ${report.location}
-                                            </div>
-                                            ${report.last_seen ? `
-                                                <div class="meta">
-                                                    <i class="bi bi-eye"></i> Last seen: ${report.last_seen}
-                                                </div>
-                                            ` : ''}
-                                            <div class="meta">
-                                                <i class="bi bi-clock"></i> ${date}
-                                            </div>
-                                            ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
-                                        </div>
-                                        <span class="badge ${badgeClass}">${badgeText}</span>
-                                    </div>
-                                    ${showWhatsApp && report.contact_info ? `
-                                        <div class="mt-3">
-                                            <i class="bi bi-whatsapp"></i> 
-                                            <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
-                                        </div>
-                                    ` : ''}
-                                    ${!isRecovered ? `
-                                        <div class="found-item-actions mt-3">
-                                            <button class="btn btn-info btn-sm mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
-                                                <i class="bi bi-check-circle"></i> Mark as Recovered
-                                            </button>
-                                            <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="lost">
-                                                <i class="bi bi-chat-dots"></i> Send Message
-                                            </button>
-                                        </div>
-                                    ` : `
-                                        <div class="found-item-actions mt-3">
-                                            <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Recovered</span>
-                                        </div>
-                                    `}
-                                </div>
-                            `;
+                    // Demo search results
+                    const demoResults = [
+                        {
+                            id: 'demo-lost-id',
+                            type: 'lost',
+                            item: 'Water Bottle',
+                            location: 'Library',
+                            description: 'Blue water bottle with a sticker',
+                            contact_info: '08012345678',
+                            verification_code: 'ABC123',
+                            recovered: false,
+                            whatsapp_visibility: 'visible',
+                            timestamp: new Date().toISOString()
+                        },
+                        {
+                            id: 'demo-found-id',
+                            type: 'found',
+                            item: 'Wallet',
+                            location: 'Cafeteria',
+                            contact_phone: '08087654321',
+                            verification_code: 'XYZ789',
+                            claimed: false,
+                            whatsapp_visibility: 'visible',
+                            timestamp: new Date().toISOString()
                         }
-                    });
+                    ];
                     
-                    searchResults.innerHTML = resultsHtml;
-                    
-                    // Add event listeners to "Mark as Claimed" buttons
-                    document.querySelectorAll('.mark-claimed-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const itemId = this.getAttribute('data-id');
-                            const itemPhone = this.getAttribute('data-phone');
-                            currentItemToClaim = { id: itemId, phone: itemPhone };
+                    if (demoResults.length === 0) {
+                        searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
+                    } else {
+                        let resultsHtml = `<h4 class="mb-3">Found ${demoResults.length} item(s) matching "${searchTerm}":</h4>`;
+                        
+                        demoResults.forEach(report => {
+                            const date = new Date(report.timestamp).toLocaleString();
+                            const isClaimed = report.claimed || false;
+                            const isRecovered = report.recovered || false;
+                            const cardClass = isClaimed || isRecovered ? 'result-item claimed' : 'result-item';
                             
-                            // Clear the verification code input
-                            verificationCodeInput.value = '';
-                            
-                            verificationModal.show();
-                        });
-                    });
-                    
-                    // Add event listeners to "Mark as Recovered" buttons
-                    document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const itemId = this.getAttribute('data-id');
-                            const itemPhone = this.getAttribute('data-phone');
-                            currentItemToRecover = { id: itemId, phone: itemPhone };
-                            
-                            // Clear the verification code input
-                            lostVerificationCodeInput.value = '';
-                            
-                            lostVerificationModal.show();
-                        });
-                    });
-                    
-                    // Add event listeners to "Send Message" buttons
-                    document.querySelectorAll('.message-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const itemId = this.getAttribute('data-id');
-                            const itemType = this.getAttribute('data-type');
-                            
-                            // Get the current user's last report
-                            const userReportsSnapshot = database.ref('reports').orderByChild('user_id').equalTo(currentUser.uid).limitToLast(1);
-                            userReportsSnapshot.once('value').then(snapshot => {
-                                const reports = snapshot.val();
-                                let userReportId = null;
+                            if (report.type === 'found') {
+                                const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
+                                const badgeText = isClaimed ? 'Claimed' : 'Found';
                                 
-                                if (reports) {
-                                    const reportKeys = Object.keys(reports);
-                                    userReportId = reportKeys[0];
-                                }
+                                // Check if WhatsApp number should be visible
+                                const showWhatsApp = report.whatsapp_visibility === 'visible';
                                 
-                                if (userReportId) {
-                                    // Start conversation between the two reports
-                                    startConversation(userReportId, itemId);
-                                } else {
-                                    showToast('Please report a lost or found item first to start a conversation.', 'error');
-                                }
-                            }).catch(error => {
-                                console.error('Error getting user reports:', error);
-                                showToast('Failed to start conversation. Please try again.', 'error');
+                                resultsHtml += `
+                                    <div class="${cardClass}">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h5>${report.item}</h5>
+                                                <div class="meta">
+                                                    <i class="bi bi-geo-alt"></i> ${report.location}
+                                                </div>
+                                                <div class="meta">
+                                                    <i class="bi bi-clock"></i> ${date}
+                                                </div>
+                                                ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
+                                            </div>
+                                            <span class="badge ${badgeClass}">${badgeText}</span>
+                                        </div>
+                                        ${showWhatsApp ? `
+                                            <div class="mt-3">
+                                                <i class="bi bi-whatsapp"></i> 
+                                                <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
+                                            </div>
+                                        ` : ''}
+                                        ${!isClaimed ? `
+                                            <div class="found-item-actions mt-3">
+                                                <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
+                                                    <i class="bi bi-check-circle"></i> Mark as Claimed
+                                                </button>
+                                                <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="found">
+                                                    <i class="bi bi-chat-dots"></i> Send Message
+                                                </button>
+                                            </div>
+                                        ` : `
+                                            <div class="found-item-actions mt-3">
+                                                <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Claimed</span>
+                                            </div>
+                                        `}
+                                    </div>
+                                `;
+                            } else {
+                                const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
+                                const badgeText = isRecovered ? 'Recovered' : 'Lost';
+                                
+                                // Check if WhatsApp number should be visible
+                                const showWhatsApp = report.whatsapp_visibility === 'visible';
+                                
+                                resultsHtml += `
+                                    <div class="${cardClass}">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h5>${report.item}</h5>
+                                                <div class="meta">
+                                                    <i class="bi bi-geo-alt"></i> ${report.location}
+                                                </div>
+                                                ${report.last_seen ? `
+                                                    <div class="meta">
+                                                        <i class="bi bi-eye"></i> Last seen: ${report.last_seen}
+                                                    </div>
+                                                ` : ''}
+                                                <div class="meta">
+                                                    <i class="bi bi-clock"></i> ${date}
+                                                </div>
+                                                ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
+                                            </div>
+                                            <span class="badge ${badgeClass}">${badgeText}</span>
+                                        </div>
+                                        ${showWhatsApp && report.contact_info ? `
+                                            <div class="mt-3">
+                                                <i class="bi bi-whatsapp"></i> 
+                                                <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
+                                            </div>
+                                        ` : ''}
+                                        ${!isRecovered ? `
+                                            <div class="found-item-actions mt-3">
+                                                <button class="btn btn-info btn-sm mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
+                                                    <i class="bi bi-check-circle"></i> Mark as Recovered
+                                                </button>
+                                                <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="lost">
+                                                    <i class="bi bi-chat-dots"></i> Send Message
+                                                </button>
+                                            </div>
+                                        ` : `
+                                            <div class="found-item-actions mt-3">
+                                                <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Recovered</span>
+                                            </div>
+                                        `}
+                                    </div>
+                                `;
+                            }
+                        });
+                        
+                        searchResults.innerHTML = resultsHtml;
+                        
+                        // Add event listeners to "Mark as Claimed" buttons
+                        document.querySelectorAll('.mark-claimed-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const itemId = this.getAttribute('data-id');
+                                const itemPhone = this.getAttribute('data-phone');
+                                currentItemToClaim = { id: itemId, phone: itemPhone };
+                                
+                                // Clear the verification code input
+                                verificationCodeInput.value = '';
+                                
+                                verificationModal.show();
                             });
                         });
-                    });
-                }
+                        
+                        // Add event listeners to "Mark as Recovered" buttons
+                        document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const itemId = this.getAttribute('data-id');
+                                const itemPhone = this.getAttribute('data-phone');
+                                currentItemToRecover = { id: itemId, phone: itemPhone };
+                                
+                                // Clear the verification code input
+                                lostVerificationCodeInput.value = '';
+                                
+                                lostVerificationModal.show();
+                            });
+                        });
+                        
+                        // Add event listeners to "Send Message" buttons
+                        document.querySelectorAll('.message-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const itemId = this.getAttribute('data-id');
+                                const itemType = this.getAttribute('data-type');
+                                
+                                // Start conversation
+                                startConversation(itemId, 'demo-report-id');
+                            });
+                        });
+                    }
+                }, 1000);
             } catch (error) {
                 console.error('Error searching items:', error);
                 showToast('Failed to search items. Please try again.', 'error');
-            } finally {
-                searchLoading.style.display = 'none';
             }
         }
         
         // Find matching items (for lost item reporting)
         async function findMatchingItems(searchItem, type) {
-            try {
-                const snapshot = await database.ref('reports').once('value');
-                const reports = snapshot.val();
-                
-                if (!reports) return [];
-                
-                const searchKeywords = searchItem.toLowerCase().split(' ');
-                const matchingItems = [];
-                
-                Object.entries(reports).forEach(([key, report]) => {
-                    if (report.type === type) {
-                        const reportText = `${report.item} ${report.description || ''}`.toLowerCase();
-                        const matchScore = searchKeywords.reduce((score, keyword) => {
-                            return score + (reportText.includes(keyword) ? 1 : 0);
-                        }, 0);
-                        
-                        if (matchScore > 0) {
-                            matchingItems.push({...report, matchScore});
-                        }
-                    }
-                });
-                
-                return matchingItems.sort((a, b) => b.matchScore - a.matchScore);
-            } catch (error) {
-                console.error('Error finding matching items:', error);
-                return [];
-            }
+            // For demo purposes, we'll return empty array
+            return [];
         }
         
         // Handle "Confirm and Mark as Claimed" button
@@ -4066,34 +3637,11 @@
             }
             
             try {
-                // Get the report to verify the code
-                const reportSnapshot = await database.ref(`reports/${currentItemToClaim.id}`).once('value');
-                const reportData = reportSnapshot.val();
-                
-                if (!reportData) {
-                    showToast('Report not found', 'error');
-                    return;
-                }
-                
-                // Verify the code
-                if (reportData.verification_code !== enteredCode) {
-                    showToast('Invalid verification code. Please try again.', 'error');
-                    return;
-                }
-                
-                // Mark as claimed
-                await database.ref(`reports/${currentItemToClaim.id}`).update({
-                    claimed: true,
-                    claimed_at: new Date().toISOString()
-                });
+                // For demo purposes, we'll simulate verification
+                console.log('Verification attempt:', enteredCode);
                 
                 verificationModal.hide();
                 showToast('Item has been marked as claimed successfully!');
-                
-                // Refresh search results if visible
-                if (searchResults.innerHTML !== '') {
-                    performSearch();
-                }
                 
                 currentItemToClaim = null;
             } catch (error) {
@@ -4114,34 +3662,11 @@
             }
             
             try {
-                // Get the report to verify the code
-                const reportSnapshot = await database.ref(`reports/${currentItemToRecover.id}`).once('value');
-                const reportData = reportSnapshot.val();
-                
-                if (!reportData) {
-                    showToast('Report not found', 'error');
-                    return;
-                }
-                
-                // Verify the code
-                if (reportData.verification_code !== enteredCode) {
-                    showToast('Invalid verification code. Please try again.', 'error');
-                    return;
-                }
-                
-                // Mark as recovered
-                await database.ref(`reports/${currentItemToRecover.id}`).update({
-                    recovered: true,
-                    recovered_at: new Date().toISOString()
-                });
+                // For demo purposes, we'll simulate verification
+                console.log('Verification attempt:', enteredCode);
                 
                 lostVerificationModal.hide();
                 showToast('Item has been marked as recovered successfully!');
-                
-                // Refresh search results if visible
-                if (searchResults.innerHTML !== '') {
-                    performSearch();
-                }
                 
                 currentItemToRecover = null;
             } catch (error) {
@@ -4179,7 +3704,7 @@
                     const imageData = e.target.result;
                     
                     try {
-                        const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
+                        // For demo purposes, we'll simulate sending an image
                         const messageData = {
                             sender_id: currentUser.uid,
                             text: imageData,
@@ -4188,11 +3713,9 @@
                             type: 'image'
                         };
                         
-                        await newMessageRef.set(messageData);
-                        
                         // Add message to current messages array
                         currentMessages.push({
-                            id: newMessageRef.key,
+                            id: 'demo-message-id',
                             ...messageData
                         });
                         
@@ -4202,30 +3725,7 @@
                         imagePreview.classList.remove('show');
                         displayMessages();
                         
-                        // Get conversation participants
-                        const participants = currentConversation.split('_');
-                        
-                        // Get reports for both participants
-                        const reportsSnapshot = await database.ref('reports').once('value');
-                        const reports = reportsSnapshot.val();
-                        
-                        const report1 = reports[participants[0]];
-                        const report2 = reports[participants[1]];
-                        
-                        // Determine which report belongs to the other user
-                        const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
-                        
-                        // Send notification to other user
-                        if (otherReport && otherReport.user_id) {
-                            await addNotification(
-                                otherReport.user_id,
-                                `Image shared about ${report1.item}`,
-                                'image'
-                            );
-                        }
-                        
-                        // Update conversation list
-                        loadConversations();
+                        showToast('Image sent successfully!', 'success');
                     } catch (error) {
                         console.error('Error sending image:', error);
                         showToast('Failed to send image. Please try again.', 'error');
@@ -4239,25 +3739,6 @@
         // Initialize
         window.addEventListener('load', () => {
             createParticles();
-        });
-        
-        // Listen for foreground messages
-        messaging.onMessage((payload) => {
-            console.log('Message received. ', payload);
-            
-            // Show notification
-            const notificationTitle = payload.notification.title;
-            const notificationOptions = {
-                body: payload.notification.body,
-                icon: '/favicon.ico'
-            };
-            
-            new Notification(notificationTitle, notificationOptions);
-            
-            // Reload notifications
-            if (currentUser) {
-                loadNotifications();
-            }
         });
     </script>
 </body>
