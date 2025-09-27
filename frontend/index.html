@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KWASU Lost & Found Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root {
             --primary-color: #1a5276;
@@ -21,6 +21,113 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-bg);
             color: #333;
+            padding-top: 70px; /* Space for sticky header */
+        }
+        
+        /* Sticky Header */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin-left: 20px;
+        }
+        
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-menu a:hover {
+            opacity: 0.8;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        
+        /* Hamburger Menu for Mobile */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: var(--primary-color);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 30px;
+                transition: left 0.3s ease;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-menu li {
+                margin: 15px 0;
+            }
+            
+            .user-menu {
+                margin-top: 20px;
+            }
         }
         
         .hero-section {
@@ -1076,11 +1183,315 @@
         .message-verification-complete {
             color: #28a745;
         }
+        
+        /* WhatsApp Visibility Toggle */
+        .whatsapp-visibility {
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .whatsapp-visibility h6 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .form-check {
+            margin-bottom: 10px;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .form-check-label {
+            font-weight: 500;
+        }
+        
+        /* Registration and Login Styles */
+        .auth-modal .modal-dialog {
+            max-width: 450px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+        
+        .auth-content {
+            display: none;
+        }
+        
+        .auth-content.active {
+            display: block;
+        }
+        
+        .verification-method {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .verification-method .btn {
+            flex: 1;
+        }
+        
+        .verification-input-group {
+            display: none;
+            margin-top: 15px;
+        }
+        
+        .verification-input-group.active {
+            display: block;
+        }
+        
+        .notification-settings {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .notification-settings h6 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .notification-setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .notification-setting:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Image Upload Styles */
+        .image-upload-container {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .image-preview.show {
+            display: block;
+        }
+        
+        .message-image {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 8px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+        
+        .contact-details-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .contact-details-container.show {
+            display: block;
+        }
+        
+        .contact-detail-item {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        
+        .contact-detail-label {
+            font-weight: 600;
+            width: 80px;
+            color: #555;
+        }
+        
+        .contact-detail-value {
+            flex: 1;
+        }
+        
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        /* Notification Panel */
+        .notification-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 350px;
+            max-height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            display: none;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        
+        .notification-panel.show {
+            display: flex;
+        }
+        
+        .notification-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .notification-list {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-item.unread {
+            background-color: #f0f7ff;
+        }
+        
+        .notification-time {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .no-notifications {
+            padding: 30px;
+            text-align: center;
+            color: #999;
+        }
+        
+        .no-notifications i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <!-- Sticky Header -->
+    <header class="sticky-header">
+        <div class="container">
+            <div class="header-content">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h1 class="header-title">KWASU LOST & FOUND PORTAL</h1>
+                <div class="user-menu">
+                    <button class="btn btn-sm btn-outline-light" id="login-btn">
+                        <i class="bi bi-person-circle"></i> Login
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" id="register-btn">
+                        <i class="bi bi-person-plus"></i> Register
+                    </button>
+                    <div class="user-avatar" id="user-avatar" style="display: none;">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="position-relative" id="notification-container" style="display: none;">
+                        <button class="btn btn-sm btn-outline-light" id="notification-btn">
+                            <i class="bi bi-bell"></i>
+                        </button>
+                        <span class="notification-badge" id="notification-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="nav-menu" id="nav-menu">
+            <li><a href="#" id="nav-home">Home</a></li>
+            <li><a href="#" id="nav-report-lost">Report Lost Item</a></li>
+            <li><a href="#" id="nav-report-found">Report Found Item</a></li>
+            <li><a href="#" id="nav-search">Search Items</a></li>
+            <li><a href="#" id="nav-messages">Messages</a></li>
+            <li><a href="#" id="nav-safety">Safety Tips</a></li>
+            <li><a href="#" id="nav-supporters">Supporters</a></li>
+        </nav>
+    </header>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notification-panel">
+        <div class="notification-header">
+            <div class="notification-title">Notifications</div>
+            <button class="btn btn-sm" id="clear-notifications">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <div class="no-notifications">
+                <i class="bi bi-bell-slash"></i>
+                <p>No notifications</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" id="home">
         <div class="container">
             <h1>KWASU Lost & Found Portal</h1>
             <p>Report lost items, found items, or search for your belongings across all platforms</p>
@@ -1094,7 +1505,7 @@
     <div class="container my-5">
         <div class="row">
             <!-- Report Lost Item Section -->
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-6 mb-4" id="report-lost-section">
                 <div class="section-card">
                     <h3 class="section-title">
                         <i class="bi bi-search"></i> Report Lost Item
@@ -1123,13 +1534,31 @@
                             <label for="lost-contact" class="form-label">Your WhatsApp Number</label>
                             <input type="tel" class="form-control" id="lost-contact" placeholder="e.g., 08012345678" required>
                         </div>
+                        
+                        <!-- WhatsApp Visibility Option -->
+                        <div class="whatsapp-visibility">
+                            <h6><i class="bi bi-eye"></i> WhatsApp Number Visibility</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lost-whatsapp-visibility" id="lost-whatsapp-visible" value="visible" checked>
+                                <label class="form-check-label" for="lost-whatsapp-visible">
+                                    Show my WhatsApp number in search results
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lost-whatsapp-visibility" id="lost-whatsapp-hidden" value="hidden">
+                                <label class="form-check-label" for="lost-whatsapp-hidden">
+                                    Only share my number when I respond to messages
+                                </label>
+                            </div>
+                        </div>
+                        
                         <button type="submit" class="btn btn-primary w-100">Report Lost Item</button>
                     </form>
                 </div>
             </div>
 
             <!-- Report Found Item Section -->
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-6 mb-4" id="report-found-section">
                 <div class="section-card">
                     <h3 class="section-title">
                         <i class="bi bi-gift"></i> Report Found Item
@@ -1150,6 +1579,24 @@
                             <label for="found-contact" class="form-label">Your WhatsApp Number</label>
                             <input type="tel" class="form-control" id="found-contact" placeholder="e.g., 08012345678" required>
                         </div>
+                        
+                        <!-- WhatsApp Visibility Option -->
+                        <div class="whatsapp-visibility">
+                            <h6><i class="bi bi-eye"></i> WhatsApp Number Visibility</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="found-whatsapp-visibility" id="found-whatsapp-visible" value="visible" checked>
+                                <label class="form-check-label" for="found-whatsapp-visible">
+                                    Show my WhatsApp number in search results
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="found-whatsapp-visibility" id="found-whatsapp-hidden" value="hidden">
+                                <label class="form-check-label" for="found-whatsapp-hidden">
+                                    Only share my number when I respond to messages
+                                </label>
+                            </div>
+                        </div>
+                        
                         <button type="submit" class="btn btn-primary w-100">Report Found Item</button>
                     </form>
                 </div>
@@ -1157,7 +1604,7 @@
         </div>
 
         <!-- Search Section -->
-        <div class="section-card">
+        <div class="section-card" id="search-section">
             <h3 class="section-title">
                 <i class="bi bi-search"></i> Search for Items
             </h3>
@@ -1188,7 +1635,7 @@
         </div>
 
         <!-- Secure Direct Messaging Section -->
-        <div class="section-card">
+        <div class="section-card" id="messages-section">
             <h3 class="section-title">
                 <i class="bi bi-chat-dots"></i> Secure Direct Messaging
             </h3>
@@ -1212,7 +1659,7 @@
         </div>
 
         <!-- Safety Tips Section -->
-        <div class="section-card">
+        <div class="section-card" id="safety-section">
             <h3 class="section-title">
                 <i class="bi bi-shield-check"></i> Safety Tips
             </h3>
@@ -1259,7 +1706,7 @@
         <div class="section-break"></div>
 
         <!-- Top Supporters Section -->
-        <div class="section-card">
+        <div class="section-card" id="supporters-section">
             <h3 class="section-title">
                 <i class="bi bi-people"></i> Top Supporters
             </h3>
@@ -1509,6 +1956,32 @@
                     </div>
                     <div class="message-input-container">
                         <textarea class="form-control message-input" id="message-input" placeholder="Type your message here..." rows="2"></textarea>
+                        
+                        <!-- Image Upload -->
+                        <div class="image-upload-container">
+                            <label for="image-upload" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-image"></i> Add Image
+                            </label>
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                            <img class="image-preview" id="image-preview" alt="Image preview">
+                        </div>
+                        
+                        <!-- Contact Details -->
+                        <div class="contact-details-container" id="contact-details-container">
+                            <div class="contact-detail-item">
+                                <div class="contact-detail-label">Name:</div>
+                                <div class="contact-detail-value" id="contact-name-value"></div>
+                            </div>
+                            <div class="contact-detail-item">
+                                <div class="contact-detail-label">Email:</div>
+                                <div class="contact-detail-value" id="contact-email-value"></div>
+                            </div>
+                            <div class="contact-detail-item">
+                                <div class="contact-detail-label">Phone:</div>
+                                <div class="contact-detail-value" id="contact-phone-value"></div>
+                            </div>
+                        </div>
+                        
                         <div class="message-actions">
                             <div>
                                 <button type="button" class="share-info-btn" id="share-contact-btn">
@@ -1568,9 +2041,112 @@
         </div>
     </div>
 
+    <!-- Registration/Login Modal -->
+    <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Welcome to KWASU Lost & Found</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" id="login-tab">Login</div>
+                        <div class="auth-tab" id="register-tab">Register</div>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div class="auth-content active" id="login-content">
+                        <form id="login-form">
+                            <div class="mb-3">
+                                <label for="login-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="login-email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="login-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="#" id="forgot-password-link">Forgot Password?</a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Registration Form -->
+                    <div class="auth-content" id="register-content">
+                        <form id="register-form">
+                            <div class="mb-3">
+                                <label for="register-name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="register-name" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="register-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="register-email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="register-phone" class="form-label">WhatsApp Number</label>
+                                <input type="tel" class="form-control" id="register-phone" placeholder="Enter your WhatsApp number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="register-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="register-password" placeholder="Create a password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="register-confirm-password" placeholder="Confirm your password" required>
+                            </div>
+                            
+                            <!-- Notification Settings -->
+                            <div class="notification-settings">
+                                <h6>Notification Preferences</h6>
+                                <div class="notification-setting">
+                                    <span>Email Notifications</span>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="email-notifications" checked>
+                                    </div>
+                                </div>
+                                <div class="notification-setting">
+                                    <span>Browser Push Notifications</span>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="push-notifications" checked>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-3">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Verification Code Input -->
+                    <div class="verification-input-group" id="verification-input-group">
+                        <p>We've sent a verification code to your email and WhatsApp number. Please enter it below:</p>
+                        <div class="mb-3">
+                            <label for="verification-code" class="form-label">Verification Code</label>
+                            <input type="text" class="form-control" id="verification-code" placeholder="Enter verification code" required>
+                        </div>
+                        <div class="verification-method">
+                            <button type="button" class="btn btn-outline-secondary" id="resend-email-code">Resend Email</button>
+                            <button type="button" class="btn btn-outline-secondary" id="resend-whatsapp-code">Resend WhatsApp</button>
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="button" class="btn btn-primary" id="verify-code-btn">Verify</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-messaging-compat.js"></script>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1579,13 +2155,33 @@
     <script>
         // Initialize Firebase
         const firebaseConfig = {
-            databaseURL: "https://kwasu-lost-and-found-default-rtdb.firebaseio.com/"
+            apiKey: "AIzaSyCQoQ2mVg7vI8sQJ4R1XJzJ6v7K8l9m0n1o",
+            authDomain: "kwasu-lost-and-found.firebaseapp.com",
+            databaseURL: "https://kwasu-lost-and-found-default-rtdb.firebaseio.com",
+            projectId: "kwasu-lost-and-found",
+            storageBucket: "kwasu-lost-and-found.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef123456789012345"
         };
         
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const auth = firebase.auth();
+        const messaging = firebase.messaging();
         
         // DOM Elements
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const userAvatar = document.getElementById('user-avatar');
+        const notificationContainer = document.getElementById('notification-container');
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationCount = document.getElementById('notification-count');
+        const notificationPanel = document.getElementById('notification-panel');
+        const notificationList = document.getElementById('notification-list');
+        const clearNotificationsBtn = document.getElementById('clear-notifications');
+        
         const lostItemForm = document.getElementById('lost-item-form');
         const foundItemForm = document.getElementById('found-item-form');
         const searchInput = document.getElementById('search-input');
@@ -1630,6 +2226,41 @@
         const reportDetails = document.getElementById('report-details');
         const submitReportBtn = document.getElementById('submit-report-btn');
         
+        // Image Upload Elements
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreview = document.getElementById('image-preview');
+        
+        // Contact Details Elements
+        const contactDetailsContainer = document.getElementById('contact-details-container');
+        const contactNameValue = document.getElementById('contact-name-value');
+        const contactEmailValue = document.getElementById('contact-email-value');
+        const contactPhoneValue = document.getElementById('contact-phone-value');
+        
+        // Auth Modal Elements
+        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginContent = document.getElementById('login-content');
+        const registerContent = document.getElementById('register-content');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const verificationInputGroup = document.getElementById('verification-input-group');
+        const verificationCode = document.getElementById('verification-code');
+        const verifyCodeBtn = document.getElementById('verify-code-btn');
+        const resendEmailCode = document.getElementById('resend-email-code');
+        const resendWhatsAppCode = document.getElementById('resend-whatsapp-code');
+        const emailNotifications = document.getElementById('email-notifications');
+        const pushNotifications = document.getElementById('push-notifications');
+        
+        // Navigation Elements
+        const navHome = document.getElementById('nav-home');
+        const navReportLost = document.getElementById('nav-report-lost');
+        const navReportFound = document.getElementById('nav-report-found');
+        const navSearch = document.getElementById('nav-search');
+        const navMessages = document.getElementById('nav-messages');
+        const navSafety = document.getElementById('nav-safety');
+        const navSupporters = document.getElementById('nav-supporters');
+        
         // Global variables
         let currentItemToClaim = null;
         let currentItemToRecover = null;
@@ -1638,6 +2269,15 @@
         let currentConversation = null;
         let currentMessages = [];
         let contactInfoShared = {};
+        let currentUser = null;
+        let notifications = [];
+        let unreadNotifications = 0;
+        let uploadedImage = null;
+        let contactDetails = {
+            name: '',
+            email: '',
+            phone: ''
+        };
         
         // Create floating particles
         function createParticles() {
@@ -1669,6 +2309,536 @@
             const sortedIds = [reportId1, reportId2].sort();
             return sortedIds.join('_');
         }
+        
+        // Toggle mobile menu
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Navigation scroll to section
+        navHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        navReportLost.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('report-lost-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        navReportFound.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('report-found-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        navSearch.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('search-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        navMessages.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('messages-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        navSafety.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('safety-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        navSupporters.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('supporters-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Auth Modal Tabs
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginContent.classList.add('active');
+            registerContent.classList.remove('active');
+            verificationInputGroup.classList.remove('active');
+        });
+        
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerContent.classList.add('active');
+            loginContent.classList.remove('active');
+            verificationInputGroup.classList.remove('active');
+        });
+        
+        // Login/Register Buttons
+        loginBtn.addEventListener('click', () => {
+            authModal.show();
+            loginTab.click();
+        });
+        
+        registerBtn.addEventListener('click', () => {
+            authModal.show();
+            registerTab.click();
+        });
+        
+        // Login Form
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Check if email is verified
+                if (!user.emailVerified) {
+                    showToast('Please verify your email before logging in.', 'error');
+                    await auth.signOut();
+                    return;
+                }
+                
+                // Get user data from database
+                const userSnapshot = await database.ref(`users/${user.uid}`).once('value');
+                const userData = userSnapshot.val();
+                
+                if (userData) {
+                    currentUser = {
+                        uid: user.uid,
+                        ...userData
+                    };
+                    
+                    // Update UI
+                    updateUserUI();
+                    authModal.hide();
+                    showToast('Login successful!', 'success');
+                    
+                    // Load conversations
+                    loadConversations();
+                } else {
+                    showToast('User data not found. Please register again.', 'error');
+                    await auth.signOut();
+                }
+            } catch (error) {
+                console.error('Error logging in:', error);
+                showToast('Failed to login. Please check your credentials.', 'error');
+            }
+        });
+        
+        // Register Form
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match.', 'error');
+                return;
+            }
+            
+            try {
+                // Create user with email and password
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Send email verification
+                await user.sendEmailVerification();
+                
+                // Save user data to database
+                await database.ref(`users/${user.uid}`).set({
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    emailNotifications: emailNotifications.checked,
+                    pushNotifications: pushNotifications.checked,
+                    createdAt: new Date().toISOString()
+                });
+                
+                // Generate verification code
+                const verificationCode = generateVerificationCode();
+                
+                // Save verification code to database
+                await database.ref(`verificationCodes/${user.uid}`).set({
+                    code: verificationCode,
+                    createdAt: new Date().toISOString()
+                });
+                
+                // Send verification code via email (simulated)
+                // In a real implementation, you would use a backend service to send emails
+                console.log(`Verification code for ${email}: ${verificationCode}`);
+                
+                // Send verification code via WhatsApp (simulated)
+                // In a real implementation, you would use a WhatsApp API service
+                console.log(`Verification code for ${phone}: ${verificationCode}`);
+                
+                // Show verification input
+                loginContent.classList.remove('active');
+                registerContent.classList.remove('active');
+                verificationInputGroup.classList.add('active');
+                
+                showToast('Registration successful! Please check your email and WhatsApp for the verification code.', 'success');
+            } catch (error) {
+                console.error('Error registering:', error);
+                showToast('Failed to register. Please try again.', 'error');
+            }
+        });
+        
+        // Verify Code
+        verifyCodeBtn.addEventListener('click', async () => {
+            const code = verificationCode.value.trim();
+            
+            if (!code) {
+                showToast('Please enter the verification code.', 'error');
+                return;
+            }
+            
+            try {
+                const user = auth.currentUser;
+                
+                if (!user) {
+                    showToast('No user logged in.', 'error');
+                    return;
+                }
+                
+                // Get verification code from database
+                const verificationSnapshot = await database.ref(`verificationCodes/${user.uid}`).once('value');
+                const verificationData = verificationSnapshot.val();
+                
+                if (!verificationData || verificationData.code !== code) {
+                    showToast('Invalid verification code.', 'error');
+                    return;
+                }
+                
+                // Mark user as verified
+                await database.ref(`users/${user.uid}/verified`).set(true);
+                
+                // Get user data
+                const userSnapshot = await database.ref(`users/${user.uid}`).once('value');
+                const userData = userSnapshot.val();
+                
+                currentUser = {
+                    uid: user.uid,
+                    ...userData
+                };
+                
+                // Update UI
+                updateUserUI();
+                authModal.hide();
+                showToast('Account verified successfully!', 'success');
+                
+                // Request push notification permission
+                if (userData.pushNotifications) {
+                    requestNotificationPermission();
+                }
+                
+                // Load conversations
+                loadConversations();
+            } catch (error) {
+                console.error('Error verifying code:', error);
+                showToast('Failed to verify code. Please try again.', 'error');
+            }
+        });
+        
+        // Resend Email Code
+        resendEmailCode.addEventListener('click', async () => {
+            try {
+                const user = auth.currentUser;
+                
+                if (!user) {
+                    showToast('No user logged in.', 'error');
+                    return;
+                }
+                
+                // Generate new verification code
+                const verificationCode = generateVerificationCode();
+                
+                // Update verification code in database
+                await database.ref(`verificationCodes/${user.uid}`).set({
+                    code: verificationCode,
+                    createdAt: new Date().toISOString()
+                });
+                
+                // Send verification code via email (simulated)
+                console.log(`New verification code for ${user.email}: ${verificationCode}`);
+                
+                showToast('Verification code resent to your email.', 'success');
+            } catch (error) {
+                console.error('Error resending email code:', error);
+                showToast('Failed to resend verification code.', 'error');
+            }
+        });
+        
+        // Resend WhatsApp Code
+        resendWhatsAppCode.addEventListener('click', async () => {
+            try {
+                const user = auth.currentUser;
+                
+                if (!user) {
+                    showToast('No user logged in.', 'error');
+                    return;
+                }
+                
+                // Get user data
+                const userSnapshot = await database.ref(`users/${user.uid}`).once('value');
+                const userData = userSnapshot.val();
+                
+                if (!userData || !userData.phone) {
+                    showToast('Phone number not found.', 'error');
+                    return;
+                }
+                
+                // Generate new verification code
+                const verificationCode = generateVerificationCode();
+                
+                // Update verification code in database
+                await database.ref(`verificationCodes/${user.uid}`).set({
+                    code: verificationCode,
+                    createdAt: new Date().toISOString()
+                });
+                
+                // Send verification code via WhatsApp (simulated)
+                console.log(`New verification code for ${userData.phone}: ${verificationCode}`);
+                
+                showToast('Verification code resent to your WhatsApp.', 'success');
+            } catch (error) {
+                console.error('Error resending WhatsApp code:', error);
+                showToast('Failed to resend verification code.', 'error');
+            }
+        });
+        
+        // Update user UI
+        function updateUserUI() {
+            if (currentUser) {
+                // Hide login/register buttons
+                loginBtn.style.display = 'none';
+                registerBtn.style.display = 'none';
+                
+                // Show user avatar and notifications
+                userAvatar.style.display = 'flex';
+                notificationContainer.style.display = 'block';
+                
+                // Set user avatar initials
+                const initials = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'U';
+                userAvatar.innerHTML = initials;
+                
+                // Load notifications
+                loadNotifications();
+            } else {
+                // Show login/register buttons
+                loginBtn.style.display = 'inline-block';
+                registerBtn.style.display = 'inline-block';
+                
+                // Hide user avatar and notifications
+                userAvatar.style.display = 'none';
+                notificationContainer.style.display = 'none';
+            }
+        }
+        
+        // Request notification permission
+        async function requestNotificationPermission() {
+            try {
+                if ('Notification' in window) {
+                    const permission = await Notification.requestPermission();
+                    
+                    if (permission === 'granted') {
+                        // Get FCM token
+                        const token = await messaging.getToken();
+                        
+                        if (token) {
+                            // Save FCM token to database
+                            await database.ref(`users/${currentUser.uid}/fcmToken`).set(token);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error requesting notification permission:', error);
+            }
+        }
+        
+        // Load notifications
+        async function loadNotifications() {
+            if (!currentUser) return;
+            
+            try {
+                const snapshot = await database.ref(`notifications/${currentUser.uid}`).once('value');
+                const notificationsData = snapshot.val();
+                
+                if (notificationsData) {
+                    notifications = Object.entries(notificationsData).map(([key, value]) => ({
+                        id: key,
+                        ...value
+                    }));
+                    
+                    // Sort by timestamp (newest first)
+                    notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    // Count unread notifications
+                    unreadNotifications = notifications.filter(n => !n.read).length;
+                    
+                    // Update notification count
+                    notificationCount.textContent = unreadNotifications;
+                    notificationCount.style.display = unreadNotifications > 0 ? 'block' : 'none';
+                    
+                    // Update notification list
+                    updateNotificationList();
+                }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+        
+        // Update notification list
+        function updateNotificationList() {
+            if (notifications.length === 0) {
+                notificationList.innerHTML = `
+                    <div class="no-notifications">
+                        <i class="bi bi-bell-slash"></i>
+                        <p>No notifications</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            notifications.forEach(notification => {
+                const date = new Date(notification.timestamp);
+                const formattedTime = date.toLocaleString();
+                
+                html += `
+                    <div class="notification-item ${notification.read ? '' : 'unread'}" data-id="${notification.id}">
+                        <div>${notification.message}</div>
+                        <div class="notification-time">${formattedTime}</div>
+                    </div>
+                `;
+            });
+            
+            notificationList.innerHTML = html;
+            
+            // Add click event to notification items
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', async function() {
+                    const notificationId = this.getAttribute('data-id');
+                    
+                    // Mark notification as read
+                    await database.ref(`notifications/${currentUser.uid}/${notificationId}/read`).set(true);
+                    
+                    // Reload notifications
+                    loadNotifications();
+                    
+                    // Close notification panel
+                    notificationPanel.classList.remove('show');
+                });
+            });
+        }
+        
+        // Toggle notification panel
+        notificationBtn.addEventListener('click', () => {
+            notificationPanel.classList.toggle('show');
+        });
+        
+        // Clear notifications
+        clearNotificationsBtn.addEventListener('click', async () => {
+            if (!currentUser) return;
+            
+            try {
+                // Mark all notifications as read
+                const updates = {};
+                notifications.forEach(notification => {
+                    updates[`notifications/${currentUser.uid}/${notification.id}/read`] = true;
+                });
+                
+                await database.ref().update(updates);
+                
+                // Reload notifications
+                loadNotifications();
+            } catch (error) {
+                console.error('Error clearing notifications:', error);
+            }
+        });
+        
+        // Close notification panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!notificationPanel.contains(e.target) && 
+                !notificationBtn.contains(e.target) && 
+                notificationPanel.classList.contains('show')) {
+                notificationPanel.classList.remove('show');
+            }
+        });
+        
+        // Add notification
+        async function addNotification(userId, message, type = 'info') {
+            try {
+                const newNotificationRef = database.ref(`notifications/${userId}`).push();
+                const notificationData = {
+                    message: message,
+                    type: type,
+                    timestamp: new Date().toISOString(),
+                    read: false
+                };
+                
+                await newNotificationRef.set(notificationData);
+                
+                // Send push notification if user has FCM token
+                const userSnapshot = await database.ref(`users/${userId}`).once('value');
+                const userData = userSnapshot.val();
+                
+                if (userData && userData.fcmToken && userData.pushNotifications) {
+                    // In a real implementation, you would send a push notification using FCM
+                    console.log(`Push notification sent to ${userData.name}: ${message}`);
+                }
+                
+                // Send email notification if enabled
+                if (userData && userData.emailNotifications) {
+                    // In a real implementation, you would send an email using a backend service
+                    console.log(`Email notification sent to ${userData.email}: ${message}`);
+                }
+            } catch (error) {
+                console.error('Error adding notification:', error);
+            }
+        }
+        
+        // Listen for auth state changes
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is signed in
+                database.ref(`users/${user.uid}`).once('value').then(snapshot => {
+                    const userData = snapshot.val();
+                    
+                    if (userData && userData.verified) {
+                        currentUser = {
+                            uid: user.uid,
+                            ...userData
+                        };
+                        
+                        updateUserUI();
+                        loadConversations();
+                        loadNotifications();
+                    } else {
+                        // User is not verified
+                        auth.signOut();
+                        showToast('Please verify your account before logging in.', 'error');
+                    }
+                }).catch(error => {
+                    console.error('Error getting user data:', error);
+                    auth.signOut();
+                });
+            } else {
+                // User is signed out
+                currentUser = null;
+                updateUserUI();
+            }
+        });
         
         // Animate counter
         function animateCounter(target, duration = 2000) {
@@ -1954,6 +3124,16 @@
         
         // Load conversations
         async function loadConversations() {
+            if (!currentUser) {
+                conversationList.innerHTML = `
+                    <div class="no-conversations">
+                        <i class="bi bi-chat-square-text"></i>
+                        <p>Please login to view your conversations.</p>
+                    </div>
+                `;
+                return;
+            }
+            
             try {
                 const snapshot = await database.ref('conversations').once('value');
                 const conversations = snapshot.val();
@@ -1978,8 +3158,7 @@
                 
                 if (reports) {
                     Object.entries(reports).forEach(([key, report]) => {
-                        if ((report.type === 'lost' && report.contact_info) || 
-                            (report.type === 'found' && report.contact_phone)) {
+                        if (report.user_id === currentUser.uid) {
                             userReportIds.push(key);
                         }
                     });
@@ -2019,7 +3198,7 @@
                             
                             // Check if there are unread messages
                             const unreadCount = Object.values(messages).filter(msg => 
-                                !msg.read && msg.sender_id !== userReportIds[0]
+                                !msg.read && msg.sender_id !== currentUser.uid
                             ).length;
                             
                             html += `
@@ -2066,6 +3245,11 @@
         
         // Open conversation
         async function openConversation(conversationId) {
+            if (!currentUser) {
+                showToast('Please login to view conversations.', 'error');
+                return;
+            }
+            
             try {
                 currentConversation = conversationId;
                 
@@ -2094,9 +3278,8 @@
                 }
                 
                 // Determine which report belongs to the current user
-                const userReportId = localStorage.getItem('lastReportId');
-                const userReport = userReportId === participants[0] ? report1 : report2;
-                const otherReport = userReportId === participants[0] ? report2 : report1;
+                const userReport = report1.user_id === currentUser.uid ? report1 : report2;
+                const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
                 
                 // Set modal title
                 messageModalLabel.textContent = `Conversation about ${otherReport.item}`;
@@ -2139,13 +3322,11 @@
                 displayMessages();
                 
                 // Mark messages as read
-                if (userReportId) {
-                    Object.entries(messages).forEach(([messageId, message]) => {
-                        if (message.sender_id !== userReportId && !message.read) {
-                            database.ref(`conversations/${conversationId}/messages/${messageId}/read`).set(true);
-                        }
-                    });
-                }
+                Object.entries(messages).forEach(([messageId, message]) => {
+                    if (message.sender_id !== currentUser.uid && !message.read) {
+                        database.ref(`conversations/${conversationId}/messages/${messageId}/read`).set(true);
+                    }
+                });
                 
                 // Show modal
                 messageModal.show();
@@ -2181,19 +3362,51 @@
                     </div>
                 `;
             } else {
-                const userReportId = localStorage.getItem('lastReportId');
-                
                 currentMessages.forEach(message => {
-                    const isSent = message.sender_id === userReportId;
+                    const isSent = message.sender_id === currentUser.uid;
                     const date = new Date(message.timestamp);
                     const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     
-                    html += `
-                        <div class="message ${isSent ? 'message-sent' : 'message-received'}">
-                            <div>${message.text}</div>
-                            <div class="message-time">${formattedTime}</div>
-                        </div>
-                    `;
+                    if (message.type === 'image') {
+                        html += `
+                            <div class="message ${isSent ? 'message-sent' : 'message-received'}">
+                                <div>
+                                    <img src="${message.text}" alt="Shared image" class="message-image">
+                                </div>
+                                <div class="message-time">${formattedTime}</div>
+                            </div>
+                        `;
+                    } else if (message.type === 'contact') {
+                        const contactData = JSON.parse(message.text);
+                        html += `
+                            <div class="message ${isSent ? 'message-sent' : 'message-received'}">
+                                <div>
+                                    <div class="contact-details-container show">
+                                        <div class="contact-detail-item">
+                                            <div class="contact-detail-label">Name:</div>
+                                            <div class="contact-detail-value">${contactData.name}</div>
+                                        </div>
+                                        <div class="contact-detail-item">
+                                            <div class="contact-detail-label">Email:</div>
+                                            <div class="contact-detail-value">${contactData.email}</div>
+                                        </div>
+                                        <div class="contact-detail-item">
+                                            <div class="contact-detail-label">Phone:</div>
+                                            <div class="contact-detail-value">${contactData.phone}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="message-time">${formattedTime}</div>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="message ${isSent ? 'message-sent' : 'message-received'}">
+                                <div>${message.text}</div>
+                                <div class="message-time">${formattedTime}</div>
+                            </div>
+                        `;
+                    }
                 });
             }
             
@@ -2201,30 +3414,31 @@
             
             // Scroll to bottom
             messageContainer.scrollTop = messageContainer.scrollHeight;
+            
+            // Add click event to images
+            document.querySelectorAll('.message-image').forEach(img => {
+                img.addEventListener('click', function() {
+                    window.open(this.src, '_blank');
+                });
+            });
         }
         
         // Send message
         async function sendMessage() {
             const text = messageInput.value.trim();
             
-            if (!text || !currentConversation) {
+            if (!text || !currentConversation || !currentUser) {
                 return;
             }
             
             try {
-                const userReportId = localStorage.getItem('lastReportId');
-                
-                if (!userReportId) {
-                    showToast('Could not identify your report. Please try again.', 'error');
-                    return;
-                }
-                
                 const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
                 const messageData = {
-                    sender_id: userReportId,
+                    sender_id: currentUser.uid,
                     text: text,
                     timestamp: new Date().toISOString(),
-                    read: false
+                    read: false,
+                    type: 'text'
                 };
                 
                 await newMessageRef.set(messageData);
@@ -2239,6 +3453,28 @@
                 messageInput.value = '';
                 displayMessages();
                 
+                // Get conversation participants
+                const participants = currentConversation.split('_');
+                
+                // Get reports for both participants
+                const reportsSnapshot = await database.ref('reports').once('value');
+                const reports = reportsSnapshot.val();
+                
+                const report1 = reports[participants[0]];
+                const report2 = reports[participants[1]];
+                
+                // Determine which report belongs to the other user
+                const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
+                
+                // Send notification to other user
+                if (otherReport && otherReport.user_id) {
+                    await addNotification(
+                        otherReport.user_id,
+                        `New message about ${report1.item}`,
+                        'message'
+                    );
+                }
+                
                 // Update conversation list
                 loadConversations();
             } catch (error) {
@@ -2249,43 +3485,34 @@
         
         // Share contact information
         async function shareContactInfo() {
-            if (!currentConversation) {
+            if (!currentConversation || !currentUser) {
                 return;
             }
             
             try {
-                const userReportId = localStorage.getItem('lastReportId');
+                // Get user data
+                const userSnapshot = await database.ref(`users/${currentUser.uid}`).once('value');
+                const userData = userSnapshot.val();
                 
-                if (!userReportId) {
-                    showToast('Could not identify your report. Please try again.', 'error');
-                    return;
-                }
-                
-                // Get user's report
-                const reportSnapshot = await database.ref(`reports/${userReportId}`).once('value');
-                const report = reportSnapshot.val();
-                
-                if (!report) {
-                    showToast('Could not find your report. Please try again.', 'error');
-                    return;
-                }
-                
-                // Get contact info based on report type
-                const contactInfo = report.type === 'lost' ? report.contact_info : report.contact_phone;
-                
-                if (!contactInfo) {
-                    showToast('No contact information available for your report.', 'error');
+                if (!userData) {
+                    showToast('Could not find your user data.', 'error');
                     return;
                 }
                 
                 // Send contact info as a message
                 const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
+                const contactData = {
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone
+                };
+                
                 const messageData = {
-                    sender_id: userReportId,
-                    text: `I've shared my contact information: ${contactInfo}`,
+                    sender_id: currentUser.uid,
+                    text: JSON.stringify(contactData),
                     timestamp: new Date().toISOString(),
                     read: false,
-                    is_contact_info: true
+                    type: 'contact'
                 };
                 
                 await newMessageRef.set(messageData);
@@ -2316,6 +3543,28 @@
                 // Show confirmation
                 showToast('Your contact information has been shared securely.', 'success');
                 
+                // Get conversation participants
+                const participants = currentConversation.split('_');
+                
+                // Get reports for both participants
+                const reportsSnapshot = await database.ref('reports').once('value');
+                const reports = reportsSnapshot.val();
+                
+                const report1 = reports[participants[0]];
+                const report2 = reports[participants[1]];
+                
+                // Determine which report belongs to the other user
+                const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
+                
+                // Send notification to other user
+                if (otherReport && otherReport.user_id) {
+                    await addNotification(
+                        otherReport.user_id,
+                        `Contact information shared about ${report1.item}`,
+                        'contact'
+                    );
+                }
+                
                 // Update conversation list
                 loadConversations();
             } catch (error) {
@@ -2345,6 +3594,7 @@
                 const reportRef = database.ref('conversation_reports').push();
                 const reportData = {
                     conversation_id: currentConversation,
+                    reporter_id: currentUser.uid,
                     reason: reason,
                     details: details,
                     timestamp: new Date().toISOString(),
@@ -2365,6 +3615,13 @@
         
         // Start a new conversation
         async function startConversation(reportId1, reportId2) {
+            if (!currentUser) {
+                showToast('Please login to start a conversation.', 'error');
+                authModal.show();
+                registerTab.click();
+                return;
+            }
+            
             try {
                 // Generate conversation ID
                 const conversationId = generateConversationId(reportId1, reportId2);
@@ -2381,9 +3638,6 @@
                     });
                 }
                 
-                // Store the last report ID for identifying the user
-                localStorage.setItem('lastReportId', reportId1);
-                
                 // Open conversation
                 openConversation(conversationId);
                 
@@ -2395,15 +3649,40 @@
             }
         }
         
+        // Image upload
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result;
+                    imagePreview.src = uploadedImage;
+                    imagePreview.classList.add('show');
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
         // Report Lost Item
         lostItemForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if (!currentUser) {
+                showToast('Please login to report an item.', 'error');
+                authModal.show();
+                registerTab.click();
+                return;
+            }
             
             const item = document.getElementById('lost-item').value;
             const location = document.getElementById('lost-location').value;
             const lastSeen = document.getElementById('lost-last-seen').value;
             const description = document.getElementById('lost-description').value;
             const contact = document.getElementById('lost-contact').value;
+            const whatsappVisibility = document.querySelector('input[name="lost-whatsapp-visibility"]:checked').value;
             
             try {
                 // Generate verification code
@@ -2412,21 +3691,20 @@
                 const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'lost',
-                    item: item, // Keep original formatting
-                    location: location, // Keep original formatting
-                    last_seen: lastSeen, // Keep original formatting
-                    description: description, // Keep original formatting
+                    item: item,
+                    location: location,
+                    last_seen: lastSeen,
+                    description: description,
                     contact_info: contact,
                     verification_code: verificationCode,
                     recovered: false,
+                    user_id: currentUser.uid,
                     reporter: 'website',
+                    whatsapp_visibility: whatsappVisibility,
                     timestamp: new Date().toISOString()
                 };
                 
                 await newReportRef.set(reportData);
-                
-                // Store the report ID for future use
-                localStorage.setItem('lastReportId', newReportRef.key);
                 
                 lostItemForm.reset();
                 
@@ -2462,9 +3740,17 @@
         foundItemForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            if (!currentUser) {
+                showToast('Please login to report an item.', 'error');
+                authModal.show();
+                registerTab.click();
+                return;
+            }
+            
             const item = document.getElementById('found-item').value;
             const location = document.getElementById('found-location').value;
             const contact = document.getElementById('found-contact').value;
+            const whatsappVisibility = document.querySelector('input[name="found-whatsapp-visibility"]:checked').value;
             
             try {
                 // Generate verification code
@@ -2473,19 +3759,18 @@
                 const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'found',
-                    item: item, // Keep original formatting
-                    location: location, // Keep original formatting
+                    item: item,
+                    location: location,
                     contact_phone: contact,
                     verification_code: verificationCode,
                     claimed: false,
+                    user_id: currentUser.uid,
                     reporter: 'website',
+                    whatsapp_visibility: whatsappVisibility,
                     timestamp: new Date().toISOString()
                 };
                 
                 await newReportRef.set(reportData);
-                
-                // Store the report ID for future use
-                localStorage.setItem('lastReportId', newReportRef.key);
                 
                 foundItemForm.reset();
                 
@@ -2574,6 +3859,11 @@
                             const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
                             const badgeText = isClaimed ? 'Claimed' : 'Found';
                             
+                            // Check if WhatsApp number should be visible
+                            const showWhatsApp = report.whatsapp_visibility === 'visible' || 
+                                              (report.whatsapp_visibility === 'hidden' && currentUser && 
+                                               contactInfoShared[generateConversationId(report.id, currentUser.lastReportId)]);
+                            
                             resultsHtml += `
                                 <div class="${cardClass}">
                                     <div class="d-flex justify-content-between align-items-start">
@@ -2589,10 +3879,12 @@
                                         </div>
                                         <span class="badge ${badgeClass}">${badgeText}</span>
                                     </div>
-                                    <div class="mt-3">
-                                        <i class="bi bi-whatsapp"></i> 
-                                        <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
-                                    </div>
+                                    ${showWhatsApp ? `
+                                        <div class="mt-3">
+                                            <i class="bi bi-whatsapp"></i> 
+                                            <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
+                                        </div>
+                                    ` : ''}
                                     ${!isClaimed ? `
                                         <div class="found-item-actions mt-3">
                                             <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
@@ -2612,6 +3904,11 @@
                         } else {
                             const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
                             const badgeText = isRecovered ? 'Recovered' : 'Lost';
+                            
+                            // Check if WhatsApp number should be visible
+                            const showWhatsApp = report.whatsapp_visibility === 'visible' || 
+                                              (report.whatsapp_visibility === 'hidden' && currentUser && 
+                                               contactInfoShared[generateConversationId(report.id, currentUser.lastReportId)]);
                             
                             resultsHtml += `
                                 <div class="${cardClass}">
@@ -2633,7 +3930,7 @@
                                         </div>
                                         <span class="badge ${badgeClass}">${badgeText}</span>
                                     </div>
-                                    ${report.contact_info ? `
+                                    ${showWhatsApp && report.contact_info ? `
                                         <div class="mt-3">
                                             <i class="bi bi-whatsapp"></i> 
                                             <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
@@ -2694,16 +3991,27 @@
                             const itemId = this.getAttribute('data-id');
                             const itemType = this.getAttribute('data-type');
                             
-                            // Get the current user's report ID
-                            const userReportId = localStorage.getItem('lastReportId');
-                            
-                            if (!userReportId) {
-                                showToast('Please report a lost or found item first to start a conversation.', 'error');
-                                return;
-                            }
-                            
-                            // Start conversation between the two reports
-                            startConversation(userReportId, itemId);
+                            // Get the current user's last report
+                            const userReportsSnapshot = database.ref('reports').orderByChild('user_id').equalTo(currentUser.uid).limitToLast(1);
+                            userReportsSnapshot.once('value').then(snapshot => {
+                                const reports = snapshot.val();
+                                let userReportId = null;
+                                
+                                if (reports) {
+                                    const reportKeys = Object.keys(reports);
+                                    userReportId = reportKeys[0];
+                                }
+                                
+                                if (userReportId) {
+                                    // Start conversation between the two reports
+                                    startConversation(userReportId, itemId);
+                                } else {
+                                    showToast('Please report a lost or found item first to start a conversation.', 'error');
+                                }
+                            }).catch(error => {
+                                console.error('Error getting user reports:', error);
+                                showToast('Failed to start conversation. Please try again.', 'error');
+                            });
                         });
                     });
                 }
@@ -2860,10 +4168,96 @@
         
         submitReportBtn.addEventListener('click', submitReport);
         
+        // Image upload in message
+        imageUpload.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            
+            if (file && currentConversation && currentUser) {
+                const reader = new FileReader();
+                
+                reader.onload = async function(e) {
+                    const imageData = e.target.result;
+                    
+                    try {
+                        const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
+                        const messageData = {
+                            sender_id: currentUser.uid,
+                            text: imageData,
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            type: 'image'
+                        };
+                        
+                        await newMessageRef.set(messageData);
+                        
+                        // Add message to current messages array
+                        currentMessages.push({
+                            id: newMessageRef.key,
+                            ...messageData
+                        });
+                        
+                        // Clear input and refresh display
+                        imageUpload.value = '';
+                        imagePreview.src = '';
+                        imagePreview.classList.remove('show');
+                        displayMessages();
+                        
+                        // Get conversation participants
+                        const participants = currentConversation.split('_');
+                        
+                        // Get reports for both participants
+                        const reportsSnapshot = await database.ref('reports').once('value');
+                        const reports = reportsSnapshot.val();
+                        
+                        const report1 = reports[participants[0]];
+                        const report2 = reports[participants[1]];
+                        
+                        // Determine which report belongs to the other user
+                        const otherReport = report1.user_id === currentUser.uid ? report2 : report1;
+                        
+                        // Send notification to other user
+                        if (otherReport && otherReport.user_id) {
+                            await addNotification(
+                                otherReport.user_id,
+                                `Image shared about ${report1.item}`,
+                                'image'
+                            );
+                        }
+                        
+                        // Update conversation list
+                        loadConversations();
+                    } catch (error) {
+                        console.error('Error sending image:', error);
+                        showToast('Failed to send image. Please try again.', 'error');
+                    }
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
         // Initialize
         window.addEventListener('load', () => {
             createParticles();
-            loadConversations();
+        });
+        
+        // Listen for foreground messages
+        messaging.onMessage((payload) => {
+            console.log('Message received. ', payload);
+            
+            // Show notification
+            const notificationTitle = payload.notification.title;
+            const notificationOptions = {
+                body: payload.notification.body,
+                icon: '/favicon.ico'
+            };
+            
+            new Notification(notificationTitle, notificationOptions);
+            
+            // Reload notifications
+            if (currentUser) {
+                loadNotifications();
+            }
         });
     </script>
 </body>
