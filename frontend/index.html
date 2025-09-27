@@ -153,7 +153,6 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor: pointer;
         }
         
         .toast-success {
@@ -168,14 +167,20 @@
             position: relative;
         }
         
-        .toast-body::after {
-            content: 'Click to view details';
-            position: absolute;
-            bottom: -5px;
-            right: 0;
-            font-size: 0.75rem;
-            color: #6c757d;
-            font-style: italic;
+        .toast-body .view-details-btn {
+            margin-top: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .toast-body .view-details-btn:hover {
+            background-color: var(--primary-color);
         }
         
         .loading-spinner {
@@ -848,7 +853,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2023 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
+            <p>&copy; 2025 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
             <p>For support: <a href="tel:09038323588">09038323588</a></p>
         </div>
     </footer>
@@ -868,6 +873,9 @@
                     <div id="matchingItemsContent">
                         <!-- Matching items will be inserted here -->
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -955,6 +963,7 @@
         // Global variables
         let currentItemToClaim = null;
         let matchingFoundItems = [];
+        let currentToast = null;
         
         // Create floating particles
         function createParticles() {
@@ -1007,11 +1016,24 @@
             supportersCounter.textContent = '0';
         });
         
-        // Show clickable toast notification
-        function showToast(message, type = 'success', clickable = false, callback = null) {
+        // Show toast notification
+        function showToast(message, type = 'success', hasButton = false, buttonCallback = null) {
+            // Remove any existing toast
+            if (currentToast) {
+                const toastElement = document.getElementById(currentToast);
+                if (toastElement) {
+                    const toastInstance = bootstrap.Toast.getInstance(toastElement);
+                    if (toastInstance) {
+                        toastInstance.hide();
+                    }
+                }
+            }
+            
             const toastId = 'toast-' + Date.now();
-            const toastHtml = `
-                <div id="${toastId}" class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true">
+            currentToast = toastId;
+            
+            let toastHtml = `
+                <div id="${toastId}" class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
                     <div class="toast-header">
                         <i class="bi bi-${type === 'success' ? 'check-circle-fill text-success' : 'exclamation-triangle-fill text-danger'} me-2"></i>
                         <strong class="me-auto">KWASU Lost & Found</strong>
@@ -1019,6 +1041,7 @@
                     </div>
                     <div class="toast-body">
                         ${message}
+                        ${hasButton ? `<button class="view-details-btn">View Details</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1028,13 +1051,23 @@
             const toast = new bootstrap.Toast(toastElement);
             toast.show();
             
-            // Add click event if toast is clickable
-            if (clickable && callback) {
-                toastElement.addEventListener('click', callback);
+            // Add click event to the button if it exists
+            if (hasButton && buttonCallback) {
+                const viewDetailsBtn = toastElement.querySelector('.view-details-btn');
+                if (viewDetailsBtn) {
+                    viewDetailsBtn.addEventListener('click', function() {
+                        buttonCallback();
+                        // Hide the toast when button is clicked
+                        toast.hide();
+                    });
+                }
             }
             
             toastElement.addEventListener('hidden.bs.toast', () => {
                 toastElement.remove();
+                if (currentToast === toastId) {
+                    currentToast = null;
+                }
             });
         }
         
@@ -1106,7 +1139,7 @@
                 if (matchingFoundItems.length > 0) {
                     const matchMessage = `We found ${matchingFoundItems.length} matching item(s) that were reported found!`;
                     
-                    // Create clickable toast
+                    // Show sticky toast with View Details button
                     showToast(matchMessage, 'success', true, () => {
                         showMatchingItemsModal(matchingFoundItems);
                     });
