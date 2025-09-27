@@ -153,6 +153,7 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
         }
         
         .toast-success {
@@ -167,20 +168,14 @@
             position: relative;
         }
         
-        .toast-body .view-details-btn {
-            margin-top: 10px;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .toast-body .view-details-btn:hover {
-            background-color: var(--primary-color);
+        .toast-body::after {
+            content: 'Click to view details';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            font-size: 0.75rem;
+            color: #6c757d;
+            font-style: italic;
         }
         
         .loading-spinner {
@@ -585,6 +580,77 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
+        
+        /* New styles for report details modal */
+        .report-details-modal .modal-dialog {
+            max-width: 600px;
+        }
+        
+        .report-details-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .report-details-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .report-details-card .detail-row {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .report-details-card .detail-label {
+            font-weight: 600;
+            width: 140px;
+            color: #555;
+        }
+        
+        .report-details-card .detail-value {
+            flex: 1;
+        }
+        
+        .verification-code-box {
+            background-color: #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .verification-code-box:hover {
+            background-color: #dee2e6;
+            transform: scale(1.02);
+        }
+        
+        .copy-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .copy-tooltip.show {
+            opacity: 1;
+        }
+        
+        .toast-action-btn {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -853,13 +919,36 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
+            <p>&copy; 2023 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
             <p>For support: <a href="tel:09038323588">09038323588</a></p>
         </div>
     </footer>
 
     <!-- Toast Container -->
     <div class="toast-container"></div>
+
+    <!-- Report Details Modal -->
+    <div class="modal fade report-details-modal" id="reportDetailsModal" tabindex="-1" aria-labelledby="reportDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportDetailsModalLabel">Report Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="reportDetailsContent">
+                        <!-- Report details will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy Tooltip -->
+    <div class="copy-tooltip" id="copyTooltip">Copied to clipboard!</div>
 
     <!-- Matching Items Modal -->
     <div class="modal fade" id="matchingItemsModal" tabindex="-1" aria-labelledby="matchingItemsModalLabel" aria-hidden="true">
@@ -873,9 +962,6 @@
                     <div id="matchingItemsContent">
                         <!-- Matching items will be inserted here -->
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -959,11 +1045,14 @@
         const requestCodeBtn = document.getElementById('requestCodeBtn');
         const founderDetailsModal = new bootstrap.Modal(document.getElementById('founderDetailsModal'));
         const founderDetailsContent = document.getElementById('founderDetailsContent');
+        const reportDetailsModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
+        const reportDetailsContent = document.getElementById('reportDetailsContent');
+        const copyTooltip = document.getElementById('copyTooltip');
         
         // Global variables
         let currentItemToClaim = null;
         let matchingFoundItems = [];
-        let currentToast = null;
+        let lastReportData = null;
         
         // Create floating particles
         function createParticles() {
@@ -1016,24 +1105,11 @@
             supportersCounter.textContent = '0';
         });
         
-        // Show toast notification
-        function showToast(message, type = 'success', hasButton = false, buttonCallback = null) {
-            // Remove any existing toast
-            if (currentToast) {
-                const toastElement = document.getElementById(currentToast);
-                if (toastElement) {
-                    const toastInstance = bootstrap.Toast.getInstance(toastElement);
-                    if (toastInstance) {
-                        toastInstance.hide();
-                    }
-                }
-            }
-            
+        // Show toast notification with action button
+        function showToast(message, type = 'success', actionButton = null) {
             const toastId = 'toast-' + Date.now();
-            currentToast = toastId;
-            
-            let toastHtml = `
-                <div id="${toastId}" class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+            const toastHtml = `
+                <div id="${toastId}" class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                         <i class="bi bi-${type === 'success' ? 'check-circle-fill text-success' : 'exclamation-triangle-fill text-danger'} me-2"></i>
                         <strong class="me-auto">KWASU Lost & Found</strong>
@@ -1041,34 +1117,122 @@
                     </div>
                     <div class="toast-body">
                         ${message}
-                        ${hasButton ? `<button class="view-details-btn">View Details</button>` : ''}
+                        ${actionButton ? `<button type="button" class="btn btn-sm btn-primary mt-2 toast-action-btn">${actionButton.text}</button>` : ''}
                     </div>
                 </div>
             `;
             
             toastContainer.insertAdjacentHTML('beforeend', toastHtml);
             const toastElement = document.getElementById(toastId);
-            const toast = new bootstrap.Toast(toastElement);
+            const toast = new bootstrap.Toast(toastElement, { autohide: false }); // Disable auto-hide
             toast.show();
             
-            // Add click event to the button if it exists
-            if (hasButton && buttonCallback) {
-                const viewDetailsBtn = toastElement.querySelector('.view-details-btn');
-                if (viewDetailsBtn) {
-                    viewDetailsBtn.addEventListener('click', function() {
-                        buttonCallback();
-                        // Hide the toast when button is clicked
-                        toast.hide();
-                    });
-                }
+            // Add click event if action button is provided
+            if (actionButton) {
+                const actionBtn = toastElement.querySelector('.toast-action-btn');
+                actionBtn.addEventListener('click', () => {
+                    actionButton.callback();
+                    toast.hide();
+                });
             }
             
             toastElement.addEventListener('hidden.bs.toast', () => {
                 toastElement.remove();
-                if (currentToast === toastId) {
-                    currentToast = null;
-                }
             });
+        }
+        
+        // Show report details modal
+        function showReportDetailsModal(reportData) {
+            let html = '';
+            
+            if (reportData.type === 'lost') {
+                html = `
+                    <div class="report-details-card">
+                        <h5><i class="bi bi-search"></i> Lost Item Details</h5>
+                        <div class="detail-row">
+                            <div class="detail-label">Item Name:</div>
+                            <div class="detail-value">${reportData.item}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Location:</div>
+                            <div class="detail-value">${reportData.location}</div>
+                        </div>
+                        ${reportData.last_seen ? `
+                        <div class="detail-row">
+                            <div class="detail-label">Last Seen:</div>
+                            <div class="detail-value">${reportData.last_seen}</div>
+                        </div>
+                        ` : ''}
+                        <div class="detail-row">
+                            <div class="detail-label">Description:</div>
+                            <div class="detail-value">${reportData.description}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Contact:</div>
+                            <div class="detail-value">${reportData.contact_info}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Reported On:</div>
+                            <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            } else if (reportData.type === 'found') {
+                html = `
+                    <div class="report-details-card">
+                        <h5><i class="bi bi-gift"></i> Found Item Details</h5>
+                        <div class="detail-row">
+                            <div class="detail-label">Item Name:</div>
+                            <div class="detail-value">${reportData.item}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Location:</div>
+                            <div class="detail-value">${reportData.location}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Contact:</div>
+                            <div class="detail-value">${reportData.contact_phone}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Verification Code:</div>
+                            <div class="detail-value">
+                                <div class="verification-code-box" id="reportVerificationCode">
+                                    ${reportData.verification_code}
+                                </div>
+                                <small class="text-muted">Click to copy</small>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Reported On:</div>
+                            <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            reportDetailsContent.innerHTML = html;
+            reportDetailsModal.show();
+            
+            // Add click event to verification code to copy to clipboard
+            if (reportData.type === 'found') {
+                const codeElement = document.getElementById('reportVerificationCode');
+                codeElement.addEventListener('click', (e) => {
+                    const code = reportData.verification_code;
+                    navigator.clipboard.writeText(code).then(() => {
+                        // Show tooltip
+                        copyTooltip.style.left = e.pageX + 'px';
+                        copyTooltip.style.top = (e.pageY - 30) + 'px';
+                        copyTooltip.classList.add('show');
+                        
+                        setTimeout(() => {
+                            copyTooltip.classList.remove('show');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Could not copy text: ', err);
+                        showToast('Failed to copy verification code.', 'error');
+                    });
+                });
+            }
         }
         
         // Show matching items modal
@@ -1120,7 +1284,7 @@
             
             try {
                 const newReportRef = database.ref('reports').push();
-                await newReportRef.set({
+                const reportData = {
                     type: 'lost',
                     item,
                     location,
@@ -1129,19 +1293,31 @@
                     contact_info: contact,
                     reporter: 'website',
                     timestamp: new Date().toISOString()
-                });
+                };
+                
+                await newReportRef.set(reportData);
                 
                 lostItemForm.reset();
-                showToast('Your lost item has been reported successfully!');
+                
+                // Show toast with action button
+                showToast('Your lost item has been reported successfully!', 'success', {
+                    text: 'View Details',
+                    callback: () => {
+                        showReportDetailsModal(reportData);
+                    }
+                });
                 
                 // Check for matching found items
                 matchingFoundItems = await findMatchingItems(item, 'found');
                 if (matchingFoundItems.length > 0) {
                     const matchMessage = `We found ${matchingFoundItems.length} matching item(s) that were reported found!`;
                     
-                    // Show sticky toast with View Details button
-                    showToast(matchMessage, 'success', true, () => {
-                        showMatchingItemsModal(matchingFoundItems);
+                    // Show toast with action button
+                    showToast(matchMessage, 'success', {
+                        text: 'View Matching Items',
+                        callback: () => {
+                            showMatchingItemsModal(matchingFoundItems);
+                        }
                     });
                 }
             } catch (error) {
@@ -1163,7 +1339,7 @@
                 const verificationCode = generateVerificationCode();
                 
                 const newReportRef = database.ref('reports').push();
-                await newReportRef.set({
+                const reportData = {
                     type: 'found',
                     item,
                     location,
@@ -1172,21 +1348,25 @@
                     claimed: false,
                     reporter: 'website',
                     timestamp: new Date().toISOString()
-                });
+                };
+                
+                await newReportRef.set(reportData);
                 
                 foundItemForm.reset();
-                showToast('Your found item has been reported successfully!');
                 
-                // Show verification code
-                setTimeout(() => {
-                    showToast(`Your verification code is: ${verificationCode}. Please save this code for future reference.`, 'success');
-                }, 1000);
+                // Show toast with action button
+                showToast('Your found item has been reported successfully!', 'success', {
+                    text: 'View Details',
+                    callback: () => {
+                        showReportDetailsModal(reportData);
+                    }
+                });
                 
                 // Show safety warning
                 setTimeout(() => {
                     const safetyMessage = `IMPORTANT: When someone contacts you to claim this item, please ask for verification details (color, brand, unique features) to confirm ownership. Do not return the item without proper verification.`;
                     showToast(safetyMessage, 'success');
-                }, 2000);
+                }, 1000);
             } catch (error) {
                 console.error('Error reporting found item:', error);
                 showToast('Failed to report found item. Please try again.', 'error');
