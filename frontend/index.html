@@ -1193,6 +1193,23 @@
             text-align: center;
         }
         
+        /* Copy Tooltip */
+        .copy-tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .copy-tooltip.show {
+            opacity: 1;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .sticky-header .nav-links {
@@ -1534,6 +1551,9 @@
         </div>
     </div>
 
+    <!-- Copy Tooltip -->
+    <div class="copy-tooltip" id="copyTooltip">Copied to clipboard!</div>
+
     <!-- Matching Items Modal -->
     <div class="modal fade" id="matchingItemsModal" tabindex="-1" aria-labelledby="matchingItemsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -1669,6 +1689,7 @@
         const founderDetailsContent = document.getElementById('founderDetailsContent');
         const reportDetailsModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
         const reportDetailsContent = document.getElementById('reportDetailsContent');
+        const copyTooltip = document.getElementById('copyTooltip');
         
         // Sticky header and scroll elements
         const stickyHeader = document.getElementById('stickyHeader');
@@ -1771,7 +1792,7 @@
             });
         }
         
-        // Show report details modal (Original version)
+        // Show report details modal (Original version with all tips)
         function showReportDetailsModal(reportData) {
             let html = '';
             
@@ -1814,6 +1835,45 @@
                             <div class="detail-label">Reported On:</div>
                             <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
                         </div>
+                        
+                        <div class="importance-note">
+                            <h6><i class="bi bi-exclamation-triangle-fill"></i> Why You Need to Save This Code</h6>
+                            <p>This verification code is your proof that you reported this lost item. You will need it to:</p>
+                            <ul>
+                                <li>Verify your identity when marking the item as recovered</li>
+                                <li>Prevent unauthorized users from marking your item as recovered</li>
+                                <li>Ensure the security and integrity of your report</li>
+                            </ul>
+                            <p class="mb-0"><strong>Please save this code by taking a screenshot or writing it down!</strong></p>
+                        </div>
+                        
+                        <div class="guide-section">
+                            <h6><i class="bi bi-list-ol"></i> How to Mark Your Item as Recovered</h6>
+                            <p>After you've recovered your lost item, please follow these steps to mark it as recovered:</p>
+                            <ol>
+                                <li>Return to this website (KWASU Lost & Found Portal)</li>
+                                <li>Scroll down to the search section</li>
+                                <li>Search for the item you reported using keywords</li>
+                                <li>Find your reported item in the search results</li>
+                                <li>Click the "Mark as Recovered" button</li>
+                                <li>Enter your verification code when prompted</li>
+                                <li>Confirm to mark the item as recovered</li>
+                            </ol>
+                            
+                            <h6 class="mt-3"><i class="bi bi-heart-fill text-danger"></i> Why This Is Important</h6>
+                            <p>Marking items as recovered helps keep our database clean and prevents confusion for other users. It also helps us track the success of this portal in reuniting lost items with their owners.</p>
+                        </div>
+                        
+                        <div class="safety-alert">
+                            <h6><i class="bi bi-shield-exclamation"></i> Safety Tips for Lost Item Reporters</h6>
+                            <p>When someone contacts you claiming to have found your item:</p>
+                            <ul>
+                                <li>Ask for specific details about the item to verify ownership</li>
+                                <li>Never share personal information beyond what is necessary</li>
+                                <li>Meet in a safe, public place on campus to retrieve your item</li>
+                                <li>If you suspect a scam, report the person's number to KWASU Safety Unit or contact the developer at 09038323588</li>
+                            </ul>
+                        </div>
                     </div>
                 `;
             } else if (reportData.type === 'found') {
@@ -1845,6 +1905,45 @@
                             <div class="detail-label">Reported On:</div>
                             <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
                         </div>
+                        
+                        <div class="importance-note">
+                            <h6><i class="bi bi-exclamation-triangle-fill"></i> Why You Need to Save This Code</h6>
+                            <p>This verification code is your proof that you reported this item. You will need it to:</p>
+                            <ul>
+                                <li>Verify your identity when someone claims this item</li>
+                                <li>Mark the item as claimed after returning it to the owner</li>
+                                <li>Prevent false claims and scams</li>
+                            </ul>
+                            <p class="mb-0"><strong>Please save this code by taking a screenshot or writing it down!</strong></p>
+                        </div>
+                        
+                        <div class="guide-section">
+                            <h6><i class="bi bi-list-ol"></i> How to Mark Item as Claimed After Returning to Owner</h6>
+                            <p>After you've returned the item to its rightful owner, please follow these steps to mark it as claimed:</p>
+                            <ol>
+                                <li>Return to this website (KWASU Lost & Found Portal)</li>
+                                <li>Scroll down to the search section</li>
+                                <li>Search for the item you reported using keywords</li>
+                                <li>Find your reported item in the search results</li>
+                                <li>Click the "Mark as Claimed" button</li>
+                                <li>Enter your verification code when prompted</li>
+                                <li>Confirm to mark the item as claimed</li>
+                            </ol>
+                            
+                            <h6 class="mt-3"><i class="bi bi-heart-fill text-danger"></i> Why This Is Important</h6>
+                            <p>Marking items as claimed helps keep our database clean and prevents confusion for other users. It also helps us track the success of this portal in reuniting lost items with their owners.</p>
+                        </div>
+                        
+                        <div class="safety-alert">
+                            <h6><i class="bi bi-shield-exclamation"></i> Important Safety Information</h6>
+                            <p>When someone claims this item:</p>
+                            <ul>
+                                <li>Ask for specific details about the item to verify ownership</li>
+                                <li>Do not return the item until you are confident about the claimant's identity</li>
+                                <li>If you notice a false claim, report the person's number to KWASU Safety Unit immediately</li>
+                                <li>You can also contact the developer for assistance in reporting false claimants</li>
+                            </ul>
+                        </div>
                     </div>
                 `;
             }
@@ -1856,10 +1955,17 @@
             const codeElementId = reportData.type === 'lost' ? 'lostReportVerificationCode' : 'foundReportVerificationCode';
             const codeElement = document.getElementById(codeElementId);
             if (codeElement) {
-                codeElement.addEventListener('click', function() {
+                codeElement.addEventListener('click', (e) => {
                     const code = reportData.verification_code;
                     navigator.clipboard.writeText(code).then(() => {
-                        showToast('Verification code copied to clipboard!', 'success');
+                        // Show tooltip
+                        copyTooltip.style.left = e.pageX + 'px';
+                        copyTooltip.style.top = (e.pageY - 30) + 'px';
+                        copyTooltip.classList.add('show');
+                        
+                        setTimeout(() => {
+                            copyTooltip.classList.remove('show');
+                        }, 2000);
                     }).catch(err => {
                         console.error('Could not copy text: ', err);
                         showToast('Failed to copy verification code.', 'error');
