@@ -13,13 +13,16 @@
             --accent-color: #f39c12;
             --light-bg: #ecf0f1;
             --supporter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-bg);
             color: #333;
-            padding-top: 0; /* Remove default padding as we'll handle it with JS */
+            padding-top: 0;
         }
         
         /* Sticky Header Styles */
@@ -202,57 +205,391 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
+        /* Enhanced Search Results Styles */
         .search-results {
             margin-top: 2rem;
         }
         
-        .result-item {
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .search-results-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .search-results-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .search-sort-select {
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
             background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border-left: 4px solid var(--accent-color);
+            font-size: 0.9rem;
+        }
+        
+        .clear-search-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            color: #666;
             transition: all 0.3s ease;
         }
         
+        .clear-search-btn:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .result-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent-color);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
         .result-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
         
-        .result-item h5 {
+        .result-item.claimed {
+            border-left-color: var(--success-color);
+        }
+        
+        .result-item.recovered {
+            border-left-color: var(--info-color);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
         }
         
-        .result-item .meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+        .result-title i {
+            margin-right: 8px;
+            color: var(--accent-color);
         }
         
-        .result-item .meta i {
-            margin-right: 5px;
-        }
-        
-        .badge {
+        .result-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
             font-size: 0.8rem;
-            padding: 5px 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
         
         .badge-lost {
-            background-color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
         }
         
         .badge-found {
-            background-color: #2ecc71;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
         }
         
         .badge-recovered {
-            background-color: #17a2b8;
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--info-color);
         }
         
+        .badge-claimed {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+        }
+        
+        .result-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .result-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .result-meta-item i {
+            color: var(--secondary-color);
+        }
+        
+        .result-description {
+            margin-bottom: 1rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .result-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-contact a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.3s ease;
+        }
+        
+        .result-contact a:hover {
+            color: var(--primary-color);
+        }
+        
+        .result-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .result-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            color: var(--success-color);
+        }
+        
+        .status-info {
+            color: var(--info-color);
+        }
+        
+        .result-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-result {
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .btn-claim {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-claim:hover {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-recover {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--info-color);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-recover:hover {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .btn-view {
+            background-color: rgba(241, 196, 15, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+        
+        .btn-view:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        /* No Results State */
+        .no-results {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .no-results-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        .no-results-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .no-results-text {
+            color: #888;
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .no-results-suggestions {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .no-results-suggestions h6 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+        
+        .no-results-suggestions ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .no-results-suggestions li {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        
+        .no-results-suggestions li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Loading State */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        .spinner-container {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .spinner-container div {
+            position: absolute;
+            top: 33px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+        
+        .spinner-container div:nth-child(1) {
+            left: 8px;
+            animation: lds-ellipsis1 0.6s infinite;
+        }
+        
+        .spinner-container div:nth-child(2) {
+            left: 8px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+        
+        .spinner-container div:nth-child(3) {
+            left: 32px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+        
+        .spinner-container div:nth-child(4) {
+            left: 56px;
+            animation: lds-ellipsis3 0.6s infinite;
+        }
+        
+        @keyframes lds-ellipsis1 {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes lds-ellipsis3 {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+        
+        @keyframes lds-ellipsis2 {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(24px, 0);
+            }
+        }
+        
+        .loading-text {
+            margin-top: 1rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
         .footer {
             background-color: var(--primary-color);
             color: white;
@@ -272,6 +609,7 @@
             text-decoration: underline;
         }
         
+        /* Toast Container */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -309,12 +647,7 @@
             position: relative;
         }
         
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        
+        /* Platform Icons */
         .platform-icons {
             margin-top: 1rem;
         }
@@ -331,6 +664,7 @@
             color: var(--accent-color);
         }
         
+        /* WhatsApp Note */
         .whatsapp-note {
             background-color: #e8f5e9;
             border-left: 4px solid #4caf50;
@@ -339,6 +673,7 @@
             border-radius: 4px;
         }
         
+        /* Safety Tips */
         .safety-tips {
             background-color: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -371,7 +706,7 @@
             margin-right: 8px;
         }
         
-        /* Simple Section Break */
+        /* Section Break */
         .section-break {
             height: 2px;
             background: linear-gradient(to right, transparent, #ddd, transparent);
@@ -572,324 +907,6 @@
             }
         }
         
-        /* Matching Items Modal */
-        .matching-item-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--accent-color);
-        }
-        
-        .matching-item-card h5 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-        
-        .matching-item-card .detail-row {
-            display: flex;
-            margin-bottom: 0.75rem;
-        }
-        
-        .matching-item-card .detail-label {
-            font-weight: 600;
-            width: 120px;
-            color: #555;
-        }
-        
-        .matching-item-card .detail-value {
-            flex: 1;
-        }
-        
-        .matching-item-card .contact-btn {
-            margin-top: 1rem;
-            display: inline-block;
-            background-color: #25D366;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s;
-        }
-        
-        .matching-item-card .contact-btn:hover {
-            background-color: #128C7E;
-            color: white;
-        }
-        
-        /* Verification Modal */
-        .modal-content {
-            border-radius: 15px;
-            border: none;
-        }
-        
-        .modal-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-radius: 15px 15px 0 0;
-            border: none;
-        }
-        
-        .modal-title {
-            font-weight: 600;
-        }
-        
-        .modal-body {
-            padding: 2rem;
-        }
-        
-        /* Founder Details Modal */
-        .founder-details {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .founder-details h5 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-        
-        .founder-details .detail-row {
-            display: flex;
-            margin-bottom: 0.75rem;
-        }
-        
-        .founder-details .detail-label {
-            font-weight: 600;
-            width: 120px;
-            color: #555;
-        }
-        
-        .founder-details .detail-value {
-            flex: 1;
-        }
-        
-        .founder-details .contact-btn {
-            margin-top: 1rem;
-            display: inline-block;
-            background-color: #25D366;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s;
-        }
-        
-        .founder-details .contact-btn:hover {
-            background-color: #128C7E;
-            color: white;
-        }
-        
-        /* Found Item Actions */
-        .found-item-actions {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .claimed-status {
-            background-color: #28a745;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        /* New styles for report details modal */
-        .report-details-modal .modal-dialog {
-            max-width: 600px;
-        }
-        
-        .report-details-card {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .report-details-card h5 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-        
-        .report-details-card .detail-row {
-            display: flex;
-            margin-bottom: 1rem;
-        }
-        
-        .report-details-card .detail-label {
-            font-weight: 600;
-            width: 140px;
-            color: #555;
-        }
-        
-        .report-details-card .detail-value {
-            flex: 1;
-        }
-        
-        .verification-code-box {
-            background-color: #e9ecef;
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .verification-code-box:hover {
-            background-color: #dee2e6;
-            transform: scale(1.02);
-        }
-        
-        .copy-tooltip {
-            position: absolute;
-            background-color: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .copy-tooltip.show {
-            opacity: 1;
-        }
-        
-        .toast-action-btn {
-            margin-top: 10px;
-        }
-        
-        .safety-alert {
-            background-color: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        
-        .safety-alert h6 {
-            color: #721c24;
-            margin-bottom: 10px;
-        }
-        
-        .safety-alert p {
-            color: #721c24;
-            margin-bottom: 0;
-        }
-        
-        .verification-input-group {
-            margin: 1.5rem 0;
-        }
-        
-        .verification-input {
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-        }
-        
-        .forgot-code-tip {
-            font-size: 0.85rem;
-            color: #6c757d;
-            margin-top: 10px;
-            text-align: center;
-            font-style: italic;
-        }
-        
-        .guide-section {
-            background-color: #e7f3ff;
-            border-left: 4px solid #0066cc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        
-        .guide-section h6 {
-            color: #004c99;
-            margin-bottom: 10px;
-        }
-        
-        .guide-section ol {
-            color: #004c99;
-            padding-left: 20px;
-        }
-        
-        .guide-section li {
-            margin-bottom: 8px;
-        }
-        
-        .guide-section li:last-child {
-            margin-bottom: 0;
-        }
-        
-        .importance-note {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        
-        .importance-note h6 {
-            color: #856404;
-            margin-bottom: 10px;
-        }
-        
-        .importance-note p {
-            color: #856404;
-            margin-bottom: 0;
-        }
-        
-        .mark-as-recovered-btn {
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .mark-as-recovered-btn:hover {
-            background-color: #138496;
-            color: white;
-        }
-        
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        
-        .verification-modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .modal-icon {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        
-        .lost-verification-modal .modal-body {
-            text-align: center;
-        }
-        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .sticky-header .nav-links {
@@ -899,6 +916,23 @@
             .sticky-header .logo {
                 margin-left: 10px;
                 font-size: 1.2rem;
+            }
+            
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .result-buttons {
+                width: 100%;
+                justify-content: flex-end;
             }
         }
     </style>
@@ -1020,10 +1054,13 @@
             </div>
             
             <div class="loading-spinner" id="search-loading">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                <div class="spinner-container">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
-                <p>Searching for items...</p>
+                <p class="loading-text">Searching for items...</p>
             </div>
             
             <div class="search-results" id="search-results"></div>
@@ -1371,6 +1408,7 @@
         let matchingFoundItems = [];
         let lastReportData = null;
         let lastScrollTop = 0;
+        let currentSearchTerm = '';
         
         // Create floating particles
         function createParticles() {
@@ -1801,7 +1839,8 @@
                 return;
             }
             
-            searchLoading.style.display = 'block';
+            currentSearchTerm = searchTerm;
+            searchLoading.classList.add('active');
             searchResults.innerHTML = '';
             
             try {
@@ -1809,8 +1848,8 @@
                 const reports = snapshot.val();
                 
                 if (!reports) {
-                    searchResults.innerHTML = '<p class="text-center">No items found in the database.</p>';
-                    searchLoading.style.display = 'none';
+                    showNoResults(searchTerm);
+                    searchLoading.classList.remove('active');
                     return;
                 }
                 
@@ -1837,134 +1876,300 @@
                 results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
                 if (results.length === 0) {
-                    searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
+                    showNoResults(searchTerm);
                 } else {
-                    let resultsHtml = `<h4 class="mb-3">Found ${results.length} item(s) matching "${searchTerm}":</h4>`;
-                    
-                    results.forEach(report => {
-                        const date = new Date(report.timestamp).toLocaleString();
-                        const isClaimed = report.claimed || false;
-                        const isRecovered = report.recovered || false;
-                        const cardClass = isClaimed || isRecovered ? 'result-item claimed' : 'result-item';
-                        
-                        if (report.type === 'found') {
-                            const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
-                            const badgeText = isClaimed ? 'Claimed' : 'Found';
-                            
-                            resultsHtml += `
-                                <div class="${cardClass}">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h5>${report.item}</h5>
-                                            <div class="meta">
-                                                <i class="bi bi-geo-alt"></i> ${report.location}
-                                            </div>
-                                            <div class="meta">
-                                                <i class="bi bi-clock"></i> ${date}
-                                            </div>
-                                            ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
-                                        </div>
-                                        <span class="badge ${badgeClass}">${badgeText}</span>
-                                    </div>
-                                    <div class="mt-3">
-                                        <i class="bi bi-whatsapp"></i> 
-                                        <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
-                                    </div>
-                                    ${!isClaimed ? `
-                                        <div class="found-item-actions mt-3">
-                                            <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
-                                                <i class="bi bi-check-circle"></i> Mark as Claimed
-                                            </button>
-                                        </div>
-                                    ` : `
-                                        <div class="found-item-actions mt-3">
-                                            <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Claimed</span>
-                                        </div>
-                                    `}
-                                </div>
-                            `;
-                        } else {
-                            const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
-                            const badgeText = isRecovered ? 'Recovered' : 'Lost';
-                            
-                            resultsHtml += `
-                                <div class="${cardClass}">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h5>${report.item}</h5>
-                                            <div class="meta">
-                                                <i class="bi bi-geo-alt"></i> ${report.location}
-                                            </div>
-                                            ${report.last_seen ? `
-                                                <div class="meta">
-                                                    <i class="bi bi-eye"></i> Last seen: ${report.last_seen}
-                                                </div>
-                                            ` : ''}
-                                            <div class="meta">
-                                                <i class="bi bi-clock"></i> ${date}
-                                            </div>
-                                            ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
-                                        </div>
-                                        <span class="badge ${badgeClass}">${badgeText}</span>
-                                    </div>
-                                    ${report.contact_info ? `
-                                        <div class="mt-3">
-                                            <i class="bi bi-whatsapp"></i> 
-                                            <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
-                                        </div>
-                                    ` : ''}
-                                    ${!isRecovered ? `
-                                        <div class="found-item-actions mt-3">
-                                            <button class="btn btn-info btn-sm mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
-                                                <i class="bi bi-check-circle"></i> Mark as Recovered
-                                            </button>
-                                        </div>
-                                    ` : `
-                                        <div class="found-item-actions mt-3">
-                                            <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Recovered</span>
-                                        </div>
-                                    `}
-                                </div>
-                            `;
-                        }
-                    });
-                    
-                    searchResults.innerHTML = resultsHtml;
-                    
-                    // Add event listeners to "Mark as Claimed" buttons
-                    document.querySelectorAll('.mark-claimed-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const itemId = this.getAttribute('data-id');
-                            const itemPhone = this.getAttribute('data-phone');
-                            currentItemToClaim = { id: itemId, phone: itemPhone };
-                            
-                            // Clear the verification code input
-                            verificationCodeInput.value = '';
-                            
-                            verificationModal.show();
-                        });
-                    });
-                    
-                    // Add event listeners to "Mark as Recovered" buttons
-                    document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const itemId = this.getAttribute('data-id');
-                            const itemPhone = this.getAttribute('data-phone');
-                            currentItemToRecover = { id: itemId, phone: itemPhone };
-                            
-                            // Clear the verification code input
-                            lostVerificationCodeInput.value = '';
-                            
-                            lostVerificationModal.show();
-                        });
-                    });
+                    displaySearchResults(results, searchTerm);
                 }
             } catch (error) {
                 console.error('Error searching items:', error);
                 showToast('Failed to search items. Please try again.', 'error');
             } finally {
-                searchLoading.style.display = 'none';
+                searchLoading.classList.remove('active');
             }
+        }
+        
+        // Display search results
+        function displaySearchResults(results, searchTerm) {
+            let resultsHtml = `
+                <div class="search-results-header">
+                    <h4 class="search-results-title">Found ${results.length} item(s) matching "${searchTerm}"</h4>
+                    <div class="search-results-actions">
+                        <select class="search-sort-select" id="sort-select">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="alphabetical">Alphabetical</option>
+                        </select>
+                        <button class="clear-search-btn" id="clear-search-btn">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            results.forEach(report => {
+                const date = new Date(report.timestamp).toLocaleString();
+                const isClaimed = report.claimed || false;
+                const isRecovered = report.recovered || false;
+                const cardClass = isClaimed ? 'claimed' : (isRecovered ? 'recovered' : '');
+                
+                if (report.type === 'found') {
+                    const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
+                    const badgeText = isClaimed ? 'Claimed' : 'Found';
+                    const badgeIcon = isClaimed ? 'bi-check-circle-fill' : 'bi-gift-fill';
+                    
+                    resultsHtml += `
+                        <div class="result-item ${cardClass}">
+                            <div class="result-header">
+                                <h5 class="result-title">
+                                    <i class="bi bi-gift"></i>
+                                    ${report.item}
+                                </h5>
+                                <span class="result-badge ${badgeClass}">
+                                    <i class="bi ${badgeIcon}"></i>
+                                    ${badgeText}
+                                </span>
+                            </div>
+                            <div class="result-meta">
+                                <div class="result-meta-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>${report.location}</span>
+                                </div>
+                                <div class="result-meta-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span>${date}</span>
+                                </div>
+                            </div>
+                            ${report.description ? `<div class="result-description">${report.description}</div>` : ''}
+                            <div class="result-contact">
+                                <i class="bi bi-whatsapp"></i>
+                                <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank">
+                                    Contact via WhatsApp: ${report.contact_phone}
+                                </a>
+                            </div>
+                            <div class="result-actions">
+                                ${isClaimed ? `
+                                    <div class="result-status status-success">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Successfully Claimed</span>
+                                    </div>
+                                ` : `
+                                    <div class="result-buttons">
+                                        <button class="btn btn-result btn-claim mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
+                                            <i class="bi bi-check-circle"></i>
+                                            Mark as Claimed
+                                        </button>
+                                        <button class="btn btn-result btn-view view-details-btn" data-id="${report.id}" data-type="found">
+                                            <i class="bi bi-eye"></i>
+                                            View Details
+                                        </button>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
+                    const badgeText = isRecovered ? 'Recovered' : 'Lost';
+                    const badgeIcon = isRecovered ? 'bi-check-circle-fill' : 'bi-search';
+                    
+                    resultsHtml += `
+                        <div class="result-item ${cardClass}">
+                            <div class="result-header">
+                                <h5 class="result-title">
+                                    <i class="bi bi-search"></i>
+                                    ${report.item}
+                                </h5>
+                                <span class="result-badge ${badgeClass}">
+                                    <i class="bi ${badgeIcon}"></i>
+                                    ${badgeText}
+                                </span>
+                            </div>
+                            <div class="result-meta">
+                                <div class="result-meta-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>${report.location}</span>
+                                </div>
+                                ${report.last_seen ? `
+                                <div class="result-meta-item">
+                                    <i class="bi bi-eye"></i>
+                                    <span>Last seen: ${report.last_seen}</span>
+                                </div>
+                                ` : ''}
+                                <div class="result-meta-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span>${date}</span>
+                                </div>
+                            </div>
+                            ${report.description ? `<div class="result-description">${report.description}</div>` : ''}
+                            ${report.contact_info ? `
+                            <div class="result-contact">
+                                <i class="bi bi-whatsapp"></i>
+                                <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank">
+                                    Contact via WhatsApp: ${report.contact_info}
+                                </a>
+                            </div>
+                            ` : ''}
+                            <div class="result-actions">
+                                ${isRecovered ? `
+                                    <div class="result-status status-info">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Successfully Recovered</span>
+                                    </div>
+                                ` : `
+                                    <div class="result-buttons">
+                                        <button class="btn btn-result btn-recover mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
+                                            <i class="bi bi-check-circle"></i>
+                                            Mark as Recovered
+                                        </button>
+                                        <button class="btn btn-result btn-view view-details-btn" data-id="${report.id}" data-type="lost">
+                                            <i class="bi bi-eye"></i>
+                                            View Details
+                                        </button>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            searchResults.innerHTML = resultsHtml;
+            
+            // Add event listeners to "Mark as Claimed" buttons
+            document.querySelectorAll('.mark-claimed-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    const itemPhone = this.getAttribute('data-phone');
+                    currentItemToClaim = { id: itemId, phone: itemPhone };
+                    
+                    // Clear the verification code input
+                    verificationCodeInput.value = '';
+                    
+                    verificationModal.show();
+                });
+            });
+            
+            // Add event listeners to "Mark as Recovered" buttons
+            document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    const itemPhone = this.getAttribute('data-phone');
+                    currentItemToRecover = { id: itemId, phone: itemPhone };
+                    
+                    // Clear the verification code input
+                    lostVerificationCodeInput.value = '';
+                    
+                    lostVerificationModal.show();
+                });
+            });
+            
+            // Add event listeners to "View Details" buttons
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const itemId = this.getAttribute('data-id');
+                    const itemType = this.getAttribute('data-type');
+                    
+                    try {
+                        const snapshot = await database.ref(`reports/${itemId}`).once('value');
+                        const reportData = snapshot.val();
+                        
+                        if (reportData) {
+                            showReportDetailsModal(reportData);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching report details:', error);
+                        showToast('Failed to load report details. Please try again.', 'error');
+                    }
+                });
+            });
+            
+            // Add event listener to sort select
+            const sortSelect = document.getElementById('sort-select');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    sortSearchResults(this.value);
+                });
+            }
+            
+            // Add event listener to clear search button
+            const clearSearchBtn = document.getElementById('clear-search-btn');
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    searchResults.innerHTML = '';
+                    currentSearchTerm = '';
+                });
+            }
+        }
+        
+        // Show no results state
+        function showNoResults(searchTerm) {
+            const noResultsHtml = `
+                <div class="no-results">
+                    <div class="no-results-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h3 class="no-results-title">No items found</h3>
+                    <p class="no-results-text">
+                        We couldn't find any items matching "${searchTerm}". Try using different keywords or check your spelling.
+                    </p>
+                    <div class="no-results-suggestions">
+                        <h6><i class="bi bi-lightbulb"></i> Search Tips</h6>
+                        <ul>
+                            <li>Try using more general terms (e.g., "phone" instead of "iPhone 13 Pro")</li>
+                            <li>Check for typos in your search term</li>
+                            <li>Try searching by location (e.g., "library", "cafeteria")</li>
+                            <li>Browse all items by leaving the search field empty and clicking "Search"</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            searchResults.innerHTML = noResultsHtml;
+        }
+        
+        // Sort search results
+        function sortSearchResults(sortBy) {
+            const resultItems = Array.from(document.querySelectorAll('.result-item'));
+            const resultsContainer = document.querySelector('.search-results');
+            
+            // Remove existing result items
+            resultItems.forEach(item => item.remove());
+            
+            // Get the current results data
+            const currentResults = [];
+            resultItems.forEach(item => {
+                // Extract data from the DOM element
+                const title = item.querySelector('.result-title').textContent.trim();
+                const dateText = item.querySelector('.result-meta-item:nth-child(2) span').textContent;
+                const date = new Date(dateText);
+                
+                currentResults.push({
+                    element: item,
+                    title: title,
+                    date: date
+                });
+            });
+            
+            // Sort based on the selected option
+            switch (sortBy) {
+                case 'oldest':
+                    currentResults.sort((a, b) => a.date - b.date);
+                    break;
+                case 'alphabetical':
+                    currentResults.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'newest':
+                default:
+                    currentResults.sort((a, b) => b.date - a.date);
+                    break;
+            }
+            
+            // Re-append the sorted elements
+            const resultsHeader = resultsContainer.querySelector('.search-results-header');
+            currentResults.forEach(result => {
+                resultsContainer.appendChild(result.element);
+            });
         }
         
         // Find matching items (for lost item reporting)
@@ -2035,7 +2240,7 @@
                 showToast('Item has been marked as claimed successfully!');
                 
                 // Refresh search results if visible
-                if (searchResults.innerHTML !== '') {
+                if (searchResults.innerHTML !== '' && currentSearchTerm) {
                     performSearch();
                 }
                 
@@ -2083,7 +2288,7 @@
                 showToast('Item has been marked as recovered successfully!');
                 
                 // Refresh search results if visible
-                if (searchResults.innerHTML !== '') {
+                if (searchResults.innerHTML !== '' && currentSearchTerm) {
                     performSearch();
                 }
                 
