@@ -125,6 +125,10 @@
             background-color: #2ecc71;
         }
         
+        .badge-recovered {
+            background-color: #17a2b8;
+        }
+        
         .footer {
             background-color: var(--primary-color);
             color: white;
@@ -727,8 +731,24 @@
             color: white;
         }
         
-        .badge-recovered {
-            background-color: #17a2b8;
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .verification-modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .lost-verification-modal .modal-body {
+            text-align: center;
         }
     </style>
 </head>
@@ -880,7 +900,7 @@
                 <h6 class="text-center"><i class="bi bi-info-circle"></i> How to Report Suspicious Activity</h6>
                 <p class="mb-0 text-center">
                     <strong>KWASU Safety Unit:</strong> Contact campus security | 
-                    <strong>Developer:</strong> <a href="tel:09038323588">09038323588</a>
+                    <strong>Developer:</strong> <a href="tel:09038323588">Rugged</a>
                 </p>
             </div>
         </div>
@@ -998,7 +1018,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2023 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
+            <p>&copy; 2025 KWASU Lost & Found Portal. Designed & Developed by Rugged of ICT.</p>
             <p>For support: <a href="tel:09038323588">09038323588</a></p>
         </div>
     </footer>
@@ -1046,7 +1066,7 @@
         </div>
     </div>
 
-    <!-- Verification Modal -->
+    <!-- Verification Modal for Found Items -->
     <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1068,6 +1088,37 @@
                     
                     <div class="d-grid gap-2 mt-4">
                         <button type="button" class="btn btn-primary" id="confirmClaimBtn">Confirm and Mark as Claimed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Modal for Lost Items -->
+    <div class="modal fade lost-verification-modal" id="lostVerificationModal" tabindex="-1" aria-labelledby="lostVerificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lostVerificationModalLabel">Verify Item Recovery</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body lost-verification-modal">
+                    <div class="modal-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <p>To verify that you are the original reporter of this lost item, please enter the verification code that was generated when you first reported the item.</p>
+                    
+                    <div class="verification-input-group">
+                        <label for="lost-verification-code-input" class="form-label">Enter Verification Code:</label>
+                        <input type="text" class="form-control verification-input" id="lost-verification-code-input" placeholder="Enter your 6-character code" maxlength="6">
+                    </div>
+                    
+                    <p class="forgot-code-tip">
+                        <i class="bi bi-info-circle"></i> If you forgot your verification code, please contact the developer at <a href="tel:09038323588">09038323588</a>
+                    </p>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="button" class="btn btn-primary" id="confirmRecoveredBtn">Confirm and Mark as Recovered</button>
                     </div>
                 </div>
             </div>
@@ -1126,6 +1177,9 @@
         const verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
         const verificationCodeInput = document.getElementById('verification-code-input');
         const confirmClaimBtn = document.getElementById('confirmClaimBtn');
+        const lostVerificationModal = new bootstrap.Modal(document.getElementById('lostVerificationModal'));
+        const lostVerificationCodeInput = document.getElementById('lost-verification-code-input');
+        const confirmRecoveredBtn = document.getElementById('confirmRecoveredBtn');
         const founderDetailsModal = new bootstrap.Modal(document.getElementById('founderDetailsModal'));
         const founderDetailsContent = document.getElementById('founderDetailsContent');
         const reportDetailsModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
@@ -1134,6 +1188,7 @@
         
         // Global variables
         let currentItemToClaim = null;
+        let currentItemToRecover = null;
         let matchingFoundItems = [];
         let lastReportData = null;
         
@@ -1255,8 +1310,45 @@
                             <div class="detail-value">${reportData.contact_info}</div>
                         </div>
                         <div class="detail-row">
+                            <div class="detail-label">Verification Code:</div>
+                            <div class="detail-value">
+                                <div class="verification-code-box" id="lostReportVerificationCode">
+                                    ${reportData.verification_code}
+                                </div>
+                                <small class="text-muted">Click to copy</small>
+                            </div>
+                        </div>
+                        <div class="detail-row">
                             <div class="detail-label">Reported On:</div>
                             <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
+                        </div>
+                        
+                        <div class="importance-note">
+                            <h6><i class="bi bi-exclamation-triangle-fill"></i> Why You Need to Save This Code</h6>
+                            <p>This verification code is your proof that you reported this lost item. You will need it to:</p>
+                            <ul>
+                                <li>Verify your identity when marking the item as recovered</li>
+                                <li>Prevent unauthorized users from marking your item as recovered</li>
+                                <li>Ensure the security and integrity of your report</li>
+                            </ul>
+                            <p class="mb-0"><strong>Please save this code by taking a screenshot or writing it down!</strong></p>
+                        </div>
+                        
+                        <div class="guide-section">
+                            <h6><i class="bi bi-list-ol"></i> How to Mark Your Item as Recovered</h6>
+                            <p>After you've recovered your lost item, please follow these steps to mark it as recovered:</p>
+                            <ol>
+                                <li>Return to this website (KWASU Lost & Found Portal)</li>
+                                <li>Scroll down to the search section</li>
+                                <li>Search for the item you reported using keywords</li>
+                                <li>Find your reported item in the search results</li>
+                                <li>Click the "Mark as Recovered" button</li>
+                                <li>Enter your verification code when prompted</li>
+                                <li>Confirm to mark the item as recovered</li>
+                            </ol>
+                            
+                            <h6 class="mt-3"><i class="bi bi-heart-fill text-danger"></i> Why This Is Important</h6>
+                            <p>Marking items as recovered helps keep our database clean and prevents confusion for other users. It also helps us track the success of this portal in reuniting lost items with their owners.</p>
                         </div>
                         
                         <div class="safety-alert">
@@ -1268,21 +1360,6 @@
                                 <li>Meet in a safe, public place on campus to retrieve your item</li>
                                 <li>If you suspect a scam, report the person's number to KWASU Safety Unit or contact the developer at 09038323588</li>
                             </ul>
-                            
-                            <div class="mt-3">
-                                <h6><i class="bi bi-info-circle"></i> After Recovering Your Item</h6>
-                                <p>Once you have recovered your lost item, please mark it as recovered in our system. This helps keep our database clean and prevents confusion for other users.</p>
-                                <div class="guide-section">
-                                    <h6><i class="bi bi-list-ol"></i> How to Mark Your Item as Recovered:</h6>
-                                    <ol>
-                                        <li>Return to this website</li>
-                                        <li>Scroll down to the search section</li>
-                                        <li>Search for your item using keywords</li>
-                                        <li>Find your lost item in the search results</li>
-                                        <li>Click the "Mark as Recovered" button</li>
-                                    </ol>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 `;
@@ -1305,7 +1382,7 @@
                         <div class="detail-row">
                             <div class="detail-label">Verification Code:</div>
                             <div class="detail-value">
-                                <div class="verification-code-box" id="reportVerificationCode">
+                                <div class="verification-code-box" id="foundReportVerificationCode">
                                     ${reportData.verification_code}
                                 </div>
                                 <small class="text-muted">Click to copy</small>
@@ -1362,8 +1439,9 @@
             reportDetailsModal.show();
             
             // Add click event to verification code to copy to clipboard
-            if (reportData.type === 'found') {
-                const codeElement = document.getElementById('reportVerificationCode');
+            const codeElementId = reportData.type === 'lost' ? 'lostReportVerificationCode' : 'foundReportVerificationCode';
+            const codeElement = document.getElementById(codeElementId);
+            if (codeElement) {
                 codeElement.addEventListener('click', (e) => {
                     const code = reportData.verification_code;
                     navigator.clipboard.writeText(code).then(() => {
@@ -1431,6 +1509,9 @@
             const contact = document.getElementById('lost-contact').value;
             
             try {
+                // Generate verification code
+                const verificationCode = generateVerificationCode();
+                
                 const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'lost',
@@ -1439,6 +1520,7 @@
                     last_seen: lastSeen, // Keep original formatting
                     description: description, // Keep original formatting
                     contact_info: contact,
+                    verification_code: verificationCode,
                     recovered: false,
                     reporter: 'website',
                     timestamp: new Date().toISOString()
@@ -1448,8 +1530,9 @@
                 
                 lostItemForm.reset();
                 
-                // Show toast with action button
-                showToast('Your lost item has been reported successfully!', 'success', {
+                // Show toast with action button and verification code
+                const message = `Your lost item has been reported successfully! Your verification code is "${verificationCode}". Please save it as you will need it later.`;
+                showToast(message, 'success', {
                     text: 'View Details',
                     callback: () => {
                         showReportDetailsModal(reportData);
@@ -1684,23 +1767,15 @@
                     
                     // Add event listeners to "Mark as Recovered" buttons
                     document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
-                        btn.addEventListener('click', async function() {
+                        btn.addEventListener('click', function() {
                             const itemId = this.getAttribute('data-id');
+                            const itemPhone = this.getAttribute('data-phone');
+                            currentItemToRecover = { id: itemId, phone: itemPhone };
                             
-                            try {
-                                await database.ref(`reports/${itemId}`).update({
-                                    recovered: true,
-                                    recovered_at: new Date().toISOString()
-                                });
-                                
-                                showToast('Item has been marked as recovered successfully!');
-                                
-                                // Refresh search results
-                                performSearch();
-                            } catch (error) {
-                                console.error('Error marking item as recovered:', error);
-                                showToast('Failed to mark item as recovered. Please try again.', 'error');
-                            }
+                            // Clear the verification code input
+                            lostVerificationCodeInput.value = '';
+                            
+                            lostVerificationModal.show();
                         });
                     });
                 }
@@ -1788,6 +1863,54 @@
             } catch (error) {
                 console.error('Error marking item as claimed:', error);
                 showToast('Failed to mark item as claimed. Please try again.', 'error');
+            }
+        });
+        
+        // Handle "Confirm and Mark as Recovered" button
+        confirmRecoveredBtn.addEventListener('click', async () => {
+            if (!currentItemToRecover) return;
+            
+            const enteredCode = lostVerificationCodeInput.value.trim().toUpperCase();
+            
+            if (!enteredCode) {
+                showToast('Please enter your verification code', 'error');
+                return;
+            }
+            
+            try {
+                // Get the report to verify the code
+                const reportSnapshot = await database.ref(`reports/${currentItemToRecover.id}`).once('value');
+                const reportData = reportSnapshot.val();
+                
+                if (!reportData) {
+                    showToast('Report not found', 'error');
+                    return;
+                }
+                
+                // Verify the code
+                if (reportData.verification_code !== enteredCode) {
+                    showToast('Invalid verification code. Please try again.', 'error');
+                    return;
+                }
+                
+                // Mark as recovered
+                await database.ref(`reports/${currentItemToRecover.id}`).update({
+                    recovered: true,
+                    recovered_at: new Date().toISOString()
+                });
+                
+                lostVerificationModal.hide();
+                showToast('Item has been marked as recovered successfully!');
+                
+                // Refresh search results if visible
+                if (searchResults.innerHTML !== '') {
+                    performSearch();
+                }
+                
+                currentItemToRecover = null;
+            } catch (error) {
+                console.error('Error marking item as recovered:', error);
+                showToast('Failed to mark item as recovered. Please try again.', 'error');
             }
         });
         
