@@ -1210,6 +1210,25 @@
             opacity: 1;
         }
         
+        /* Verification Error Message */
+        .verification-error {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .verification-error.show {
+            display: block;
+        }
+        
+        .verification-error i {
+            margin-right: 8px;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .sticky-header .nav-links {
@@ -1582,6 +1601,11 @@
                 <div class="modal-body">
                     <p>To verify that you are the original reporter of this found item, please enter the verification code that was sent to your WhatsApp number when you first reported the item.</p>
                     
+                    <div class="verification-error" id="verification-error">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <span>Invalid verification code. Please try again.</span>
+                    </div>
+                    
                     <div class="verification-input-group">
                         <label for="verification-code-input" class="form-label">Enter Verification Code:</label>
                         <input type="text" class="form-control verification-input" id="verification-code-input" placeholder="Enter your 6-character code" maxlength="6">
@@ -1612,6 +1636,11 @@
                         <i class="bi bi-shield-check"></i>
                     </div>
                     <p>To verify that you are the original reporter of this lost item, please enter the verification code that was generated when you first reported the item.</p>
+                    
+                    <div class="verification-error" id="lost-verification-error">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <span>Invalid verification code. Please try again.</span>
+                    </div>
                     
                     <div class="verification-input-group">
                         <label for="lost-verification-code-input" class="form-label">Enter Verification Code:</label>
@@ -1681,9 +1710,11 @@
         const matchingItemsContent = document.getElementById('matchingItemsContent');
         const verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
         const verificationCodeInput = document.getElementById('verification-code-input');
+        const verificationError = document.getElementById('verification-error');
         const confirmClaimBtn = document.getElementById('confirmClaimBtn');
         const lostVerificationModal = new bootstrap.Modal(document.getElementById('lostVerificationModal'));
         const lostVerificationCodeInput = document.getElementById('lost-verification-code-input');
+        const lostVerificationError = document.getElementById('lost-verification-error');
         const confirmRecoveredBtn = document.getElementById('confirmRecoveredBtn');
         const founderDetailsModal = new bootstrap.Modal(document.getElementById('founderDetailsModal'));
         const founderDetailsContent = document.getElementById('founderDetailsContent');
@@ -2329,8 +2360,9 @@
                     const itemPhone = this.getAttribute('data-phone');
                     currentItemToClaim = { id: itemId, phone: itemPhone };
                     
-                    // Clear the verification code input
+                    // Clear the verification code input and error message
                     verificationCodeInput.value = '';
+                    verificationError.classList.remove('show');
                     
                     verificationModal.show();
                 });
@@ -2343,8 +2375,9 @@
                     const itemPhone = this.getAttribute('data-phone');
                     currentItemToRecover = { id: itemId, phone: itemPhone };
                     
-                    // Clear the verification code input
+                    // Clear the verification code input and error message
                     lostVerificationCodeInput.value = '';
+                    lostVerificationError.classList.remove('show');
                     
                     lostVerificationModal.show();
                 });
@@ -2493,7 +2526,8 @@
                 
                 // Verify the code
                 if (reportData.verification_code !== enteredCode) {
-                    showToast('Invalid verification code. Please try again.', 'error');
+                    // Show error message inside the modal instead of toast
+                    verificationError.classList.add('show');
                     return;
                 }
                 
@@ -2541,7 +2575,8 @@
                 
                 // Verify the code
                 if (reportData.verification_code !== enteredCode) {
-                    showToast('Invalid verification code. Please try again.', 'error');
+                    // Show error message inside the modal instead of toast
+                    lostVerificationError.classList.add('show');
                     return;
                 }
                 
