@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KWASU Lost & Found Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@.10.0/font/bootstrap-icons.css">
     <style>
         :root {
             --primary-color: #1a5276;
@@ -13,6 +13,8 @@
             --accent-color: #f39c12;
             --light-bg: #ecf0f1;
             --supporter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --message-sent: #dcf8c6;
+            --message-received: #f1f0f0;
         }
         
         body {
@@ -552,6 +554,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .claimed-status {
@@ -750,6 +754,328 @@
         .lost-verification-modal .modal-body {
             text-align: center;
         }
+        
+        /* Messaging System Styles */
+        .messaging-section {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .messaging-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .conversation-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+        }
+        
+        .conversation-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .conversation-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .conversation-item.active {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .conversation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .conversation-preview {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .conversation-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+        
+        .conversation-message {
+            font-size: 0.9rem;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70%;
+        }
+        
+        .conversation-time {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .conversation-unread {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+        
+        .message-modal .modal-dialog {
+            max-width: 800px;
+            height: 600px;
+        }
+        
+        .message-modal .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-modal .modal-header {
+            flex-shrink: 0;
+        }
+        
+        .message-modal .modal-body {
+            flex-grow: 1;
+            overflow: hidden;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f5f5f5;
+        }
+        
+        .message {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        
+        .message-sent {
+            background-color: var(--message-sent);
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-received {
+            background-color: var(--message-received);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            color: #999;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .message-received .message-time {
+            text-align: left;
+        }
+        
+        .message-input-container {
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            background-color: white;
+        }
+        
+        .message-input {
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            resize: none;
+            height: auto;
+            max-height: 120px;
+        }
+        
+        .message-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .message-safety-tips {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .message-safety-tips i {
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        
+        .share-info-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+        
+        .share-info-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        .report-conversation-btn {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            color: #721c24;
+        }
+        
+        .report-conversation-btn:hover {
+            background-color: #f1b0b7;
+        }
+        
+        .message-info-shared {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #155724;
+        }
+        
+        .message-info-shared i {
+            color: #28a745;
+            margin-right: 5px;
+        }
+        
+        .no-conversations {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        .no-conversations i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .message-contact-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .message-contact-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .message-contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .message-contact-info {
+            flex-grow: 1;
+        }
+        
+        .message-contact-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .message-contact-item {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .message-contact-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-message {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        
+        .btn-message:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-message-outline {
+            background-color: transparent;
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        
+        .btn-message-outline:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .message-status {
+            font-size: 0.75rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .message-verification-pending {
+            color: var(--accent-color);
+        }
+        
+        .message-verification-complete {
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -859,6 +1185,30 @@
             </div>
             
             <div class="search-results" id="search-results"></div>
+        </div>
+
+        <!-- Secure Direct Messaging Section -->
+        <div class="section-card">
+            <h3 class="section-title">
+                <i class="bi bi-chat-dots"></i> Secure Direct Messaging
+            </h3>
+            <p>Communicate securely with item owners or finders without immediately exposing personal contact information.</p>
+            
+            <div class="messaging-section">
+                <div class="messaging-header">
+                    <h5>Your Conversations</h5>
+                    <button class="btn btn-sm btn-primary" id="refresh-conversations-btn">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="conversation-list" id="conversation-list">
+                    <div class="no-conversations">
+                        <i class="bi bi-chat-square-text"></i>
+                        <p>No conversations yet. Start a conversation from the search results.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Safety Tips Section -->
@@ -1142,6 +1492,82 @@
         </div>
     </div>
 
+    <!-- Message Modal -->
+    <div class="modal fade message-modal" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Conversation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="message-contact-card" id="message-contact-card">
+                        <!-- Contact information will be inserted here -->
+                    </div>
+                    <div class="message-container" id="message-container">
+                        <!-- Messages will be loaded here -->
+                    </div>
+                    <div class="message-input-container">
+                        <textarea class="form-control message-input" id="message-input" placeholder="Type your message here..." rows="2"></textarea>
+                        <div class="message-actions">
+                            <div>
+                                <button type="button" class="share-info-btn" id="share-contact-btn">
+                                    <i class="bi bi-share"></i> Share Contact Info
+                                </button>
+                                <button type="button" class="report-conversation-btn" id="report-conversation-btn">
+                                    <i class="bi bi-exclamation-triangle"></i> Report
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="send-message-btn">
+                                <i class="bi bi-send"></i> Send
+                            </button>
+                        </div>
+                        <div class="message-safety-tips" id="message-safety-tips">
+                            <i class="bi bi-shield-exclamation"></i> <strong>Safety Tip:</strong> Do not share personal information until you have verified the other person's identity.
+                        </div>
+                        <div class="message-info-shared" id="message-info-shared" style="display: none;">
+                            <i class="bi bi-check-circle"></i> You have shared your contact information with this user.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Conversation Modal -->
+    <div class="modal fade" id="reportConversationModal" tabindex="-1" aria-labelledby="reportConversationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportConversationModalLabel">Report Conversation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please provide details about why you are reporting this conversation:</p>
+                    <div class="mb-3">
+                        <label for="report-reason" class="form-label">Reason for Reporting</label>
+                        <select class="form-select" id="report-reason">
+                            <option value="">Select a reason</option>
+                            <option value="spam">Spam or unwanted messages</option>
+                            <option value="harassment">Harassment or abusive behavior</option>
+                            <option value="scam">Suspected scam or fraud</option>
+                            <option value="inappropriate">Inappropriate content</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="report-details" class="form-label">Additional Details</label>
+                        <textarea class="form-control" id="report-details" rows="3" placeholder="Please provide more details about the issue..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="submit-report-btn">Submit Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -1186,11 +1612,32 @@
         const reportDetailsContent = document.getElementById('reportDetailsContent');
         const copyTooltip = document.getElementById('copyTooltip');
         
+        // Messaging System Elements
+        const conversationList = document.getElementById('conversation-list');
+        const refreshConversationsBtn = document.getElementById('refresh-conversations-btn');
+        const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        const messageModalLabel = document.getElementById('messageModalLabel');
+        const messageContactCard = document.getElementById('message-contact-card');
+        const messageContainer = document.getElementById('message-container');
+        const messageInput = document.getElementById('message-input');
+        const sendMessageBtn = document.getElementById('send-message-btn');
+        const shareContactBtn = document.getElementById('share-contact-btn');
+        const reportConversationBtn = document.getElementById('report-conversation-btn');
+        const messageSafetyTips = document.getElementById('message-safety-tips');
+        const messageInfoShared = document.getElementById('message-info-shared');
+        const reportConversationModal = new bootstrap.Modal(document.getElementById('reportConversationModal'));
+        const reportReason = document.getElementById('report-reason');
+        const reportDetails = document.getElementById('report-details');
+        const submitReportBtn = document.getElementById('submit-report-btn');
+        
         // Global variables
         let currentItemToClaim = null;
         let currentItemToRecover = null;
         let matchingFoundItems = [];
         let lastReportData = null;
+        let currentConversation = null;
+        let currentMessages = [];
+        let contactInfoShared = {};
         
         // Create floating particles
         function createParticles() {
@@ -1214,6 +1661,13 @@
         // Generate random verification code
         function generateVerificationCode() {
             return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+        
+        // Generate conversation ID
+        function generateConversationId(reportId1, reportId2) {
+            // Sort the IDs to ensure consistent conversation ID regardless of who initiates
+            const sortedIds = [reportId1, reportId2].sort();
+            return sortedIds.join('_');
         }
         
         // Animate counter
@@ -1498,6 +1952,449 @@
             matchingItemsModal.show();
         }
         
+        // Load conversations
+        async function loadConversations() {
+            try {
+                const snapshot = await database.ref('conversations').once('value');
+                const conversations = snapshot.val();
+                
+                if (!conversations) {
+                    conversationList.innerHTML = `
+                        <div class="no-conversations">
+                            <i class="bi bi-chat-square-text"></i>
+                            <p>No conversations yet. Start a conversation from the search results.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                let hasConversations = false;
+                
+                // Get the current user's reports to identify their conversations
+                const reportsSnapshot = await database.ref('reports').once('value');
+                const reports = reportsSnapshot.val();
+                const userReportIds = [];
+                
+                if (reports) {
+                    Object.entries(reports).forEach(([key, report]) => {
+                        if ((report.type === 'lost' && report.contact_info) || 
+                            (report.type === 'found' && report.contact_phone)) {
+                            userReportIds.push(key);
+                        }
+                    });
+                }
+                
+                // Find conversations involving the user's reports
+                Object.entries(conversations).forEach(([conversationId, conversation]) => {
+                    const participants = conversationId.split('_');
+                    
+                    if (participants.some(id => userReportIds.includes(id))) {
+                        hasConversations = true;
+                        
+                        // Get the other participant (not the current user)
+                        const otherParticipantId = participants.find(id => !userReportIds.includes(id));
+                        
+                        // Get the other participant's report details
+                        let otherReport = null;
+                        if (reports && reports[otherParticipantId]) {
+                            otherReport = reports[otherParticipantId];
+                        }
+                        
+                        // Get the last message
+                        const messages = conversation.messages || {};
+                        let lastMessage = null;
+                        let lastMessageTime = 0;
+                        
+                        Object.entries(messages).forEach(([messageId, message]) => {
+                            if (message.timestamp > lastMessageTime) {
+                                lastMessageTime = message.timestamp;
+                                lastMessage = message;
+                            }
+                        });
+                        
+                        if (lastMessage) {
+                            const date = new Date(lastMessage.timestamp);
+                            const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            
+                            // Check if there are unread messages
+                            const unreadCount = Object.values(messages).filter(msg => 
+                                !msg.read && msg.sender_id !== userReportIds[0]
+                            ).length;
+                            
+                            html += `
+                                <div class="conversation-item" data-conversation-id="${conversationId}">
+                                    <div class="conversation-preview">
+                                        <div>
+                                            <div class="conversation-title">
+                                                ${otherReport ? otherReport.item : 'Unknown Item'}
+                                                ${unreadCount > 0 ? `<span class="conversation-unread">${unreadCount}</span>` : ''}
+                                            </div>
+                                            <div class="conversation-message">${lastMessage.text}</div>
+                                        </div>
+                                        <div class="conversation-time">${formattedTime}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+                
+                if (!hasConversations) {
+                    html = `
+                        <div class="no-conversations">
+                            <i class="bi bi-chat-square-text"></i>
+                            <p>No conversations yet. Start a conversation from the search results.</p>
+                        </div>
+                    `;
+                }
+                
+                conversationList.innerHTML = html;
+                
+                // Add click event to conversation items
+                document.querySelectorAll('.conversation-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const conversationId = this.getAttribute('data-conversation-id');
+                        openConversation(conversationId);
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+                showToast('Failed to load conversations. Please try again.', 'error');
+            }
+        }
+        
+        // Open conversation
+        async function openConversation(conversationId) {
+            try {
+                currentConversation = conversationId;
+                
+                // Get conversation data
+                const conversationSnapshot = await database.ref(`conversations/${conversationId}`).once('value');
+                const conversation = conversationSnapshot.val();
+                
+                if (!conversation) {
+                    showToast('Conversation not found.', 'error');
+                    return;
+                }
+                
+                // Get participant IDs
+                const participants = conversationId.split('_');
+                
+                // Get reports for both participants
+                const reportsSnapshot = await database.ref('reports').once('value');
+                const reports = reportsSnapshot.val();
+                
+                const report1 = reports[participants[0]];
+                const report2 = reports[participants[1]];
+                
+                if (!report1 || !report2) {
+                    showToast('Could not load conversation details.', 'error');
+                    return;
+                }
+                
+                // Determine which report belongs to the current user
+                const userReportId = localStorage.getItem('lastReportId');
+                const userReport = userReportId === participants[0] ? report1 : report2;
+                const otherReport = userReportId === participants[0] ? report2 : report1;
+                
+                // Set modal title
+                messageModalLabel.textContent = `Conversation about ${otherReport.item}`;
+                
+                // Set contact card
+                const contactInitials = (otherReport.item || 'U').substring(0, 2).toUpperCase();
+                const contactType = otherReport.type === 'lost' ? 'Lost Item Reporter' : 'Found Item Reporter';
+                
+                messageContactCard.innerHTML = `
+                    <div class="message-contact-header">
+                        <div class="message-contact-avatar">${contactInitials}</div>
+                        <div class="message-contact-info">
+                            <div class="message-contact-name">${otherReport.item}</div>
+                            <div class="message-contact-item">${contactType}</div>
+                            <div class="message-contact-item">Location: ${otherReport.location}</div>
+                            <div class="message-status ${contactInfoShared[conversationId] ? 'message-verification-complete' : 'message-verification-pending'}">
+                                ${contactInfoShared[conversationId] ? 
+                                    '<i class="bi bi-check-circle-fill"></i> Contact information shared' : 
+                                    '<i class="bi bi-shield-exclamation"></i> Anonymous - No contact information shared yet'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Load messages
+                currentMessages = [];
+                const messages = conversation.messages || {};
+                
+                Object.entries(messages).forEach(([messageId, message]) => {
+                    currentMessages.push({
+                        id: messageId,
+                        ...message
+                    });
+                });
+                
+                // Sort messages by timestamp
+                currentMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                
+                // Display messages
+                displayMessages();
+                
+                // Mark messages as read
+                if (userReportId) {
+                    Object.entries(messages).forEach(([messageId, message]) => {
+                        if (message.sender_id !== userReportId && !message.read) {
+                            database.ref(`conversations/${conversationId}/messages/${messageId}/read`).set(true);
+                        }
+                    });
+                }
+                
+                // Show modal
+                messageModal.show();
+                
+                // Focus on message input
+                setTimeout(() => {
+                    messageInput.focus();
+                }, 500);
+                
+                // Update contact info shared status
+                if (contactInfoShared[conversationId]) {
+                    messageSafetyTips.style.display = 'none';
+                    messageInfoShared.style.display = 'block';
+                } else {
+                    messageSafetyTips.style.display = 'block';
+                    messageInfoShared.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error opening conversation:', error);
+                showToast('Failed to open conversation. Please try again.', 'error');
+            }
+        }
+        
+        // Display messages in the conversation
+        function displayMessages() {
+            let html = '';
+            
+            if (currentMessages.length === 0) {
+                html = `
+                    <div class="no-conversations">
+                        <i class="bi bi-chat-dots"></i>
+                        <p>No messages yet. Start the conversation!</p>
+                    </div>
+                `;
+            } else {
+                const userReportId = localStorage.getItem('lastReportId');
+                
+                currentMessages.forEach(message => {
+                    const isSent = message.sender_id === userReportId;
+                    const date = new Date(message.timestamp);
+                    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    html += `
+                        <div class="message ${isSent ? 'message-sent' : 'message-received'}">
+                            <div>${message.text}</div>
+                            <div class="message-time">${formattedTime}</div>
+                        </div>
+                    `;
+                });
+            }
+            
+            messageContainer.innerHTML = html;
+            
+            // Scroll to bottom
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+        
+        // Send message
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            
+            if (!text || !currentConversation) {
+                return;
+            }
+            
+            try {
+                const userReportId = localStorage.getItem('lastReportId');
+                
+                if (!userReportId) {
+                    showToast('Could not identify your report. Please try again.', 'error');
+                    return;
+                }
+                
+                const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
+                const messageData = {
+                    sender_id: userReportId,
+                    text: text,
+                    timestamp: new Date().toISOString(),
+                    read: false
+                };
+                
+                await newMessageRef.set(messageData);
+                
+                // Add message to current messages array
+                currentMessages.push({
+                    id: newMessageRef.key,
+                    ...messageData
+                });
+                
+                // Clear input and refresh display
+                messageInput.value = '';
+                displayMessages();
+                
+                // Update conversation list
+                loadConversations();
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showToast('Failed to send message. Please try again.', 'error');
+            }
+        }
+        
+        // Share contact information
+        async function shareContactInfo() {
+            if (!currentConversation) {
+                return;
+            }
+            
+            try {
+                const userReportId = localStorage.getItem('lastReportId');
+                
+                if (!userReportId) {
+                    showToast('Could not identify your report. Please try again.', 'error');
+                    return;
+                }
+                
+                // Get user's report
+                const reportSnapshot = await database.ref(`reports/${userReportId}`).once('value');
+                const report = reportSnapshot.val();
+                
+                if (!report) {
+                    showToast('Could not find your report. Please try again.', 'error');
+                    return;
+                }
+                
+                // Get contact info based on report type
+                const contactInfo = report.type === 'lost' ? report.contact_info : report.contact_phone;
+                
+                if (!contactInfo) {
+                    showToast('No contact information available for your report.', 'error');
+                    return;
+                }
+                
+                // Send contact info as a message
+                const newMessageRef = database.ref(`conversations/${currentConversation}/messages`).push();
+                const messageData = {
+                    sender_id: userReportId,
+                    text: `I've shared my contact information: ${contactInfo}`,
+                    timestamp: new Date().toISOString(),
+                    read: false,
+                    is_contact_info: true
+                };
+                
+                await newMessageRef.set(messageData);
+                
+                // Mark contact info as shared
+                contactInfoShared[currentConversation] = true;
+                
+                // Add message to current messages array
+                currentMessages.push({
+                    id: newMessageRef.key,
+                    ...messageData
+                });
+                
+                // Update UI
+                messageSafetyTips.style.display = 'none';
+                messageInfoShared.style.display = 'block';
+                
+                // Update contact status
+                const statusElement = messageContactCard.querySelector('.message-status');
+                if (statusElement) {
+                    statusElement.className = 'message-status message-verification-complete';
+                    statusElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> Contact information shared';
+                }
+                
+                // Refresh display
+                displayMessages();
+                
+                // Show confirmation
+                showToast('Your contact information has been shared securely.', 'success');
+                
+                // Update conversation list
+                loadConversations();
+            } catch (error) {
+                console.error('Error sharing contact info:', error);
+                showToast('Failed to share contact information. Please try again.', 'error');
+            }
+        }
+        
+        // Report conversation
+        function reportConversation() {
+            reportReason.value = '';
+            reportDetails.value = '';
+            reportConversationModal.show();
+        }
+        
+        // Submit report
+        async function submitReport() {
+            const reason = reportReason.value;
+            const details = reportDetails.value.trim();
+            
+            if (!reason) {
+                showToast('Please select a reason for reporting.', 'error');
+                return;
+            }
+            
+            try {
+                const reportRef = database.ref('conversation_reports').push();
+                const reportData = {
+                    conversation_id: currentConversation,
+                    reason: reason,
+                    details: details,
+                    timestamp: new Date().toISOString(),
+                    status: 'pending'
+                };
+                
+                await reportRef.set(reportData);
+                
+                reportConversationModal.hide();
+                messageModal.hide();
+                
+                showToast('Your report has been submitted. Thank you for helping keep our community safe.', 'success');
+            } catch (error) {
+                console.error('Error submitting report:', error);
+                showToast('Failed to submit report. Please try again.', 'error');
+            }
+        }
+        
+        // Start a new conversation
+        async function startConversation(reportId1, reportId2) {
+            try {
+                // Generate conversation ID
+                const conversationId = generateConversationId(reportId1, reportId2);
+                
+                // Check if conversation already exists
+                const conversationSnapshot = await database.ref(`conversations/${conversationId}`).once('value');
+                const conversation = conversationSnapshot.val();
+                
+                if (!conversation) {
+                    // Create new conversation
+                    await database.ref(`conversations/${conversationId}`).set({
+                        created_at: new Date().toISOString(),
+                        participants: [reportId1, reportId2]
+                    });
+                }
+                
+                // Store the last report ID for identifying the user
+                localStorage.setItem('lastReportId', reportId1);
+                
+                // Open conversation
+                openConversation(conversationId);
+                
+                // Refresh conversation list
+                loadConversations();
+            } catch (error) {
+                console.error('Error starting conversation:', error);
+                showToast('Failed to start conversation. Please try again.', 'error');
+            }
+        }
+        
         // Report Lost Item
         lostItemForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1527,6 +2424,9 @@
                 };
                 
                 await newReportRef.set(reportData);
+                
+                // Store the report ID for future use
+                localStorage.setItem('lastReportId', newReportRef.key);
                 
                 lostItemForm.reset();
                 
@@ -1583,6 +2483,9 @@
                 };
                 
                 await newReportRef.set(reportData);
+                
+                // Store the report ID for future use
+                localStorage.setItem('lastReportId', newReportRef.key);
                 
                 foundItemForm.reset();
                 
@@ -1695,6 +2598,9 @@
                                             <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
                                                 <i class="bi bi-check-circle"></i> Mark as Claimed
                                             </button>
+                                            <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="found">
+                                                <i class="bi bi-chat-dots"></i> Send Message
+                                            </button>
                                         </div>
                                     ` : `
                                         <div class="found-item-actions mt-3">
@@ -1738,6 +2644,9 @@
                                             <button class="btn btn-info btn-sm mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
                                                 <i class="bi bi-check-circle"></i> Mark as Recovered
                                             </button>
+                                            <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="lost">
+                                                <i class="bi bi-chat-dots"></i> Send Message
+                                            </button>
                                         </div>
                                     ` : `
                                         <div class="found-item-actions mt-3">
@@ -1776,6 +2685,25 @@
                             lostVerificationCodeInput.value = '';
                             
                             lostVerificationModal.show();
+                        });
+                    });
+                    
+                    // Add event listeners to "Send Message" buttons
+                    document.querySelectorAll('.message-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const itemId = this.getAttribute('data-id');
+                            const itemType = this.getAttribute('data-type');
+                            
+                            // Get the current user's report ID
+                            const userReportId = localStorage.getItem('lastReportId');
+                            
+                            if (!userReportId) {
+                                showToast('Please report a lost or found item first to start a conversation.', 'error');
+                                return;
+                            }
+                            
+                            // Start conversation between the two reports
+                            startConversation(userReportId, itemId);
                         });
                     });
                 }
@@ -1914,9 +2842,28 @@
             }
         });
         
+        // Messaging event listeners
+        refreshConversationsBtn.addEventListener('click', loadConversations);
+        
+        sendMessageBtn.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        shareContactBtn.addEventListener('click', shareContactInfo);
+        
+        reportConversationBtn.addEventListener('click', reportConversation);
+        
+        submitReportBtn.addEventListener('click', submitReport);
+        
         // Initialize
         window.addEventListener('load', () => {
             createParticles();
+            loadConversations();
         });
     </script>
 </body>
