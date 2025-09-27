@@ -39,7 +39,7 @@
             transition: top 0.4s ease-in-out;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
         }
         
         .sticky-header.visible {
@@ -51,17 +51,12 @@
             align-items: center;
             font-size: 1.5rem;
             font-weight: 700;
-            margin-left: 20px;
-        }
-        
-        .sticky-header .logo i {
-            margin-right: 10px;
-            color: var(--accent-color);
+            text-transform: uppercase;
         }
         
         .sticky-header .nav-links {
             display: flex;
-            margin-right: 20px;
+            margin-left: 20px;
         }
         
         .sticky-header .nav-links a {
@@ -436,17 +431,6 @@
         
         .btn-recover:hover {
             background-color: var(--info-color);
-            color: white;
-        }
-        
-        .btn-view {
-            background-color: rgba(241, 196, 15, 0.1);
-            color: var(--accent-color);
-            border: 1px solid rgba(241, 196, 15, 0.3);
-        }
-        
-        .btn-view:hover {
-            background-color: var(--accent-color);
             color: white;
         }
         
@@ -914,7 +898,6 @@
             }
             
             .sticky-header .logo {
-                margin-left: 10px;
                 font-size: 1.2rem;
             }
             
@@ -944,15 +927,8 @@
     <!-- Sticky Header -->
     <header class="sticky-header" id="stickyHeader">
         <div class="logo">
-            <i class="bi bi-search"></i>
-            <span>KWASU Lost & Found</span>
+            <span>KWASU LOST & FOUND</span>
         </div>
-        <nav class="nav-links">
-            <a href="#report-lost">Report Lost</a>
-            <a href="#report-found">Report Found</a>
-            <a href="#search-items">Search Items</a>
-            <a href="#safety-tips">Safety Tips</a>
-        </nav>
     </header>
 
     <!-- Hero Section -->
@@ -1958,10 +1934,6 @@
                                             <i class="bi bi-check-circle"></i>
                                             Mark as Claimed
                                         </button>
-                                        <button class="btn btn-result btn-view view-details-btn" data-id="${report.id}" data-type="found">
-                                            <i class="bi bi-eye"></i>
-                                            View Details
-                                        </button>
                                     </div>
                                 `}
                             </div>
@@ -2021,10 +1993,6 @@
                                             <i class="bi bi-check-circle"></i>
                                             Mark as Recovered
                                         </button>
-                                        <button class="btn btn-result btn-view view-details-btn" data-id="${report.id}" data-type="lost">
-                                            <i class="bi bi-eye"></i>
-                                            View Details
-                                        </button>
                                     </div>
                                 `}
                             </div>
@@ -2060,26 +2028,6 @@
                     lostVerificationCodeInput.value = '';
                     
                     lostVerificationModal.show();
-                });
-            });
-            
-            // Add event listeners to "View Details" buttons
-            document.querySelectorAll('.view-details-btn').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    const itemId = this.getAttribute('data-id');
-                    const itemType = this.getAttribute('data-type');
-                    
-                    try {
-                        const snapshot = await database.ref(`reports/${itemId}`).once('value');
-                        const reportData = snapshot.val();
-                        
-                        if (reportData) {
-                            showReportDetailsModal(reportData);
-                        }
-                    } catch (error) {
-                        console.error('Error fetching report details:', error);
-                        showToast('Failed to load report details. Please try again.', 'error');
-                    }
                 });
             });
             
@@ -2330,23 +2278,6 @@
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
-            });
-        });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    const offsetTop = targetElement.offsetTop - 80; // Account for sticky header
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
             });
         });
         
