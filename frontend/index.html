@@ -153,7 +153,6 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor: pointer;
         }
         
         .toast-success {
@@ -166,16 +165,6 @@
         
         .toast-body {
             position: relative;
-        }
-        
-        .toast-body::after {
-            content: 'Click to view details';
-            position: absolute;
-            bottom: -5px;
-            right: 0;
-            font-size: 0.75rem;
-            color: #6c757d;
-            font-style: italic;
         }
         
         .loading-spinner {
@@ -507,17 +496,6 @@
             padding: 2rem;
         }
         
-        .verification-code {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            letter-spacing: 3px;
-        }
-        
         /* Founder Details Modal */
         .founder-details {
             background-color: #f8f9fa;
@@ -650,6 +628,43 @@
         
         .toast-action-btn {
             margin-top: 10px;
+        }
+        
+        .safety-alert {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .safety-alert h6 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .safety-alert p {
+            color: #721c24;
+            margin-bottom: 0;
+        }
+        
+        .verification-input-group {
+            margin: 1.5rem 0;
+        }
+        
+        .verification-input {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+        }
+        
+        .forgot-code-tip {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 10px;
+            text-align: center;
+            font-style: italic;
         }
     </style>
 </head>
@@ -977,13 +992,18 @@
                 </div>
                 <div class="modal-body">
                     <p>To verify that you are the original reporter of this found item, please enter the verification code that was sent to your WhatsApp number when you first reported the item.</p>
-                    <p>If you didn't save the code, you can request a new one by clicking the button below.</p>
                     
-                    <div class="verification-code" id="verificationCode">------</div>
+                    <div class="verification-input-group">
+                        <label for="verification-code-input" class="form-label">Enter Verification Code:</label>
+                        <input type="text" class="form-control verification-input" id="verification-code-input" placeholder="Enter your 6-character code" maxlength="6">
+                    </div>
+                    
+                    <p class="forgot-code-tip">
+                        <i class="bi bi-info-circle"></i> If you forgot your verification code, please contact the developer at <a href="tel:09038323588">09038323588</a>
+                    </p>
                     
                     <div class="d-grid gap-2 mt-4">
                         <button type="button" class="btn btn-primary" id="confirmClaimBtn">Confirm and Mark as Claimed</button>
-                        <button type="button" class="btn btn-outline-secondary" id="requestCodeBtn">Request New Code</button>
                     </div>
                 </div>
             </div>
@@ -1040,9 +1060,8 @@
         const matchingItemsModal = new bootstrap.Modal(document.getElementById('matchingItemsModal'));
         const matchingItemsContent = document.getElementById('matchingItemsContent');
         const verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
-        const verificationCodeEl = document.getElementById('verificationCode');
+        const verificationCodeInput = document.getElementById('verification-code-input');
         const confirmClaimBtn = document.getElementById('confirmClaimBtn');
-        const requestCodeBtn = document.getElementById('requestCodeBtn');
         const founderDetailsModal = new bootstrap.Modal(document.getElementById('founderDetailsModal'));
         const founderDetailsContent = document.getElementById('founderDetailsContent');
         const reportDetailsModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
@@ -1175,6 +1194,17 @@
                             <div class="detail-label">Reported On:</div>
                             <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
                         </div>
+                        
+                        <div class="safety-alert">
+                            <h6><i class="bi bi-shield-exclamation"></i> Safety Tips for Lost Item Reporters</h6>
+                            <p>When someone contacts you claiming to have found your item:</p>
+                            <ul>
+                                <li>Ask for specific details about the item to verify ownership</li>
+                                <li>Never share personal information beyond what is necessary</li>
+                                <li>Meet in a safe, public place on campus to retrieve your item</li>
+                                <li>If you suspect a scam, report the person's number to KWASU Safety Unit or contact the developer at 09038323588</li>
+                            </ul>
+                        </div>
                     </div>
                 `;
             } else if (reportData.type === 'found') {
@@ -1205,6 +1235,18 @@
                         <div class="detail-row">
                             <div class="detail-label">Reported On:</div>
                             <div class="detail-value">${new Date(reportData.timestamp).toLocaleString()}</div>
+                        </div>
+                        
+                        <div class="safety-alert">
+                            <h6><i class="bi bi-shield-exclamation"></i> Important Safety Information</h6>
+                            <p><strong>Save this verification code!</strong> You will need it to mark this item as claimed when the owner retrieves it.</p>
+                            <p>When someone claims this item:</p>
+                            <ul>
+                                <li>Ask for specific details about the item to verify ownership</li>
+                                <li>Do not return the item until you are confident about the claimant's identity</li>
+                                <li>If you notice a false claim, report the person's number to KWASU Safety Unit immediately</li>
+                                <li>You can also contact the developer for assistance in reporting false claimants</li>
+                            </ul>
                         </div>
                     </div>
                 `;
@@ -1286,10 +1328,10 @@
                 const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'lost',
-                    item,
-                    location,
-                    last_seen: lastSeen,
-                    description,
+                    item: item, // Keep original formatting
+                    location: location, // Keep original formatting
+                    last_seen: lastSeen, // Keep original formatting
+                    description: description, // Keep original formatting
                     contact_info: contact,
                     reporter: 'website',
                     timestamp: new Date().toISOString()
@@ -1341,8 +1383,8 @@
                 const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'found',
-                    item,
-                    location,
+                    item: item, // Keep original formatting
+                    location: location, // Keep original formatting
                     contact_phone: contact,
                     verification_code: verificationCode,
                     claimed: false,
@@ -1354,8 +1396,9 @@
                 
                 foundItemForm.reset();
                 
-                // Show toast with action button
-                showToast('Your found item has been reported successfully!', 'success', {
+                // Show toast with action button and verification code
+                const message = `Thanks for reporting an item, Please view your submission code "${verificationCode}" and save it as you will need it later🙏.`;
+                showToast(message, 'success', {
                     text: 'View Details',
                     callback: () => {
                         showReportDetailsModal(reportData);
@@ -1411,6 +1454,9 @@
                         results.push({ ...report, id: key });
                     }
                 });
+                
+                // Sort results by timestamp (most recent first)
+                results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
                 if (results.length === 0) {
                     searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
@@ -1499,9 +1545,8 @@
                             const itemPhone = this.getAttribute('data-phone');
                             currentItemToClaim = { id: itemId, phone: itemPhone };
                             
-                            // Generate a new verification code for this session
-                            const verificationCode = generateVerificationCode();
-                            verificationCodeEl.textContent = verificationCode;
+                            // Clear the verification code input
+                            verificationCodeInput.value = '';
                             
                             verificationModal.show();
                         });
@@ -1550,7 +1595,30 @@
         confirmClaimBtn.addEventListener('click', async () => {
             if (!currentItemToClaim) return;
             
+            const enteredCode = verificationCodeInput.value.trim().toUpperCase();
+            
+            if (!enteredCode) {
+                showToast('Please enter your verification code', 'error');
+                return;
+            }
+            
             try {
+                // Get the report to verify the code
+                const reportSnapshot = await database.ref(`reports/${currentItemToClaim.id}`).once('value');
+                const reportData = reportSnapshot.val();
+                
+                if (!reportData) {
+                    showToast('Report not found', 'error');
+                    return;
+                }
+                
+                // Verify the code
+                if (reportData.verification_code !== enteredCode) {
+                    showToast('Invalid verification code. Please try again.', 'error');
+                    return;
+                }
+                
+                // Mark as claimed
                 await database.ref(`reports/${currentItemToClaim.id}`).update({
                     claimed: true,
                     claimed_at: new Date().toISOString()
@@ -1569,13 +1637,6 @@
                 console.error('Error marking item as claimed:', error);
                 showToast('Failed to mark item as claimed. Please try again.', 'error');
             }
-        });
-        
-        // Handle "Request New Code" button
-        requestCodeBtn.addEventListener('click', () => {
-            const newCode = generateVerificationCode();
-            verificationCodeEl.textContent = newCode;
-            showToast(`A new verification code has been generated: ${newCode}`, 'success');
         });
         
         // Initialize
