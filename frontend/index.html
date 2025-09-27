@@ -13,127 +13,119 @@
             --accent-color: #f39c12;
             --light-bg: #ecf0f1;
             --supporter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --message-sent: #dcf8c6;
-            --message-received: #f1f0f0;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-bg);
             color: #333;
-            padding-top: 70px; /* Space for sticky header */
+            padding-top: 0; /* Remove default padding as we'll handle it with JS */
         }
         
-        /* Sticky Header */
+        /* Sticky Header Styles */
         .sticky-header {
             position: fixed;
-            top: 0;
+            top: -100px;
             left: 0;
-            right: 0;
+            width: 100%;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 15px 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .header-content {
+            z-index: 1030;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: top 0.4s ease-in-out;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
         
-        .header-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 0;
+        .sticky-header.visible {
+            top: 0;
         }
         
-        .header-subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin: 0;
-        }
-        
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .nav-menu {
+        .sticky-header .logo {
             display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .nav-menu li {
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
             margin-left: 20px;
         }
         
-        .nav-menu a {
+        .sticky-header .logo i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .sticky-header .nav-links {
+            display: flex;
+            margin-right: 20px;
+        }
+        
+        .sticky-header .nav-links a {
             color: white;
             text-decoration: none;
+            margin-left: 20px;
             font-weight: 500;
-            transition: opacity 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
-        .nav-menu a:hover {
-            opacity: 0.8;
+        .sticky-header .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
         }
         
-        .user-menu {
-            display: flex;
-            align-items: center;
+        .sticky-header .nav-links a:hover:after {
+            width: 100%;
         }
         
-        .user-avatar {
-            width: 35px;
-            height: 35px;
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+            z-index: 1031;
+            transition: width 0.1s ease;
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border-radius: 50%;
-            background-color: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 15px;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1020;
         }
         
-        /* Hamburger Menu for Mobile */
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            
-            .nav-menu {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background-color: var(--primary-color);
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
-                padding-top: 30px;
-                transition: left 0.3s ease;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .nav-menu li {
-                margin: 15px 0;
-            }
-            
-            .user-menu {
-                margin-top: 20px;
-            }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
         
         .hero-section {
@@ -141,6 +133,7 @@
             color: white;
             padding: 4rem 0;
             text-align: center;
+            transition: padding 0.4s ease-in-out;
         }
         
         .hero-section h1 {
@@ -160,11 +153,12 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             padding: 2rem;
             margin-bottom: 2rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .section-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
         
         .section-title {
@@ -184,6 +178,12 @@
             border-radius: 8px;
             border: 1px solid #ddd;
             padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(41, 128, 185, 0.25);
         }
         
         .btn-primary {
@@ -192,11 +192,14 @@
             border-radius: 8px;
             padding: 10px 20px;
             font-weight: 600;
+            transition: all 0.3s ease;
         }
         
         .btn-primary:hover {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .search-results {
@@ -210,6 +213,12 @@
             margin-bottom: 1rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             border-left: 4px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+        
+        .result-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
         
         .result-item h5 {
@@ -255,9 +264,11 @@
         .footer a {
             color: var(--accent-color);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
         
         .footer a:hover {
+            color: white;
             text-decoration: underline;
         }
         
@@ -272,6 +283,18 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideInRight 0.4s ease;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
         
         .toast-success {
@@ -300,11 +323,12 @@
             color: white;
             font-size: 1.5rem;
             margin: 0 10px;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .platform-icons a:hover {
             transform: scale(1.2);
+            color: var(--accent-color);
         }
         
         .whatsapp-note {
@@ -667,8 +691,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
         }
         
         .claimed-status {
@@ -868,655 +890,39 @@
             text-align: center;
         }
         
-        /* Messaging System Styles */
-        .messaging-section {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .messaging-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .conversation-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
-        }
-        
-        .conversation-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .conversation-item:hover {
-            background-color: #f1f1f1;
-        }
-        
-        .conversation-item.active {
-            background-color: #e3f2fd;
-            border-left: 4px solid var(--secondary-color);
-        }
-        
-        .conversation-item:last-child {
-            border-bottom: none;
-        }
-        
-        .conversation-preview {
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .conversation-title {
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 4px;
-        }
-        
-        .conversation-message {
-            font-size: 0.9rem;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 70%;
-        }
-        
-        .conversation-time {
-            font-size: 0.8rem;
-            color: #999;
-        }
-        
-        .conversation-unread {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            text-align: center;
-            line-height: 20px;
-            font-size: 0.7rem;
-            margin-left: 5px;
-        }
-        
-        .message-modal .modal-dialog {
-            max-width: 800px;
-            height: 600px;
-        }
-        
-        .message-modal .modal-content {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .message-modal .modal-header {
-            flex-shrink: 0;
-        }
-        
-        .message-modal .modal-body {
-            flex-grow: 1;
-            overflow: hidden;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .message-container {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 15px;
-            background-color: #f5f5f5;
-        }
-        
-        .message {
-            max-width: 70%;
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 18px;
-            position: relative;
-            word-wrap: break-word;
-        }
-        
-        .message-sent {
-            background-color: var(--message-sent);
-            align-self: flex-end;
-            margin-left: auto;
-            border-bottom-right-radius: 5px;
-        }
-        
-        .message-received {
-            background-color: var(--message-received);
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-        }
-        
-        .message-time {
-            font-size: 0.7rem;
-            color: #999;
-            text-align: right;
-            margin-top: 5px;
-        }
-        
-        .message-received .message-time {
-            text-align: left;
-        }
-        
-        .message-input-container {
-            padding: 15px;
-            border-top: 1px solid #ddd;
-            background-color: white;
-        }
-        
-        .message-input {
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            padding: 10px 20px;
-            resize: none;
-            height: auto;
-            max-height: 120px;
-        }
-        
-        .message-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-        
-        .message-safety-tips {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            font-size: 0.85rem;
-        }
-        
-        .message-safety-tips i {
-            color: #ffc107;
-            margin-right: 5px;
-        }
-        
-        .share-info-btn {
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.85rem;
-            color: #495057;
-        }
-        
-        .share-info-btn:hover {
-            background-color: #e9ecef;
-        }
-        
-        .report-conversation-btn {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.85rem;
-            color: #721c24;
-        }
-        
-        .report-conversation-btn:hover {
-            background-color: #f1b0b7;
-        }
-        
-        .message-info-shared {
-            background-color: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            font-size: 0.85rem;
-            color: #155724;
-        }
-        
-        .message-info-shared i {
-            color: #28a745;
-            margin-right: 5px;
-        }
-        
-        .no-conversations {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-        }
-        
-        .no-conversations i {
-            font-size: 3rem;
-            color: #ddd;
-            margin-bottom: 15px;
-        }
-        
-        .message-contact-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .message-contact-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .message-contact-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--secondary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .message-contact-info {
-            flex-grow: 1;
-        }
-        
-        .message-contact-name {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .message-contact-item {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .message-contact-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-message {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.85rem;
-        }
-        
-        .btn-message:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .btn-message-outline {
-            background-color: transparent;
-            color: var(--secondary-color);
-            border: 1px solid var(--secondary-color);
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.85rem;
-        }
-        
-        .btn-message-outline:hover {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .message-status {
-            font-size: 0.75rem;
-            color: #666;
-            font-style: italic;
-            margin-top: 5px;
-        }
-        
-        .message-verification-pending {
-            color: var(--accent-color);
-        }
-        
-        .message-verification-complete {
-            color: #28a745;
-        }
-        
-        /* WhatsApp Visibility Toggle */
-        .whatsapp-visibility {
-            background-color: #e8f5e9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .whatsapp-visibility h6 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
-        
-        .form-check {
-            margin-bottom: 10px;
-        }
-        
-        .form-check-input:checked {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-        
-        .form-check-label {
-            font-weight: 500;
-        }
-        
-        /* Registration and Login Styles */
-        .auth-modal .modal-dialog {
-            max-width: 450px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .auth-tab.active {
-            color: var(--secondary-color);
-            border-bottom-color: var(--secondary-color);
-        }
-        
-        .auth-content {
-            display: none;
-        }
-        
-        .auth-content.active {
-            display: block;
-        }
-        
-        .verification-method {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .verification-method .btn {
-            flex: 1;
-        }
-        
-        .verification-input-group {
-            display: none;
-            margin-top: 15px;
-        }
-        
-        .verification-input-group.active {
-            display: block;
-        }
-        
-        .notification-settings {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        
-        .notification-settings h6 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .notification-setting {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .notification-setting:last-child {
-            margin-bottom: 0;
-        }
-        
-        /* Image Upload Styles */
-        .image-upload-container {
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .image-preview {
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 8px;
-            object-fit: cover;
-            display: none;
-        }
-        
-        .image-preview.show {
-            display: block;
-        }
-        
-        .message-image {
-            max-width: 250px;
-            max-height: 250px;
-            border-radius: 8px;
-            margin-top: 5px;
-            cursor: pointer;
-        }
-        
-        .contact-details-container {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        .contact-details-container.show {
-            display: block;
-        }
-        
-        .contact-detail-item {
-            display: flex;
-            margin-bottom: 5px;
-        }
-        
-        .contact-detail-label {
-            font-weight: 600;
-            width: 80px;
-            color: #555;
-        }
-        
-        .contact-detail-value {
-            flex: 1;
-        }
-        
-        /* Notification Badge */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-        
-        /* Notification Panel */
-        .notification-panel {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            width: 350px;
-            max-height: 400px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 999;
-            display: none;
-            overflow: hidden;
-            flex-direction: column;
-        }
-        
-        .notification-panel.show {
-            display: flex;
-        }
-        
-        .notification-header {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .notification-title {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .notification-list {
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        
-        .notification-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .notification-item:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .notification-item:last-child {
-            border-bottom: none;
-        }
-        
-        .notification-item.unread {
-            background-color: #f0f7ff;
-        }
-        
-        .notification-time {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 5px;
-        }
-        
-        .no-notifications {
-            padding: 30px;
-            text-align: center;
-            color: #999;
-        }
-        
-        .no-notifications i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        /* Registration Prompt */
-        .registration-prompt {
-            background-color: #e3f2fd;
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .registration-prompt h6 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .registration-prompt p {
-            color: var(--primary-color);
-            margin-bottom: 10px;
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sticky-header .nav-links {
+                display: none;
+            }
+            
+            .sticky-header .logo {
+                margin-left: 10px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
     <!-- Sticky Header -->
-    <header class="sticky-header">
-        <div class="container">
-            <div class="header-content">
-                <button class="menu-toggle" id="menu-toggle">
-                    <i class="bi bi-list"></i>
-                </button>
-                <div>
-                    <h1 class="header-title">KWASU LOST & FOUND PORTAL</h1>
-                    <p class="header-subtitle">Report lost items, found items, or search for your belongings across all platforms</p>
-                </div>
-                <div class="user-menu">
-                    <div class="user-avatar" id="user-avatar" style="display: none;">
-                        <i class="bi bi-person"></i>
-                    </div>
-                    <div class="position-relative" id="notification-container" style="display: none;">
-                        <button class="btn btn-sm btn-outline-light" id="notification-btn">
-                            <i class="bi bi-bell"></i>
-                        </button>
-                        <span class="notification-badge" id="notification-count">0</span>
-                    </div>
-                </div>
-            </div>
+    <header class="sticky-header" id="stickyHeader">
+        <div class="logo">
+            <i class="bi bi-search"></i>
+            <span>KWASU Lost & Found</span>
         </div>
-        <nav class="nav-menu" id="nav-menu">
-            <li><a href="#" id="nav-home">Home</a></li>
-            <li><a href="#" id="nav-report-lost">Report Lost Item</a></li>
-            <li><a href="#" id="nav-report-found">Report Found Item</a></li>
-            <li><a href="#" id="nav-search">Search Items</a></li>
-            <li><a href="#" id="nav-messages">Messages</a></li>
-            <li><a href="#" id="nav-safety">Safety Tips</a></li>
-            <li><a href="#" id="nav-supporters">Supporters</a></li>
-            <li><hr class="my-2 text-white-50"></li></li>
-            <li><a href="#" id="nav-login"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-            <li><a href="#" id="nav-register"><i class="bi bi-person-plus"></i> Register</a></li>
+        <nav class="nav-links">
+            <a href="#report-lost">Report Lost</a>
+            <a href="#report-found">Report Found</a>
+            <a href="#search-items">Search Items</a>
+            <a href="#safety-tips">Safety Tips</a>
         </nav>
     </header>
 
-    <!-- Notification Panel -->
-    <div class="notification-panel" id="notification-panel">
-        <div class="notification-header">
-            <div class="notification-title">Notifications</div>
-            <button class="btn btn-sm" id="clear-notifications">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-        <div class="notification-list" id="notification-list">
-            <div class="no-notifications">
-                <i class="bi bi-bell-slash"></i>
-                <p>No notifications</p>
-            </div>
-        </div>
-    </div>
-
     <!-- Hero Section -->
-    <section class="hero-section" id="home">
+    <section class="hero-section" id="hero">
         <div class="container">
             <h1>KWASU Lost & Found Portal</h1>
             <p>Report lost items, found items, or search for your belongings across all platforms</p>
@@ -1530,7 +936,7 @@
     <div class="container my-5">
         <div class="row">
             <!-- Report Lost Item Section -->
-            <div class="col-lg-6 mb-4" id="report-lost-section">
+            <div class="col-lg-6 mb-4" id="report-lost">
                 <div class="section-card">
                     <h3 class="section-title">
                         <i class="bi bi-search"></i> Report Lost Item
@@ -1559,40 +965,13 @@
                             <label for="lost-contact" class="form-label">Your WhatsApp Number</label>
                             <input type="tel" class="form-control" id="lost-contact" placeholder="e.g., 08012345678" required>
                         </div>
-                        
-                        <!-- WhatsApp Visibility Option -->
-                        <div class="whatsapp-visibility">
-                            <h6><i class="bi bi-eye"></i> WhatsApp Number Visibility</h6>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="lost-whatsapp-visibility" id="lost-whatsapp-visible" value="visible" checked>
-                                <label class="form-check-label" for="lost-whatsapp-visible">
-                                    Show my WhatsApp number in search results
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="lost-whatsapp-visibility" id="lost-whatsapp-hidden" value="hidden">
-                                <label class="form-check-label" for="lost-whatsapp-hidden">
-                                    Only share my number when I respond to messages
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <!-- Registration Prompt -->
-                        <div class="registration-prompt" id="lost-registration-prompt" style="display: none;">
-                            <h6><i class="bi bi-info-circle"></i> Registration Required</h6>
-                            <p>You've chosen to only share your WhatsApp number when you respond to messages. This requires registration to use our secure messaging system.</p>
-                            <button type="button" class="btn btn-primary" id="lost-register-btn">
-                                <i class="bi bi-person-plus"></i> Register Now
-                            </button>
-                        </div>
-                        
                         <button type="submit" class="btn btn-primary w-100">Report Lost Item</button>
                     </form>
                 </div>
             </div>
 
             <!-- Report Found Item Section -->
-            <div class="col-lg-6 mb-4" id="report-found-section">
+            <div class="col-lg-6 mb-4" id="report-found">
                 <div class="section-card">
                     <h3 class="section-title">
                         <i class="bi bi-gift"></i> Report Found Item
@@ -1613,33 +992,6 @@
                             <label for="found-contact" class="form-label">Your WhatsApp Number</label>
                             <input type="tel" class="form-control" id="found-contact" placeholder="e.g., 08012345678" required>
                         </div>
-                        
-                        <!-- WhatsApp Visibility Option -->
-                        <div class="whatsapp-visibility">
-                            <h6><i class="bi bi-eye"></i> WhatsApp Number Visibility</h6>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="found-whatsapp-visibility" id="found-whatsapp-visible" value="visible" checked>
-                                <label class="form-check-label" for="found-whatsapp-visible">
-                                    Show my WhatsApp number in search results
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="found-whatsapp-visibility" id="found-whatsapp-hidden" value="hidden">
-                                <label class="form-check-label" for="found-whatsapp-hidden">
-                                    Only share my number when I respond to messages
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <!-- Registration Prompt -->
-                        <div class="registration-prompt" id="found-registration-prompt" style="display: none;">
-                            <h6><i class="bi bi-info-circle"></i> Registration Required</h6>
-                            <p>You've chosen to only share your WhatsApp number when you respond to messages. This requires registration to use our secure messaging system.</p>
-                            <button type="button" class="btn btn-primary" id="found-register-btn">
-                                <i class="bi bi-person-plus"></i> Register Now
-                            </button>
-                        </div>
-                        
                         <button type="submit" class="btn btn-primary w-100">Report Found Item</button>
                     </form>
                 </div>
@@ -1647,7 +999,7 @@
         </div>
 
         <!-- Search Section -->
-        <div class="section-card" id="search-section">
+        <div class="section-card" id="search-items">
             <h3 class="section-title">
                 <i class="bi bi-search"></i> Search for Items
             </h3>
@@ -1677,32 +1029,8 @@
             <div class="search-results" id="search-results"></div>
         </div>
 
-        <!-- Secure Direct Messaging Section -->
-        <div class="section-card" id="messages-section">
-            <h3 class="section-title">
-                <i class="bi bi-chat-dots"></i> Secure Direct Messaging
-            </h3>
-            <p>Communicate securely with item owners or finders without immediately exposing personal contact information.</p>
-            
-            <div class="messaging-section">
-                <div class="messaging-header">
-                    <h5>Your Conversations</h5>
-                    <button class="btn btn-sm btn-primary" id="refresh-conversations-btn">
-                        <i class="bi bi-arrow-clockwise"></i> Refresh
-                    </button>
-                </div>
-                
-                <div class="conversation-list" id="conversation-list">
-                    <div class="no-conversations">
-                        <i class="bi bi-chat-square-text"></i>
-                        <p>No conversations yet. Start a conversation from the search results.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Safety Tips Section -->
-        <div class="section-card" id="safety-section">
+        <div class="section-card" id="safety-tips">
             <h3 class="section-title">
                 <i class="bi bi-shield-check"></i> Safety Tips
             </h3>
@@ -1749,7 +1077,7 @@
         <div class="section-break"></div>
 
         <!-- Top Supporters Section -->
-        <div class="section-card" id="supporters-section">
+        <div class="section-card">
             <h3 class="section-title">
                 <i class="bi bi-people"></i> Top Supporters
             </h3>
@@ -1862,6 +1190,11 @@
             <p>For support: <a href="tel:09038323588">09038323588</a></p>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="bi bi-arrow-up"></i>
+    </div>
 
     <!-- Toast Container -->
     <div class="toast-container"></div>
@@ -1982,214 +1315,9 @@
         </div>
     </div>
 
-    <!-- Message Modal -->
-    <div class="modal fade message-modal" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="messageModalLabel">Conversation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="message-contact-card" id="message-contact-card">
-                        <!-- Contact information will be inserted here -->
-                    </div>
-                    <div class="message-container" id="message-container">
-                        <!-- Messages will be loaded here -->
-                    </div>
-                    <div class="message-input-container">
-                        <textarea class="form-control message-input" id="message-input" placeholder="Type your message here..." rows="2"></textarea>
-                        
-                        <!-- Image Upload -->
-                        <div class="image-upload-container">
-                            <label for="image-upload" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-image"></i> Add Image
-                            </label>
-                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                            <img class="image-preview" id="image-preview" alt="Image preview">
-                        </div>
-                        
-                        <!-- Contact Details -->
-                        <div class="contact-details-container" id="contact-details-container">
-                            <div class="contact-detail-item">
-                                <div class="contact-detail-label">Name:</div>
-                                <div class="contact-detail-value" id="contact-name-value"></div>
-                            </div>
-                            <div class="contact-detail-item">
-                                <div class="contact-detail-label">Email:</div>
-                                <div class="contact-detail-value" id="contact-email-value"></div>
-                            </div>
-                            <div class="contact-detail-item">
-                                <div class="contact-detail-label">Phone:</div>
-                                <div class="contact-detail-value" id="contact-phone-value"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="message-actions">
-                            <div>
-                                <button type="button" class="share-info-btn" id="share-contact-btn">
-                                    <i class="bi bi-share"></i> Share Contact Info
-                                </button>
-                                <button type="button" class="report-conversation-btn" id="report-conversation-btn">
-                                    <i class="bi bi-exclamation-triangle"></i> Report
-                                </button>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="send-message-btn">
-                                <i class="bi bi-send"></i> Send
-                            </button>
-                        </div>
-                        <div class="message-safety-tips" id="message-safety-tips">
-                            <i class="bi bi-shield-exclamation"></i> <strong>Safety Tip:</strong> Do not share personal information until you have verified the other person's identity.
-                        </div>
-                        <div class="message-info-shared" id="message-info-shared" style="display: none;">
-                            <i class="bi bi-check-circle"></i> You have shared your contact information with this user.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Report Conversation Modal -->
-    <div class="modal fade" id="reportConversationModal" tabindex="-1" aria-labelledby="reportConversationModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reportConversationModalLabel">Report Conversation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Please provide details about why you are reporting this conversation:</p>
-                    <div class="mb-3">
-                        <label for="report-reason" class="form-label">Reason for Reporting</label>
-                        <select class="form-select" id="report-reason">
-                            <option value="">Select a reason</option>
-                            <option value="spam">Spam or unwanted messages</option>
-                            <option value="harassment">Harassment or abusive behavior</option>
-                            <option value="scam">Suspected scam or fraud</option>
-                            <option value="inappropriate">Inappropriate content</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="report-details" class="form-label">Additional Details</label>
-                        <textarea class="form-control" id="report-details" rows="3" placeholder="Please provide more details about the issue..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="submit-report-btn">Submit Report</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Registration/Login Modal -->
-    <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="authModalLabel">Welcome to KWASU Lost & Found</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="auth-tabs">
-                        <div class="auth-tab active" id="login-tab">Login</div>
-                        <div class="auth-tab" id="register-tab">Register</div>
-                    </div>
-                    
-                    <!-- Login Form -->
-                    <div class="auth-content active" id="login-content">
-                        <form id="login-form">
-                            <div class="mb-3">
-                                <label for="login-email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="login-email" placeholder="Enter your email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="login-password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                            <div class="text-center mt-3">
-                                <a href="#" id="forgot-password-link">Forgot Password?</a>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- Registration Form -->
-                    <div class="auth-content" id="register-content">
-                        <form id="register-form">
-                            <div class="mb-3">
-                                <label for="register-name" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="register-name" placeholder="Enter your full name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="register-email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="register-email" placeholder="Enter your email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="register-phone" class="form-label">WhatsApp Number</label>
-                                <input type="tel" class="form-control" id="register-phone" placeholder="Enter your WhatsApp number" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="register-password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="register-password" placeholder="Create a password" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="register-confirm-password" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="register-confirm-password" placeholder="Confirm your password" required>
-                            </div>
-                            
-                            <!-- Notification Settings -->
-                            <div class="notification-settings">
-                                <h6>Notification Preferences</h6>
-                                <div class="notification-setting">
-                                    <span>Email Notifications</span>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="email-notifications" checked>
-                                    </div>
-                                </div>
-                                <div class="notification-setting">
-                                    <span>Browser Push Notifications</span>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="push-notifications" checked>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="d-grid gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- Verification Code Input -->
-                    <div class="verification-input-group" id="verification-input-group">
-                        <p>We've sent a verification code to your email and WhatsApp number. Please enter it below:</p>
-                        <div class="mb-3">
-                            <label for="verification-code" class="form-label">Verification Code</label>
-                            <input type="text" class="form-control" id="verification-code" placeholder="Enter verification code" required>
-                        </div>
-                        <div class="verification-method">
-                            <button type="button" class="btn btn-outline-secondary" id="resend-email-code">Resend Email</button>
-                            <button type="button" class="btn btn-outline-secondary" id="resend-whatsapp-code">Resend WhatsApp</button>
-                        </div>
-                        <div class="d-grid gap-2 mt-3">
-                            <button type="button" class="btn btn-primary" id="verify-code-btn">Verify</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-messaging-compat.js"></script>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -2198,33 +1326,13 @@
     <script>
         // Initialize Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyCQoQ2mVg7vI8sQJ4R1XJzJ6v7K8l9m0n1o",
-            authDomain: "kwasu-lost-and-found.firebaseapp.com",
-            databaseURL: "https://kwasu-lost-and-found-default-rtdb.firebaseio.com",
-            projectId: "kwasu-lost-and-found",
-            storageBucket: "kwasu-lost-and-found.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef123456789012345"
+            databaseURL: "https://kwasu-lost-and-found-default-rtdb.firebaseio.com/"
         };
         
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const auth = firebase.auth();
-        const messaging = firebase.messaging();
         
         // DOM Elements
-        const menuToggle = document.getElementById('menu-toggle');
-        const navMenu = document.getElementById('nav-menu');
-        const navLogin = document.getElementById('nav-login');
-        const navRegister = document.getElementById('nav-register');
-        const userAvatar = document.getElementById('user-avatar');
-        const notificationContainer = document.getElementById('notification-container');
-        const notificationBtn = document.getElementById('notification-btn');
-        const notificationCount = document.getElementById('notification-count');
-        const notificationPanel = document.getElementById('notification-panel');
-        const notificationList = document.getElementById('notification-list');
-        const clearNotificationsBtn = document.getElementById('clear-notifications');
-        
         const lostItemForm = document.getElementById('lost-item-form');
         const foundItemForm = document.getElementById('found-item-form');
         const searchInput = document.getElementById('search-input');
@@ -2249,84 +1357,20 @@
         const founderDetailsContent = document.getElementById('founderDetailsContent');
         const reportDetailsModal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
         const reportDetailsContent = document.getElementById('reportDetailsContent');
-        const copyTooltip = document.getElementById('copy-tooltip');
+        const copyTooltip = document.getElementById('copyTooltip');
         
-        // Registration Prompt Elements
-        const lostRegistrationPrompt = document.getElementById('lost-registration-prompt');
-        const foundRegistrationPrompt = document.getElementById('found-registration-prompt');
-        const lostRegisterBtn = document.getElementById('lost-register-btn');
-        const foundRegisterBtn = document.getElementById('found-register-btn');
-        
-        // Messaging System Elements
-        const conversationList = document.getElementById('conversation-list');
-        const refreshConversationsBtn = document.getElementById('refresh-conversations-btn');
-        const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
-        const messageModalLabel = document.getElementById('messageModalLabel');
-        const messageContactCard = document.getElementById('message-contact-card');
-        const messageContainer = document.getElementById('message-container');
-        const messageInput = document.getElementById('message-input');
-        const sendMessageBtn = document.getElementById('send-message-btn');
-        const shareContactBtn = document.getElementById('share-contact-btn');
-        const reportConversationBtn = document.getElementById('report-conversation-btn');
-        const messageSafetyTips = document.getElementById('message-safety-tips');
-        const messageInfoShared = document.getElementById('message-info-shared');
-        const reportConversationModal = new bootstrap.Modal(document.getElementById('reportConversationModal'));
-        const reportReason = document.getElementById('report-reason');
-        const reportDetails = document.getElementById('report-details');
-        const submitReportBtn = document.getElementById('submit-report-btn');
-        
-        // Image Upload Elements
-        const imageUpload = document.getElementById('image-upload');
-        const imagePreview = document.getElementById('image-preview');
-        
-        // Contact Details Elements
-        const contactDetailsContainer = document.getElementById('contact-details-container');
-        const contactNameValue = document.getElementById('contact-name-value');
-        const contactEmailValue = document.getElementById('contact-email-value');
-        const contactPhoneValue = document.getElementById('contact-phone-value');
-        
-        // Auth Modal Elements
-        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
-        const loginTab = document.getElementById('login-tab');
-        const registerTab = document.getElementById('register-tab');
-        const loginContent = document.getElementById('login-content');
-        const registerContent = document.getElementById('register-content');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const verificationInputGroup = document.getElementById('verification-input-group');
-        const verificationCode = document.getElementById('verification-code');
-        const verifyCodeBtn = document.getElementById('verify-code-btn');
-        const resendEmailCode = document.getElementById('resend-email-code');
-        const resendWhatsAppCode = document.getElementById('resend-whatsapp-code');
-        const emailNotifications = document.getElementById('email-notifications');
-        const pushNotifications = document.getElementById('push-notifications');
-        
-        // Navigation Elements
-        const navHome = document.getElementById('nav-home');
-        const navReportLost = document.getElementById('nav-report-lost');
-        const navReportFound = document.getElementById('nav-report-found');
-        const navSearch = document.getElementById('nav-search');
-        const navMessages = document.getElementById('nav-messages');
-        const navSafety = document.getElementById('nav-safety');
-        const navSupporters = document.getElementById('nav-supporters');
+        // Sticky header and scroll elements
+        const stickyHeader = document.getElementById('stickyHeader');
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+        const heroSection = document.getElementById('hero');
         
         // Global variables
         let currentItemToClaim = null;
         let currentItemToRecover = null;
         let matchingFoundItems = [];
         let lastReportData = null;
-        let currentConversation = null;
-        let currentMessages = [];
-        let contactInfoShared = {};
-        let currentUser = null;
-        let notifications = [];
-        let unreadNotifications = 0;
-        let uploadedImage = null;
-        let contactDetails = {
-            name: '',
-            email: '',
-            phone: ''
-        };
+        let lastScrollTop = 0;
         
         // Create floating particles
         function createParticles() {
@@ -2351,328 +1395,6 @@
         function generateVerificationCode() {
             return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
-        
-        // Generate conversation ID
-        function generateConversationId(reportId1, reportId2) {
-            // Sort the IDs to ensure consistent conversation ID regardless of who initiates
-            const sortedIds = [reportId1, reportId2].sort();
-            return sortedIds.join('_');
-        }
-        
-        // Toggle mobile menu
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-            });
-        });
-        
-        // Navigation scroll to section
-        navHome.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        
-        navReportLost.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('report-lost-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        navReportFound.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('report-found-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        navSearch.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('search-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        navMessages.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('messages-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        navSafety.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('safety-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        navSupporters.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('supporters-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        // Auth Modal Tabs
-        loginTab.addEventListener('click', () => {
-            loginTab.classList.add('active');
-            registerTab.classList.remove('active');
-            loginContent.classList.add('active');
-            registerContent.classList.remove('active');
-            verificationInputGroup.classList.remove('active');
-        });
-        
-        registerTab.addEventListener('click', () => {
-            registerTab.classList.add('active');
-            loginTab.classList.remove('active');
-            registerContent.classList.add('active');
-            loginContent.classList.remove('active');
-            verificationInputGroup.classList.remove('active');
-        });
-        
-        // Login/Register Buttons in Menu
-        navLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            authModal.show();
-            loginTab.click();
-        });
-        
-        navRegister.addEventListener('click', (e) => {
-            e.preventDefault();
-            authModal.show();
-            registerTab.click();
-        });
-        
-        // Login Form
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            try {
-                // For demo purposes, we'll simulate login
-                // In a real implementation, you would use Firebase Auth
-                console.log('Login attempt:', { email, password });
-                
-                // Simulate successful login
-                showToast('Login successful!', 'success');
-                authModal.hide();
-                
-                // Update UI to show logged in state
-                updateUserUI();
-            } catch (error) {
-                console.error('Error logging in:', error);
-                showToast('Failed to login. Please check your credentials.', 'error');
-            }
-        });
-        
-        // Register Form
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const phone = document.getElementById('register-phone').value;
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
-            
-            if (password !== confirmPassword) {
-                showToast('Passwords do not match.', 'error');
-                return;
-            }
-            
-            try {
-                // For demo purposes, we'll simulate registration
-                // In a real implementation, you would use Firebase Auth
-                console.log('Registration attempt:', { name, email, phone, password });
-                
-                // Generate verification code
-                const verificationCode = generateVerificationCode();
-                
-                // Show verification input
-                loginContent.classList.remove('active');
-                registerContent.classList.remove('active');
-                verificationInputGroup.classList.add('active');
-                
-                showToast('Registration successful! Please check your email and WhatsApp for the verification code.', 'success');
-            } catch (error) {
-                console.error('Error registering:', error);
-                showToast('Failed to register. Please try again.', 'error');
-            }
-        });
-        
-        // Verify Code
-        verifyCodeBtn.addEventListener('click', async () => {
-            const code = verificationCode.value.trim();
-            
-            if (!code) {
-                showToast('Please enter the verification code.', 'error');
-                return;
-            }
-            
-            try {
-                // For demo purposes, we'll simulate verification
-                console.log('Verification attempt:', code);
-                
-                // Simulate successful verification
-                showToast('Account verified successfully!', 'success');
-                authModal.hide();
-                
-                // Update UI to show logged in state
-                updateUserUI();
-            } catch (error) {
-                console.error('Error verifying code:', error);
-                showToast('Failed to verify code. Please try again.', 'error');
-            }
-        });
-        
-        // Resend Email Code
-        resendEmailCode.addEventListener('click', async () => {
-            try {
-                // For demo purposes, we'll simulate resending email code
-                console.log('Resend email code');
-                
-                showToast('Verification code resent to your email.', 'success');
-            } catch (error) {
-                console.error('Error resending email code:', error);
-                showToast('Failed to resend verification code.', 'error');
-            }
-        });
-        
-        // Resend WhatsApp Code
-        resendWhatsAppCode.addEventListener('click', async () => {
-            try {
-                // For demo purposes, we'll simulate resending WhatsApp code
-                console.log('Resend WhatsApp code');
-                
-                showToast('Verification code resent to your WhatsApp.', 'success');
-            } catch (error) {
-                console.error('Error resending WhatsApp code:', error);
-                showToast('Failed to resend verification code.', 'error');
-            }
-        });
-        
-        // Update user UI
-        function updateUserUI() {
-            // For demo purposes, we'll simulate a logged in user
-            currentUser = {
-                uid: 'demo-user-id',
-                name: 'Demo User',
-                email: 'demo@example.com',
-                phone: '08012345678'
-            };
-            
-            // Show user avatar and notifications
-            userAvatar.style.display = 'flex';
-            notificationContainer.style.display = 'block';
-            
-            // Set user avatar initials
-            const initials = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'U';
-            userAvatar.innerHTML = initials;
-            
-            // Load conversations
-            loadConversations();
-        }
-        
-        // Request notification permission
-        async function requestNotificationPermission() {
-            try {
-                if ('Notification' in window) {
-                    const permission = await Notification.requestPermission();
-                    
-                    if (permission === 'granted') {
-                        // Get FCM token
-                        const token = await messaging.getToken();
-                        
-                        if (token) {
-                            // Save FCM token to database
-                            console.log('FCM Token:', token);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error requesting notification permission:', error);
-            }
-        }
-        
-        // Load notifications
-        async function loadNotifications() {
-            // For demo purposes, we'll simulate loading notifications
-            notifications = [];
-            unreadNotifications = 0;
-            
-            // Update notification count
-            notificationCount.textContent = unreadNotifications;
-            notificationCount.style.display = unreadNotifications > 0 ? 'block' : 'none';
-            
-            // Update notification list
-            updateNotificationList();
-        }
-        
-        // Update notification list
-        function updateNotificationList() {
-            if (notifications.length === 0) {
-                notificationList.innerHTML = `
-                    <div class="no-notifications">
-                        <i class="bi bi-bell-slash"></i>
-                        <p>No notifications</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            
-            notifications.forEach(notification => {
-                const date = new Date(notification.timestamp);
-                const formattedTime = date.toLocaleString();
-                
-                html += `
-                    <div class="notification-item ${notification.read ? '' : 'unread'}" data-id="${notification.id}">
-                        <div>${notification.message}</div>
-                        <div class="notification-time">${formattedTime}</div>
-                    </div>
-                `;
-            });
-            
-            notificationList.innerHTML = html;
-            
-            // Add click event to notification items
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', async function() {
-                    const notificationId = this.getAttribute('data-id');
-                    
-                    // Mark notification as read
-                    this.classList.remove('unread');
-                    
-                    // Close notification panel
-                    notificationPanel.classList.remove('show');
-                });
-            });
-        }
-        
-        // Toggle notification panel
-        notificationBtn.addEventListener('click', () => {
-            notificationPanel.classList.toggle('show');
-        });
-        
-        // Clear notifications
-        clearNotificationsBtn.addEventListener('click', async () => {
-            // For demo purposes, we'll simulate clearing notifications
-            notifications = [];
-            unreadNotifications = 0;
-            
-            // Update notification count
-            notificationCount.textContent = unreadNotifications;
-            notificationCount.style.display = unreadNotifications > 0 ? 'block' : 'none';
-            
-            // Update notification list
-            updateNotificationList();
-        });
-        
-        // Close notification panel when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!notificationPanel.contains(e.target) && 
-                !notificationBtn.contains(e.target) && 
-                notificationPanel.classList.contains('show')) {
-                notificationPanel.classList.remove('show');
-            }
-        });
         
         // Animate counter
         function animateCounter(target, duration = 2000) {
@@ -2956,338 +1678,6 @@
             matchingItemsModal.show();
         }
         
-        // Load conversations
-        async function loadConversations() {
-            if (!currentUser) {
-                conversationList.innerHTML = `
-                    <div class="no-conversations">
-                        <i class="bi bi-chat-square-text"></i>
-                        <p>Please login to view your conversations.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // For demo purposes, we'll simulate loading conversations
-            conversationList.innerHTML = `
-                <div class="no-conversations">
-                    <i class="bi bi-chat-square-text"></i>
-                    <p>No conversations yet. Start a conversation from the search results.</p>
-                </div>
-            `;
-        }
-        
-        // Open conversation
-        async function openConversation(conversationId) {
-            if (!currentUser) {
-                showToast('Please login to view conversations.', 'error');
-                authModal.show();
-                registerTab.click();
-                return;
-            }
-            
-            // For demo purposes, we'll simulate opening a conversation
-            currentConversation = conversationId;
-            
-            // Set modal title
-            messageModalLabel.textContent = 'Conversation about Demo Item';
-            
-            // Set contact card
-            messageContactCard.innerHTML = `
-                <div class="message-contact-header">
-                    <div class="message-contact-avatar">DI</div>
-                    <div class="message-contact-info">
-                        <div class="message-contact-name">Demo Item</div>
-                        <div class="message-contact-item">Found Item Reporter</div>
-                        <div class="message-contact-item">Location: Demo Location</div>
-                        <div class="message-status message-verification-pending">
-                            <i class="bi bi-shield-exclamation"></i> Anonymous - No contact information shared yet
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Load messages
-            currentMessages = [];
-            
-            // Display messages
-            displayMessages();
-            
-            // Show modal
-            messageModal.show();
-            
-            // Focus on message input
-            setTimeout(() => {
-                messageInput.focus();
-            }, 500);
-        }
-        
-        // Display messages in the conversation
-        function displayMessages() {
-            let html = '';
-            
-            if (currentMessages.length === 0) {
-                html = `
-                    <div class="no-conversations">
-                        <i class="bi bi-chat-dots"></i>
-                        <p>No messages yet. Start the conversation!</p>
-                    </div>
-                `;
-            } else {
-                currentMessages.forEach(message => {
-                    const isSent = message.sender_id === currentUser.uid;
-                    const date = new Date(message.timestamp);
-                    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    
-                    if (message.type === 'image') {
-                        html += `
-                            <div class="message ${isSent ? 'message-sent' : 'message-received'}">
-                                <div>
-                                    <img src="${message.text}" alt="Shared image" class="message-image">
-                                </div>
-                                <div class="message-time">${formattedTime}</div>
-                            </div>
-                        `;
-                    } else if (message.type === 'contact') {
-                        const contactData = JSON.parse(message.text);
-                        html += `
-                            <div class="message ${isSent ? 'message-sent' : 'message-received'}">
-                                <div>
-                                    <div class="contact-details-container show">
-                                        <div class="contact-detail-item">
-                                            <div class="contact-detail-label">Name:</div>
-                                            <div class="contact-detail-value">${contactData.name}</div>
-                                        </div>
-                                        <div class="contact-detail-item">
-                                            <div class="contact-detail-label">Email:</div>
-                                            <div class="contact-detail-value">${contactData.email}</div>
-                                        </div>
-                                        <div class="contact-detail-item">
-                                            <div class="contact-detail-label">Phone:</div>
-                                            <div class="contact-detail-value">${contactData.phone}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="message-time">${formattedTime}</div>
-                            </div>
-                        `;
-                    } else {
-                        html += `
-                            <div class="message ${isSent ? 'message-sent' : 'message-received'}">
-                                <div>${message.text}</div>
-                                <div class="message-time">${formattedTime}</div>
-                            </div>
-                        `;
-                    }
-                });
-            }
-            
-            messageContainer.innerHTML = html;
-            
-            // Scroll to bottom
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-            
-            // Add click event to images
-            document.querySelectorAll('.message-image').forEach(img => {
-                img.addEventListener('click', function() {
-                    window.open(this.src, '_blank');
-                });
-            });
-        }
-        
-        // Send message
-        async function sendMessage() {
-            const text = messageInput.value.trim();
-            
-            if (!text || !currentConversation || !currentUser) {
-                return;
-            }
-            
-            try {
-                // For demo purposes, we'll simulate sending a message
-                const messageData = {
-                    sender_id: currentUser.uid,
-                    text: text,
-                    timestamp: new Date().toISOString(),
-                    read: false,
-                    type: 'text'
-                };
-                
-                // Add message to current messages array
-                currentMessages.push({
-                    id: 'demo-message-id',
-                    ...messageData
-                });
-                
-                // Clear input and refresh display
-                messageInput.value = '';
-                displayMessages();
-                
-                showToast('Message sent successfully!', 'success');
-            } catch (error) {
-                console.error('Error sending message:', error);
-                showToast('Failed to send message. Please try again.', 'error');
-            }
-        }
-        
-        // Share contact information
-        async function shareContactInfo() {
-            if (!currentConversation || !currentUser) {
-                return;
-            }
-            
-            try {
-                // Send contact info as a message
-                const contactData = {
-                    name: currentUser.name,
-                    email: currentUser.email,
-                    phone: currentUser.phone
-                };
-                
-                const messageData = {
-                    sender_id: currentUser.uid,
-                    text: JSON.stringify(contactData),
-                    timestamp: new Date().toISOString(),
-                    read: false,
-                    type: 'contact'
-                };
-                
-                // Add message to current messages array
-                currentMessages.push({
-                    id: 'demo-message-id',
-                    ...messageData
-                });
-                
-                // Mark contact info as shared
-                contactInfoShared[currentConversation] = true;
-                
-                // Update UI
-                messageSafetyTips.style.display = 'none';
-                messageInfoShared.style.display = 'block';
-                
-                // Update contact status
-                const statusElement = messageContactCard.querySelector('.message-status');
-                if (statusElement) {
-                    statusElement.className = 'message-status message-verification-complete';
-                    statusElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> Contact information shared';
-                }
-                
-                // Refresh display
-                displayMessages();
-                
-                // Show confirmation
-                showToast('Your contact information has been shared securely.', 'success');
-            } catch (error) {
-                console.error('Error sharing contact info:', error);
-                showToast('Failed to share contact information. Please try again.', 'error');
-            }
-        }
-        
-        // Report conversation
-        function reportConversation() {
-            reportReason.value = '';
-            reportDetails.value = '';
-            reportConversationModal.show();
-        }
-        
-        // Submit report
-        async function submitReport() {
-            const reason = reportReason.value;
-            const details = reportDetails.value.trim();
-            
-            if (!reason) {
-                showToast('Please select a reason for reporting.', 'error');
-                return;
-            }
-            
-            try {
-                // For demo purposes, we'll simulate submitting a report
-                console.log('Report submitted:', { reason, details });
-                
-                reportConversationModal.hide();
-                messageModal.hide();
-                
-                showToast('Your report has been submitted. Thank you for helping keep our community safe.', 'success');
-            } catch (error) {
-                console.error('Error submitting report:', error);
-                showToast('Failed to submit report. Please try again.', 'error');
-            }
-        }
-        
-        // Start a new conversation
-        async function startConversation(reportId1, reportId2) {
-            if (!currentUser) {
-                showToast('Please login to start a conversation.', 'error');
-                authModal.show();
-                registerTab.click();
-                return;
-            }
-            
-            try {
-                // Generate conversation ID
-                const conversationId = generateConversationId(reportId1, reportId2);
-                
-                // Open conversation
-                openConversation(conversationId);
-            } catch (error) {
-                console.error('Error starting conversation:', error);
-                showToast('Failed to start conversation. Please try again.', 'error');
-            }
-        }
-        
-        // Image upload
-        imageUpload.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            
-            if (file) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    uploadedImage = e.target.result;
-                    imagePreview.src = uploadedImage;
-                    imagePreview.classList.add('show');
-                };
-                
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // WhatsApp visibility change handlers
-        document.getElementById('lost-whatsapp-visible').addEventListener('change', function() {
-            if (this.checked) {
-                lostRegistrationPrompt.style.display = 'none';
-            }
-        });
-        
-        document.getElementById('lost-whatsapp-hidden').addEventListener('change', function() {
-            if (this.checked) {
-                lostRegistrationPrompt.style.display = 'block';
-            }
-        });
-        
-        document.getElementById('found-whatsapp-visible').addEventListener('change', function() {
-            if (this.checked) {
-                foundRegistrationPrompt.style.display = 'none';
-            }
-        });
-        
-        document.getElementById('found-whatsapp-hidden').addEventListener('change', function() {
-            if (this.checked) {
-                foundRegistrationPrompt.style.display = 'block';
-            }
-        });
-        
-        // Registration prompt buttons
-        lostRegisterBtn.addEventListener('click', () => {
-            authModal.show();
-            registerTab.click();
-        });
-        
-        foundRegisterBtn.addEventListener('click', () => {
-            authModal.show();
-            registerTab.click();
-        });
-        
         // Report Lost Item
         lostItemForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -3297,35 +1687,26 @@
             const lastSeen = document.getElementById('lost-last-seen').value;
             const description = document.getElementById('lost-description').value;
             const contact = document.getElementById('lost-contact').value;
-            const whatsappVisibility = document.querySelector('input[name="lost-whatsapp-visibility"]:checked').value;
-            
-            // Check if registration is required
-            if (whatsappVisibility === 'hidden' && !currentUser) {
-                showToast('Please register to use the secure messaging system.', 'error');
-                return;
-            }
             
             try {
                 // Generate verification code
                 const verificationCode = generateVerificationCode();
                 
-                // For demo purposes, we'll simulate reporting an item
+                const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'lost',
-                    item: item,
-                    location: location,
-                    last_seen: lastSeen,
-                    description: description,
+                    item: item, // Keep original formatting
+                    location: location, // Keep original formatting
+                    last_seen: lastSeen, // Keep original formatting
+                    description: description, // Keep original formatting
                     contact_info: contact,
                     verification_code: verificationCode,
                     recovered: false,
-                    user_id: currentUser ? currentUser.uid : null,
                     reporter: 'website',
-                    whatsapp_visibility: whatsappVisibility,
                     timestamp: new Date().toISOString()
                 };
                 
-                console.log('Lost item reported:', reportData);
+                await newReportRef.set(reportData);
                 
                 lostItemForm.reset();
                 
@@ -3364,33 +1745,24 @@
             const item = document.getElementById('found-item').value;
             const location = document.getElementById('found-location').value;
             const contact = document.getElementById('found-contact').value;
-            const whatsappVisibility = document.querySelector('input[name="found-whatsapp-visibility"]:checked').value;
-            
-            // Check if registration is required
-            if (whatsappVisibility === 'hidden' && !currentUser) {
-                showToast('Please register to use the secure messaging system.', 'error');
-                return;
-            }
             
             try {
                 // Generate verification code
                 const verificationCode = generateVerificationCode();
                 
-                // For demo purposes, we'll simulate reporting an item
+                const newReportRef = database.ref('reports').push();
                 const reportData = {
                     type: 'found',
-                    item: item,
-                    location: location,
+                    item: item, // Keep original formatting
+                    location: location, // Keep original formatting
                     contact_phone: contact,
                     verification_code: verificationCode,
                     claimed: false,
-                    user_id: currentUser ? currentUser.uid : null,
                     reporter: 'website',
-                    whatsapp_visibility: whatsappVisibility,
                     timestamp: new Date().toISOString()
                 };
                 
-                console.log('Found item reported:', reportData);
+                await newReportRef.set(reportData);
                 
                 foundItemForm.reset();
                 
@@ -3433,196 +1805,197 @@
             searchResults.innerHTML = '';
             
             try {
-                // For demo purposes, we'll simulate searching items
-                setTimeout(() => {
+                const snapshot = await database.ref('reports').once('value');
+                const reports = snapshot.val();
+                
+                if (!reports) {
+                    searchResults.innerHTML = '<p class="text-center">No items found in the database.</p>';
                     searchLoading.style.display = 'none';
-                    
-                    // Demo search results
-                    const demoResults = [
-                        {
-                            id: 'demo-lost-id',
-                            type: 'lost',
-                            item: 'Water Bottle',
-                            location: 'Library',
-                            description: 'Blue water bottle with a sticker',
-                            contact_info: '08012345678',
-                            verification_code: 'ABC123',
-                            recovered: false,
-                            whatsapp_visibility: 'visible',
-                            timestamp: new Date().toISOString()
-                        },
-                        {
-                            id: 'demo-found-id',
-                            type: 'found',
-                            item: 'Wallet',
-                            location: 'Cafeteria',
-                            contact_phone: '08087654321',
-                            verification_code: 'XYZ789',
-                            claimed: false,
-                            whatsapp_visibility: 'visible',
-                            timestamp: new Date().toISOString()
-                        }
-                    ];
-                    
-                    if (demoResults.length === 0) {
-                        searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
-                    } else {
-                        let resultsHtml = `<h4 class="mb-3">Found ${demoResults.length} item(s) matching "${searchTerm}":</h4>`;
-                        
-                        demoResults.forEach(report => {
-                            const date = new Date(report.timestamp).toLocaleString();
-                            const isClaimed = report.claimed || false;
-                            const isRecovered = report.recovered || false;
-                            const cardClass = isClaimed || isRecovered ? 'result-item claimed' : 'result-item';
-                            
-                            if (report.type === 'found') {
-                                const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
-                                const badgeText = isClaimed ? 'Claimed' : 'Found';
-                                
-                                // Check if WhatsApp number should be visible
-                                const showWhatsApp = report.whatsapp_visibility === 'visible';
-                                
-                                resultsHtml += `
-                                    <div class="${cardClass}">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <h5>${report.item}</h5>
-                                                <div class="meta">
-                                                    <i class="bi bi-geo-alt"></i> ${report.location}
-                                                </div>
-                                                <div class="meta">
-                                                    <i class="bi bi-clock"></i> ${date}
-                                                </div>
-                                                ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
-                                            </div>
-                                            <span class="badge ${badgeClass}">${badgeText}</span>
-                                        </div>
-                                        ${showWhatsApp ? `
-                                            <div class="mt-3">
-                                                <i class="bi bi-whatsapp"></i> 
-                                                <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
-                                            </div>
-                                        ` : ''}
-                                        ${!isClaimed ? `
-                                            <div class="found-item-actions mt-3">
-                                                <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
-                                                    <i class="bi bi-check-circle"></i> Mark as Claimed
-                                                </button>
-                                                <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="found">
-                                                    <i class="bi bi-chat-dots"></i> Send Message
-                                                </button>
-                                            </div>
-                                        ` : `
-                                            <div class="found-item-actions mt-3">
-                                                <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Claimed</span>
-                                            </div>
-                                        `}
-                                    </div>
-                                `;
-                            } else {
-                                const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
-                                const badgeText = isRecovered ? 'Recovered' : 'Lost';
-                                
-                                // Check if WhatsApp number should be visible
-                                const showWhatsApp = report.whatsapp_visibility === 'visible';
-                                
-                                resultsHtml += `
-                                    <div class="${cardClass}">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <h5>${report.item}</h5>
-                                                <div class="meta">
-                                                    <i class="bi bi-geo-alt"></i> ${report.location}
-                                                </div>
-                                                ${report.last_seen ? `
-                                                    <div class="meta">
-                                                        <i class="bi bi-eye"></i> Last seen: ${report.last_seen}
-                                                    </div>
-                                                ` : ''}
-                                                <div class="meta">
-                                                    <i class="bi bi-clock"></i> ${date}
-                                                </div>
-                                                ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
-                                            </div>
-                                            <span class="badge ${badgeClass}">${badgeText}</span>
-                                        </div>
-                                        ${showWhatsApp && report.contact_info ? `
-                                            <div class="mt-3">
-                                                <i class="bi bi-whatsapp"></i> 
-                                                <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
-                                            </div>
-                                        ` : ''}
-                                        ${!isRecovered ? `
-                                            <div class="found-item-actions mt-3">
-                                                <button class="btn btn-info btn-sm mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
-                                                    <i class="bi bi-check-circle"></i> Mark as Recovered
-                                                </button>
-                                                <button class="btn btn-primary btn-sm message-btn" data-id="${report.id}" data-type="lost">
-                                                    <i class="bi bi-chat-dots"></i> Send Message
-                                                </button>
-                                            </div>
-                                        ` : `
-                                            <div class="found-item-actions mt-3">
-                                                <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Recovered</span>
-                                            </div>
-                                        `}
-                                    </div>
-                                `;
-                            }
-                        });
-                        
-                        searchResults.innerHTML = resultsHtml;
-                        
-                        // Add event listeners to "Mark as Claimed" buttons
-                        document.querySelectorAll('.mark-claimed-btn').forEach(btn => {
-                            btn.addEventListener('click', function() {
-                                const itemId = this.getAttribute('data-id');
-                                const itemPhone = this.getAttribute('data-phone');
-                                currentItemToClaim = { id: itemId, phone: itemPhone };
-                                
-                                // Clear the verification code input
-                                verificationCodeInput.value = '';
-                                
-                                verificationModal.show();
-                            });
-                        });
-                        
-                        // Add event listeners to "Mark as Recovered" buttons
-                        document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
-                            btn.addEventListener('click', function() {
-                                const itemId = this.getAttribute('data-id');
-                                const itemPhone = this.getAttribute('data-phone');
-                                currentItemToRecover = { id: itemId, phone: itemPhone };
-                                
-                                // Clear the verification code input
-                                lostVerificationCodeInput.value = '';
-                                
-                                lostVerificationModal.show();
-                            });
-                        });
-                        
-                        // Add event listeners to "Send Message" buttons
-                        document.querySelectorAll('.message-btn').forEach(btn => {
-                            btn.addEventListener('click', function() {
-                                const itemId = this.getAttribute('data-id');
-                                const itemType = this.getAttribute('data-type');
-                                
-                                // Start conversation
-                                startConversation(itemId, 'demo-report-id');
-                            });
-                        });
+                    return;
+                }
+                
+                const results = [];
+                const twoDaysAgo = new Date();
+                twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+                
+                Object.entries(reports).forEach(([key, report]) => {
+                    // Filter out items that were claimed/recovered more than 2 days ago
+                    if ((report.claimed && report.claimed_at && new Date(report.claimed_at) < twoDaysAgo) ||
+                        (report.recovered && report.recovered_at && new Date(report.recovered_at) < twoDaysAgo)) {
+                        return;
                     }
-                }, 1000);
+                    
+                    if (filter !== 'all' && report.type !== filter) return;
+                    
+                    const searchText = `${report.item} ${report.location} ${report.description || ''}`.toLowerCase();
+                    if (searchText.includes(searchTerm)) {
+                        results.push({ ...report, id: key });
+                    }
+                });
+                
+                // Sort results by timestamp (most recent first)
+                results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                if (results.length === 0) {
+                    searchResults.innerHTML = `<p class="text-center">No items found matching "${searchTerm}".</p>`;
+                } else {
+                    let resultsHtml = `<h4 class="mb-3">Found ${results.length} item(s) matching "${searchTerm}":</h4>`;
+                    
+                    results.forEach(report => {
+                        const date = new Date(report.timestamp).toLocaleString();
+                        const isClaimed = report.claimed || false;
+                        const isRecovered = report.recovered || false;
+                        const cardClass = isClaimed || isRecovered ? 'result-item claimed' : 'result-item';
+                        
+                        if (report.type === 'found') {
+                            const badgeClass = isClaimed ? 'badge-claimed' : 'badge-found';
+                            const badgeText = isClaimed ? 'Claimed' : 'Found';
+                            
+                            resultsHtml += `
+                                <div class="${cardClass}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5>${report.item}</h5>
+                                            <div class="meta">
+                                                <i class="bi bi-geo-alt"></i> ${report.location}
+                                            </div>
+                                            <div class="meta">
+                                                <i class="bi bi-clock"></i> ${date}
+                                            </div>
+                                            ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
+                                        </div>
+                                        <span class="badge ${badgeClass}">${badgeText}</span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <i class="bi bi-whatsapp"></i> 
+                                        <a href="https://wa.me/${report.contact_phone.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_phone}</a>
+                                    </div>
+                                    ${!isClaimed ? `
+                                        <div class="found-item-actions mt-3">
+                                            <button class="btn btn-success btn-sm mark-claimed-btn" data-id="${report.id}" data-phone="${report.contact_phone}">
+                                                <i class="bi bi-check-circle"></i> Mark as Claimed
+                                            </button>
+                                        </div>
+                                    ` : `
+                                        <div class="found-item-actions mt-3">
+                                            <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Claimed</span>
+                                        </div>
+                                    `}
+                                </div>
+                            `;
+                        } else {
+                            const badgeClass = isRecovered ? 'badge-recovered' : 'badge-lost';
+                            const badgeText = isRecovered ? 'Recovered' : 'Lost';
+                            
+                            resultsHtml += `
+                                <div class="${cardClass}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5>${report.item}</h5>
+                                            <div class="meta">
+                                                <i class="bi bi-geo-alt"></i> ${report.location}
+                                            </div>
+                                            ${report.last_seen ? `
+                                                <div class="meta">
+                                                    <i class="bi bi-eye"></i> Last seen: ${report.last_seen}
+                                                </div>
+                                            ` : ''}
+                                            <div class="meta">
+                                                <i class="bi bi-clock"></i> ${date}
+                                            </div>
+                                            ${report.description ? `<p class="mt-2">${report.description}</p>` : ''}
+                                        </div>
+                                        <span class="badge ${badgeClass}">${badgeText}</span>
+                                    </div>
+                                    ${report.contact_info ? `
+                                        <div class="mt-3">
+                                            <i class="bi bi-whatsapp"></i> 
+                                            <a href="https://wa.me/${report.contact_info.replace(/^0/, '234')}" target="_blank" class="fw-bold">Contact via WhatsApp: ${report.contact_info}</a>
+                                        </div>
+                                    ` : ''}
+                                    ${!isRecovered ? `
+                                        <div class="found-item-actions mt-3">
+                                            <button class="btn btn-info btn-sm mark-recovered-btn" data-id="${report.id}" data-phone="${report.contact_info}">
+                                                <i class="bi bi-check-circle"></i> Mark as Recovered
+                                            </button>
+                                        </div>
+                                    ` : `
+                                        <div class="found-item-actions mt-3">
+                                            <span class="claimed-status"><i class="bi bi-check-circle"></i> Successfully Recovered</span>
+                                        </div>
+                                    `}
+                                </div>
+                            `;
+                        }
+                    });
+                    
+                    searchResults.innerHTML = resultsHtml;
+                    
+                    // Add event listeners to "Mark as Claimed" buttons
+                    document.querySelectorAll('.mark-claimed-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const itemId = this.getAttribute('data-id');
+                            const itemPhone = this.getAttribute('data-phone');
+                            currentItemToClaim = { id: itemId, phone: itemPhone };
+                            
+                            // Clear the verification code input
+                            verificationCodeInput.value = '';
+                            
+                            verificationModal.show();
+                        });
+                    });
+                    
+                    // Add event listeners to "Mark as Recovered" buttons
+                    document.querySelectorAll('.mark-recovered-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const itemId = this.getAttribute('data-id');
+                            const itemPhone = this.getAttribute('data-phone');
+                            currentItemToRecover = { id: itemId, phone: itemPhone };
+                            
+                            // Clear the verification code input
+                            lostVerificationCodeInput.value = '';
+                            
+                            lostVerificationModal.show();
+                        });
+                    });
+                }
             } catch (error) {
                 console.error('Error searching items:', error);
                 showToast('Failed to search items. Please try again.', 'error');
+            } finally {
+                searchLoading.style.display = 'none';
             }
         }
         
         // Find matching items (for lost item reporting)
         async function findMatchingItems(searchItem, type) {
-            // For demo purposes, we'll return empty array
-            return [];
+            try {
+                const snapshot = await database.ref('reports').once('value');
+                const reports = snapshot.val();
+                
+                if (!reports) return [];
+                
+                const searchKeywords = searchItem.toLowerCase().split(' ');
+                const matchingItems = [];
+                
+                Object.entries(reports).forEach(([key, report]) => {
+                    if (report.type === type) {
+                        const reportText = `${report.item} ${report.description || ''}`.toLowerCase();
+                        const matchScore = searchKeywords.reduce((score, keyword) => {
+                            return score + (reportText.includes(keyword) ? 1 : 0);
+                        }, 0);
+                        
+                        if (matchScore > 0) {
+                            matchingItems.push({...report, matchScore});
+                        }
+                    }
+                });
+                
+                return matchingItems.sort((a, b) => b.matchScore - a.matchScore);
+            } catch (error) {
+                console.error('Error finding matching items:', error);
+                return [];
+            }
         }
         
         // Handle "Confirm and Mark as Claimed" button
@@ -3637,11 +2010,34 @@
             }
             
             try {
-                // For demo purposes, we'll simulate verification
-                console.log('Verification attempt:', enteredCode);
+                // Get the report to verify the code
+                const reportSnapshot = await database.ref(`reports/${currentItemToClaim.id}`).once('value');
+                const reportData = reportSnapshot.val();
+                
+                if (!reportData) {
+                    showToast('Report not found', 'error');
+                    return;
+                }
+                
+                // Verify the code
+                if (reportData.verification_code !== enteredCode) {
+                    showToast('Invalid verification code. Please try again.', 'error');
+                    return;
+                }
+                
+                // Mark as claimed
+                await database.ref(`reports/${currentItemToClaim.id}`).update({
+                    claimed: true,
+                    claimed_at: new Date().toISOString()
+                });
                 
                 verificationModal.hide();
                 showToast('Item has been marked as claimed successfully!');
+                
+                // Refresh search results if visible
+                if (searchResults.innerHTML !== '') {
+                    performSearch();
+                }
                 
                 currentItemToClaim = null;
             } catch (error) {
@@ -3662,11 +2058,34 @@
             }
             
             try {
-                // For demo purposes, we'll simulate verification
-                console.log('Verification attempt:', enteredCode);
+                // Get the report to verify the code
+                const reportSnapshot = await database.ref(`reports/${currentItemToRecover.id}`).once('value');
+                const reportData = reportSnapshot.val();
+                
+                if (!reportData) {
+                    showToast('Report not found', 'error');
+                    return;
+                }
+                
+                // Verify the code
+                if (reportData.verification_code !== enteredCode) {
+                    showToast('Invalid verification code. Please try again.', 'error');
+                    return;
+                }
+                
+                // Mark as recovered
+                await database.ref(`reports/${currentItemToRecover.id}`).update({
+                    recovered: true,
+                    recovered_at: new Date().toISOString()
+                });
                 
                 lostVerificationModal.hide();
                 showToast('Item has been marked as recovered successfully!');
+                
+                // Refresh search results if visible
+                if (searchResults.innerHTML !== '') {
+                    performSearch();
+                }
                 
                 currentItemToRecover = null;
             } catch (error) {
@@ -3675,65 +2094,55 @@
             }
         });
         
-        // Messaging event listeners
-        refreshConversationsBtn.addEventListener('click', loadConversations);
-        
-        sendMessageBtn.addEventListener('click', sendMessage);
-        
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+        // Sticky header functionality
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Update scroll progress bar
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = `${scrollPercent}%`;
+            
+            // Show/hide back to top button
+            if (scrollTop > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
             }
+            
+            // Show/hide sticky header based on scroll direction
+            if (scrollTop > heroSection.offsetHeight) {
+                stickyHeader.classList.add('visible');
+            } else {
+                stickyHeader.classList.remove('visible');
+            }
+            
+            lastScrollTop = scrollTop;
         });
         
-        shareContactBtn.addEventListener('click', shareContactInfo);
+        // Back to top button functionality
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
         
-        reportConversationBtn.addEventListener('click', reportConversation);
-        
-        submitReportBtn.addEventListener('click', submitReport);
-        
-        // Image upload in message
-        imageUpload.addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            
-            if (file && currentConversation && currentUser) {
-                const reader = new FileReader();
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
                 
-                reader.onload = async function(e) {
-                    const imageData = e.target.result;
-                    
-                    try {
-                        // For demo purposes, we'll simulate sending an image
-                        const messageData = {
-                            sender_id: currentUser.uid,
-                            text: imageData,
-                            timestamp: new Date().toISOString(),
-                            read: false,
-                            type: 'image'
-                        };
-                        
-                        // Add message to current messages array
-                        currentMessages.push({
-                            id: 'demo-message-id',
-                            ...messageData
-                        });
-                        
-                        // Clear input and refresh display
-                        imageUpload.value = '';
-                        imagePreview.src = '';
-                        imagePreview.classList.remove('show');
-                        displayMessages();
-                        
-                        showToast('Image sent successfully!', 'success');
-                    } catch (error) {
-                        console.error('Error sending image:', error);
-                        showToast('Failed to send image. Please try again.', 'error');
-                    }
-                };
-                
-                reader.readAsDataURL(file);
-            }
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80; // Account for sticky header
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
         
         // Initialize
