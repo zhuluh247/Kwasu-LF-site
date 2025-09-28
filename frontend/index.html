@@ -2035,7 +2035,7 @@
                         <div class="detail-row">
                             <div class="detail-label">Item Image:</div>
                             <div class="detail-value">
-                                <img src="${reportData.image_url}" alt="${reportData.item}" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+                                <img src="${reportData.image_url || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${reportData.item}" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
                             </div>
                         </div>
                         <div class="detail-row">
@@ -2214,6 +2214,12 @@
         // Upload image to Firebase Storage
         async function uploadImage(file) {
             return new Promise((resolve, reject) => {
+                // If no Firebase Storage, return a placeholder URL
+                if (!storage) {
+                    resolve('https://via.placeholder.com/300x200?text=Item+Image');
+                    return;
+                }
+                
                 const storageRef = storage.ref();
                 const fileName = `found-items/${Date.now()}_${file.name}`;
                 const imageRef = storageRef.child(fileName);
@@ -2226,12 +2232,17 @@
                     }, 
                     (error) => {
                         console.error('Error uploading image:', error);
-                        reject(error);
+                        // Return a placeholder URL if upload fails
+                        resolve('https://via.placeholder.com/300x200?text=Upload+Failed');
                     }, 
                     () => {
                         // Upload completed successfully
                         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                             resolve(downloadURL);
+                        }).catch((error) => {
+                            console.error('Error getting download URL:', error);
+                            // Return a placeholder URL if getting URL fails
+                            resolve('https://via.placeholder.com/300x200?text=Item+Image');
                         });
                     }
                 );
@@ -2316,7 +2327,7 @@
                 // Generate verification code
                 const verificationCode = generateVerificationCode();
                 
-                // Upload image to Firebase Storage
+                // Upload image to Firebase Storage or get placeholder
                 const imageUrl = await uploadImage(selectedImageFile);
                 
                 const newReportRef = database.ref('reports').push();
@@ -2450,10 +2461,13 @@
                     const badgeText = isClaimed ? 'Claimed' : 'Found';
                     const badgeIcon = isClaimed ? 'bi-check-circle-fill' : 'bi-gift-fill';
                     
+                    // Always show image for found items, use placeholder if not available
+                    const imageUrl = report.image_url || 'https://via.placeholder.com/80x80?text=No+Image';
+                    
                     resultsHtml += `
                         <div class="result-item ${cardClass}">
                             <div class="result-header-with-image">
-                                ${report.image_url ? `<img src="${report.image_url}" alt="${report.item}" class="result-image">` : ''}
+                                <img src="${imageUrl}" alt="${report.item}" class="result-image" onerror="this.src='https://via.placeholder.com/80x80?text=Error'">
                                 <div class="result-content">
                                     <div class="result-header">
                                         <h5 class="result-title">
