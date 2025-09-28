@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
+        /* All your existing CSS styles remain the same */
         :root {
             --primary-color: #1a5276;
             --secondary-color: #2980b9;
@@ -25,7 +26,7 @@
             padding-top: 0;
         }
         
-        /* Sticky Header Styles */
+        /* All your existing CSS styles remain unchanged */
         .sticky-header {
             position: fixed;
             top: -100px;
@@ -83,7 +84,6 @@
             width: 100%;
         }
         
-        /* Scroll Progress Indicator */
         .scroll-progress {
             position: fixed;
             top: 0;
@@ -94,7 +94,6 @@
             transition: width 0.1s ease;
         }
         
-        /* Back to Top Button */
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -207,7 +206,6 @@
             cursor: not-allowed;
         }
         
-        /* Enhanced Search Results Styles */
         .search-results {
             margin-top: 2rem;
         }
@@ -441,7 +439,6 @@
             color: white;
         }
         
-        /* No Results State */
         .no-results {
             text-align: center;
             padding: 3rem 2rem;
@@ -499,7 +496,6 @@
             margin-bottom: 0;
         }
         
-        /* Loading State */
         .loading-spinner {
             display: none;
             text-align: center;
@@ -580,7 +576,6 @@
             font-size: 1.1rem;
         }
         
-        /* Footer */
         .footer {
             background-color: var(--primary-color);
             color: white;
@@ -600,7 +595,6 @@
             text-decoration: underline;
         }
         
-        /* Toast Container */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -638,7 +632,6 @@
             position: relative;
         }
         
-        /* Platform Icons */
         .platform-icons {
             margin-top: 1rem;
         }
@@ -655,7 +648,6 @@
             color: var(--accent-color);
         }
         
-        /* WhatsApp Note */
         .whatsapp-note {
             background-color: #e8f5e9;
             border-left: 4px solid #4caf50;
@@ -664,7 +656,6 @@
             border-radius: 4px;
         }
         
-        /* Safety Tips */
         .safety-tips {
             background-color: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -697,14 +688,12 @@
             margin-right: 8px;
         }
         
-        /* Section Break */
         .section-break {
             height: 2px;
             background: linear-gradient(to right, transparent, #ddd, transparent);
             margin: 3rem 0;
         }
         
-        /* Enhanced Supporters Section */
         .supporters-section {
             background: var(--supporter-gradient);
             border-radius: 15px;
@@ -863,7 +852,6 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
-        /* Floating particles animation */
         .particles {
             position: absolute;
             top: 0;
@@ -898,7 +886,6 @@
             }
         }
         
-        /* Original Report Details Modal Styles */
         .matching-item-card {
             background: #f8f9fa;
             border-radius: 10px;
@@ -944,7 +931,6 @@
             color: white;
         }
         
-        /* Verification Modal */
         .modal-content {
             border-radius: 15px;
             border: none;
@@ -965,7 +951,6 @@
             padding: 2rem;
         }
         
-        /* Founder Details Modal */
         .founder-details {
             background-color: #f8f9fa;
             border-radius: 10px;
@@ -1011,7 +996,6 @@
             color: white;
         }
         
-        /* Found Item Actions */
         .found-item-actions {
             margin-top: 1rem;
             display: flex;
@@ -1028,7 +1012,6 @@
             font-weight: 600;
         }
         
-        /* New styles for report details modal */
         .report-details-modal .modal-dialog {
             max-width: 600px;
         }
@@ -1200,7 +1183,6 @@
             text-align: center;
         }
         
-        /* Copy Tooltip */
         .copy-tooltip {
             position: absolute;
             background-color: #333;
@@ -1217,7 +1199,6 @@
             opacity: 1;
         }
         
-        /* Verification Error Message */
         .verification-error {
             display: none;
             background-color: #f8d7da;
@@ -1236,7 +1217,6 @@
             margin-right: 8px;
         }
         
-        /* Image Upload Styles */
         .image-upload-container {
             margin-bottom: 1rem;
         }
@@ -1298,7 +1278,6 @@
             color: #6c757d;
         }
         
-        /* Image Upload Progress */
         .image-upload-progress {
             display: none;
             margin-top: 10px;
@@ -1333,7 +1312,6 @@
             color: var(--secondary-color);
         }
         
-        /* Result Item Image */
         .result-image {
             width: 80px;
             height: 80px;
@@ -1353,7 +1331,6 @@
             margin-bottom: 1rem;
         }
         
-        /* Responsive adjustments */
         @media (max-width: 768px) {
             .sticky-header .nav-links {
                 display: none;
@@ -1490,7 +1467,7 @@
                                     <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <div class="upload-status">
-                                    <span>Uploading image...</span>
+                                    <span>Processing image...</span>
                                     <span class="upload-percentage">0%</span>
                                 </div>
                             </div>
@@ -1834,7 +1811,6 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1843,13 +1819,11 @@
     <script>
         // Initialize Firebase
         const firebaseConfig = {
-            databaseURL: "https://kwasu-lost-and-found-default-rtdb.firebaseio.com/",
-            storageBucket: "kwasu-lost-and-found.appspot.com"
+            databaseURL: "https://kwasu-lost-and-found-default-rtdb.firebaseio.com/"
         };
         
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const storage = firebase.storage();
         
         // DOM Elements
         const lostItemForm = document.getElementById('lost-item-form');
@@ -2255,8 +2229,8 @@
                 };
                 reader.readAsDataURL(file);
                 
-                // Upload image immediately
-                uploadImage(file);
+                // Process image immediately using base64 encoding
+                processImage(file);
             }
         });
         
@@ -2272,50 +2246,34 @@
             uploadedImageUrl = null;
         }
         
-        // Upload image to Firebase Storage
-        function uploadImage(file) {
+        // Process image using base64 encoding (Alternative Solution 2)
+        function processImage(file) {
             // Show progress bar
             imageUploadProgress.classList.add('show');
             progressBar.style.width = '0%';
             progressBar.setAttribute('aria-valuenow', 0);
             uploadPercentage.textContent = '0%';
             
-            // Disable submit button during upload
+            // Disable submit button during processing
             foundItemSubmitBtn.disabled = true;
-            foundItemSubmitBtn.textContent = 'Uploading Image...';
+            foundItemSubmitBtn.textContent = 'Processing Image...';
             
-            const storageRef = storage.ref();
-            const fileName = `found-items/${Date.now()}_${file.name}`;
-            const imageRef = storageRef.child(fileName);
+            const reader = new FileReader();
             
-            const uploadTask = imageRef.put(file);
-            
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // Update progress bar
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            reader.onload = function(e) {
+                // Simulate processing progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
                     progressBar.style.width = `${progress}%`;
                     progressBar.setAttribute('aria-valuenow', progress);
-                    uploadPercentage.textContent = `${Math.round(progress)}%`;
-                }, 
-                (error) => {
-                    console.error('Error uploading image:', error);
-                    showToast('Failed to upload image. Please try again.', 'error');
+                    uploadPercentage.textContent = `${progress}%`;
                     
-                    // Hide progress bar
-                    imageUploadProgress.classList.remove('show');
-                    
-                    // Re-enable submit button
-                    foundItemSubmitBtn.disabled = false;
-                    foundItemSubmitBtn.textContent = 'Report Found Item';
-                    
-                    // Reset image preview
-                    resetImagePreview();
-                }, 
-                () => {
-                    // Upload completed successfully
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        uploadedImageUrl = downloadURL;
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        // Store the base64 image data
+                        uploadedImageUrl = e.target.result;
                         
                         // Hide progress bar
                         imageUploadProgress.classList.remove('show');
@@ -2325,23 +2283,28 @@
                         foundItemSubmitBtn.textContent = 'Report Found Item';
                         
                         // Show success message
-                        showToast('Image uploaded successfully!', 'success');
-                    }).catch((error) => {
-                        console.error('Error getting download URL:', error);
-                        showToast('Failed to get image URL. Please try again.', 'error');
-                        
-                        // Hide progress bar
-                        imageUploadProgress.classList.remove('show');
-                        
-                        // Re-enable submit button
-                        foundItemSubmitBtn.disabled = false;
-                        foundItemSubmitBtn.textContent = 'Report Found Item';
-                        
-                        // Reset image preview
-                        resetImagePreview();
-                    });
-                }
-            );
+                        showToast('Image processed successfully!', 'success');
+                    }
+                }, 100);
+            };
+            
+            reader.onerror = function(error) {
+                console.error('Error reading file:', error);
+                showToast('Failed to process image. Please try again.', 'error');
+                
+                // Hide progress bar
+                imageUploadProgress.classList.remove('show');
+                
+                // Re-enable submit button
+                foundItemSubmitBtn.disabled = false;
+                foundItemSubmitBtn.textContent = 'Report Found Item';
+                
+                // Reset image preview
+                resetImagePreview();
+            };
+            
+            // Read the file as a data URL (base64)
+            reader.readAsDataURL(file);
         }
         
         // Report Lost Item
@@ -2412,7 +2375,7 @@
             const location = document.getElementById('found-location').value;
             const contact = document.getElementById('found-contact').value;
             
-            // Check if image is uploaded
+            // Check if image is processed
             if (!uploadedImageUrl) {
                 showToast('Please upload an image of the found item', 'error');
                 return;
@@ -2428,7 +2391,7 @@
                     item: item, // Keep original formatting
                     location: location, // Keep original formatting
                     contact_phone: contact,
-                    image_url: uploadedImageUrl,
+                    image_url: uploadedImageUrl, // Now a base64 string
                     verification_code: verificationCode,
                     claimed: false,
                     reporter: 'website',
@@ -2559,7 +2522,7 @@
                     resultsHtml += `
                         <div class="result-item ${cardClass}">
                             <div class="result-header-with-image">
-                                ${imageUrl ? `<img src="${imageUrl}" alt="${report.item}" class="result-image" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">` : '<img src="https://via.placeholder.com/80x80?text=No+Image" alt="No Image" class="result-image">'}
+                                ${imageUrl ? `<img src="${imageUrl}" alt="${report.item}" class="result-image">` : '<img src="https://via.placeholder.com/80x80?text=No+Image" alt="No Image" class="result-image">'}
                                 <div class="result-content">
                                     <div class="result-header">
                                         <h5 class="result-title">
