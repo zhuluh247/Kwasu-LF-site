@@ -1947,7 +1947,7 @@
             
             toastContainer.insertAdjacentHTML('beforeend', toastHtml);
             const toastElement = document.getElementById(toastId);
-            const toast = new bootstrap.Toast(toastElement, { autohide: false }); // Disable auto-hide
+            const toast = new bootstrap.Toast(toastElement, { autohide: true, delay: 10000 }); // Auto-hide after 10 seconds
             toast.show();
             
             // Add click event if action button is provided
@@ -2403,28 +2403,28 @@
                     timestamp: new Date().toISOString()
                 };
                 
+                // Save to database
                 await newReportRef.set(reportData);
                 
-                // Show success toast first
-                const message = `Thanks for reporting an item! Your verification code is "${verificationCode}". Please save it as you will need it later.`;
-                const toastId = showToast(message, 'success', {
+                // Reset form immediately
+                foundItemForm.reset();
+                resetImagePreview();
+                
+                // Show success toast with verification code
+                const message = `🎉 Success! Your found item has been reported. Verification Code: <strong>${verificationCode}</strong>. Please save this code!`;
+                showToast(message, 'success', {
                     text: 'View Details',
                     callback: () => {
                         showReportDetailsModal(reportData);
                     }
                 });
                 
-                // Reset form after a delay to allow user to see the success message
-                setTimeout(() => {
-                    foundItemForm.reset();
-                    resetImagePreview();
-                }, 3000);
-                
                 // Show safety warning after a delay
                 setTimeout(() => {
-                    const safetyMessage = `IMPORTANT: When someone contacts you to claim this item, please ask for verification details (color, brand, unique features) to confirm ownership. Do not return the item without proper verification.`;
+                    const safetyMessage = `⚠️ IMPORTANT: When someone contacts you to claim this item, please ask for verification details (color, brand, unique features) to confirm ownership. Do not return the item without proper verification.`;
                     showToast(safetyMessage, 'success');
-                }, 1000);
+                }, 3000);
+                
             } catch (error) {
                 console.error('Error reporting found item:', error);
                 showToast('Failed to report found item. Please try again.', 'error');
