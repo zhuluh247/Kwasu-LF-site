@@ -1875,6 +1875,7 @@
         let currentSearchTerm = '';
         let selectedImageFile = null;
         let uploadedImageUrl = null;
+        let isImageProcessed = false;
         
         // Create floating particles
         function createParticles() {
@@ -1961,6 +1962,8 @@
             toastElement.addEventListener('hidden.bs.toast', () => {
                 toastElement.remove();
             });
+            
+            return toastId;
         }
         
         // Show report details modal (Original version with all tips)
@@ -2244,6 +2247,7 @@
             `;
             selectedImageFile = null;
             uploadedImageUrl = null;
+            isImageProcessed = false;
         }
         
         // Process image using base64 encoding (Alternative Solution 2)
@@ -2274,6 +2278,7 @@
                         
                         // Store the base64 image data
                         uploadedImageUrl = e.target.result;
+                        isImageProcessed = true;
                         
                         // Hide progress bar
                         imageUploadProgress.classList.remove('show');
@@ -2376,7 +2381,7 @@
             const contact = document.getElementById('found-contact').value;
             
             // Check if image is processed
-            if (!uploadedImageUrl) {
+            if (!isImageProcessed || !uploadedImageUrl) {
                 showToast('Please upload an image of the found item', 'error');
                 return;
             }
@@ -2400,19 +2405,22 @@
                 
                 await newReportRef.set(reportData);
                 
-                foundItemForm.reset();
-                resetImagePreview();
-                
-                // Show toast with action button and verification code
-                const message = `Thanks for reporting an item, Please view your submission code "${verificationCode}" and save it as you will need it later🙏.`;
-                showToast(message, 'success', {
+                // Show success toast first
+                const message = `Thanks for reporting an item! Your verification code is "${verificationCode}". Please save it as you will need it later.`;
+                const toastId = showToast(message, 'success', {
                     text: 'View Details',
                     callback: () => {
                         showReportDetailsModal(reportData);
                     }
                 });
                 
-                // Show safety warning
+                // Reset form after a delay to allow user to see the success message
+                setTimeout(() => {
+                    foundItemForm.reset();
+                    resetImagePreview();
+                }, 3000);
+                
+                // Show safety warning after a delay
                 setTimeout(() => {
                     const safetyMessage = `IMPORTANT: When someone contacts you to claim this item, please ask for verification details (color, brand, unique features) to confirm ownership. Do not return the item without proper verification.`;
                     showToast(safetyMessage, 'success');
@@ -2522,7 +2530,10 @@
                     resultsHtml += `
                         <div class="result-item ${cardClass}">
                             <div class="result-header-with-image">
-                                ${imageUrl ? `<img src="${imageUrl}" alt="${report.item}" class="result-image">` : '<img src="https://via.placeholder.com/80x80?text=No+Image" alt="No Image" class="result-image">'}
+                                ${imageUrl && imageUrl.startsWith('data:image') ? 
+                                    `<img src="${imageUrl}" alt="${report.item}" class="result-image">` : 
+                                    '<img src="https://via.placeholder.com/80x80?text=No+Image" alt="No Image" class="result-image">'
+                                }
                                 <div class="result-content">
                                     <div class="result-header">
                                         <h5 class="result-title">
