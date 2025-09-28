@@ -1408,18 +1408,18 @@
                     <form id="lost-item-form">
                         <div class="mb-3">
                             <label for="lost-item" class="form-label">Item Name</label>
-                            <input type="text" class="form-control" id="lost-item" placeholder="e.g., Water Bottle, Wallet, Phone" required>
+                            <input type="text" class="form-control" id="lost-item" placeholder="e.g., ID Card, Bag, Phone, Wallet" required>
                         </div>
                         <div class="mb-3">
                             <label for="lost-location" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="lost-location" placeholder="e.g., Library, Cafeteria, Lecture Hall" required>
+                            <input type="text" class="form-control" id="lost-location" placeholder="e.g., E-Library, Auditorium, School Gate" required>
                         </div>
                         <div class="mb-3">
                             <label for="lost-last-seen" class="form-label">Last Seen Location (if known)</label>
                             <input type="text" class="form-control" id="lost-last-seen" placeholder="e.g., Near the library entrance, Cafeteria table 5">
                         </div>
                         <div class="mb-3">
-                            <label for="lost-description" class="form-label">Description</label>
+                            <label for="lost-description" class="form-label">Description of the lost Item</label>
                             <textarea class="form-control" id="lost-description" rows="3" placeholder="Provide details about your item (color, brand, unique features, etc.)" required></textarea>
                         </div>
                         <div class="mb-3">
@@ -1443,11 +1443,15 @@
                     <form id="found-item-form">
                         <div class="mb-3">
                             <label for="found-item" class="form-label">Item Name</label>
-                            <input type="text" class="form-control" id="found-item" placeholder="e.g., Keys, ID Card, Notebook" required>
+                            <input type="text" class="form-control" id="found-item" placeholder="e.g., Key, Wristwatch, ID Card, Phone" required>
                         </div>
                         <div class="mb-3">
                             <label for="found-location" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="found-location" placeholder="e.g., Parking Lot, Classroom, Sports Complex" required>
+                            <input type="text" class="form-control" id="found-location" placeholder="e.g., Infront of ICT, School Clinic, Main Library" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="found-description" class="form-label">Description of the Found Item</label>
+                            <textarea class="form-control" id="found-description" rows="3" placeholder="Provide details about the found item (color, brand, unique features, etc.)"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="found-contact" class="form-label">Your WhatsApp Number</label>
@@ -1519,7 +1523,7 @@
                 <i class="bi bi-shield-check"></i> Safety Tips
             </h3>
             <div class="alert alert-warning">
-                <i class="bi bi-exclamation-triangle-fill"></i> <strong>Important:</strong> These safety guidelines are for school safety and to prevent scams. Please follow them carefully.
+                <i class="bi bi-exclamation-triangle-fill"></i> <strong>Important:</strong> These safety guidelines are for personal safety and to prevent scams. Please follow them carefully.
             </div>
             
             <div class="row">
@@ -2384,6 +2388,7 @@
             
             const item = document.getElementById('found-item').value;
             const location = document.getElementById('found-location').value;
+            const description = document.getElementById('found-description').value;
             const contact = document.getElementById('found-contact').value;
             
             // Check if image is processed
@@ -2401,6 +2406,7 @@
                     type: 'found',
                     item: item, // Keep original formatting
                     location: location, // Keep original formatting
+                    description: description, // Keep original formatting
                     contact_phone: contact,
                     image_url: uploadedImageUrl, // Now a base64 string
                     verification_code: verificationCode,
