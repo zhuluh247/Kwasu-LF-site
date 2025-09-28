@@ -1472,7 +1472,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100" id="found-item-submit-btn">Report Found Item</button>
+                        <button type="submit" class="btn btn-primary w-100" id="found-item-submit-btn" disabled>Report Found Item</button>
                     </form>
                 </div>
             </div>
@@ -2248,6 +2248,8 @@
             selectedImageFile = null;
             uploadedImageUrl = null;
             isImageProcessed = false;
+            // Keep submit button disabled until image is processed
+            foundItemSubmitBtn.disabled = true;
         }
         
         // Process image using base64 encoding (Alternative Solution 2)
@@ -2283,12 +2285,15 @@
                         // Hide progress bar
                         imageUploadProgress.classList.remove('show');
                         
-                        // Re-enable submit button
-                        foundItemSubmitBtn.disabled = false;
-                        foundItemSubmitBtn.textContent = 'Report Found Item';
+                        // Update button text to indicate ready state
+                        foundItemSubmitBtn.textContent = 'Ready to Submit';
                         
-                        // Show success message
-                        showToast('Image processed successfully!', 'success');
+                        // Wait 3 seconds before enabling the submit button
+                        setTimeout(() => {
+                            // Re-enable submit button after delay
+                            foundItemSubmitBtn.disabled = false;
+                            foundItemSubmitBtn.textContent = 'Report Found Item';
+                        }, 3000);
                     }
                 }, 100);
             };
