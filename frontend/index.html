@@ -738,79 +738,70 @@
         
         .supporters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
             margin-top: 2rem;
         }
         
         .supporter-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background-size: cover;
+            background-position: center;
             border-radius: 12px;
-            padding: 1.2rem;
+            padding: 1rem;
             text-align: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
             z-index: 1;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+        
+        .supporter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
+            z-index: -1;
         }
         
         .supporter-card:hover {
             transform: translateY(-5px) scale(1.02);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
         .supporter-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin: 0 auto 0.8rem;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .supporter-avatar::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6ec7, #7873f5, #4bcffa, #f093fb);
-            border-radius: 50%;
-            z-index: -1;
-            animation: rotate 3s linear infinite;
-        }
-        
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            display: none; /* Hide the avatar since we're using background images */
         }
         
         .supporter-name {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         
         .supporter-role {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            margin-bottom: 0.4rem;
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-bottom: 0.3rem;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         
         .supporter-department {
-            font-size: 0.8rem;
-            opacity: 0.7;
+            font-size: 0.7rem;
+            opacity: 0.8;
             font-style: italic;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         
         .toggle-supporters-btn {
@@ -837,19 +828,20 @@
         
         .supporter-badge {
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: 10px;
+            left: 10px;
             background: var(--accent-color);
             color: white;
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 2;
         }
         
         .particles {
@@ -1368,6 +1360,10 @@
                 margin-right: 0;
                 margin-bottom: 1rem;
             }
+            
+            .supporters-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
         }
     </style>
 </head>
@@ -1586,7 +1582,7 @@
                 
                 <div class="collapse mt-4" id="supporters-list">
                     <div class="supporters-grid">
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter1/400/300.jpg');">
                             <div class="supporter-badge">1</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name One</div>
@@ -1594,7 +1590,7 @@
                             <div class="supporter-department">(Computer Science Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter2/400/300.jpg');">
                             <div class="supporter-badge">2</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Two</div>
@@ -1602,7 +1598,7 @@
                             <div class="supporter-department">(Mass Comm. Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter3/400/300.jpg');">
                             <div class="supporter-badge">3</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Three</div>
@@ -1610,7 +1606,7 @@
                             <div class="supporter-department">(Fine Arts Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter4/400/300.jpg');">
                             <div class="supporter-badge">4</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Four</div>
@@ -1618,7 +1614,7 @@
                             <div class="supporter-department">(English Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter5/400/300.jpg');">
                             <div class="supporter-badge">5</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Five</div>
@@ -1626,7 +1622,7 @@
                             <div class="supporter-department">(Sociology Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter6/400/300.jpg');">
                             <div class="supporter-badge">6</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Six</div>
@@ -1634,7 +1630,7 @@
                             <div class="supporter-department">(Mathematics Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter7/400/300.jpg');">
                             <div class="supporter-badge">7</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Seven</div>
@@ -1642,7 +1638,7 @@
                             <div class="supporter-department">(Business Admin Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter8/400/300.jpg');">
                             <div class="supporter-badge">8</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Eight</div>
@@ -1650,7 +1646,7 @@
                             <div class="supporter-department">(Library Science Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter9/400/300.jpg');">
                             <div class="supporter-badge">9</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Nine</div>
@@ -1658,7 +1654,7 @@
                             <div class="supporter-department">(Psychology Dpt.)</div>
                         </div>
                         
-                        <div class="supporter-card">
+                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter10/400/300.jpg');">
                             <div class="supporter-badge">10</div>
                             <div class="supporter-avatar">FN</div>
                             <div class="supporter-name">Full Name Ten</div>
