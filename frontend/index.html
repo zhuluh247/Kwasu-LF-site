@@ -744,36 +744,32 @@
         }
         
         .supporter-card {
-            background-size: cover;
-            background-position: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
+            overflow: hidden;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
             z-index: 1;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            overflow: hidden;
-        }
-        
-        .supporter-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
-            z-index: -1;
         }
         
         .supporter-card:hover {
             transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .supporter-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .supporter-info {
+            padding: 1rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
         }
         
         .supporter-avatar {
@@ -783,17 +779,15 @@
         .supporter-name {
             font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.1rem; /* Reduced from 0.3rem */
+            margin-bottom: 0.3rem;
             color: white;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         
         .supporter-role {
             font-size: 0.75rem;
             opacity: 0.9;
-            margin-bottom: 0.1rem; /* Reduced from 0.3rem */
+            margin-bottom: 0.3rem;
             color: white;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         
         .supporter-department {
@@ -801,7 +795,6 @@
             opacity: 0.8;
             font-style: italic;
             color: white;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
         
         .toggle-supporters-btn {
@@ -1582,84 +1575,104 @@
                 
                 <div class="collapse mt-4" id="supporters-list">
                     <div class="supporters-grid">
-                        <div class="supporter-card" style="background-image: url('https://i.imghippo.com/files/Ixm6386PoI.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">1</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">RAJI ABDULSAMAD (PEOPLE)</div>
-                            <div class="supporter-role">SU President</div>
-                            <div class="supporter-department">(English Dpt.)</div>
+                            <img src="https://i.imghippo.com/files/Ixm6386PoI.jpg" alt="RAJI ABDULSAMAD" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">RAJI ABDULSAMAD (PEOPLE)</div>
+                                <div class="supporter-role">SU President</div>
+                                <div class="supporter-department">(English Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://i.imghippo.com/files/fju5384dB.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">2</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">AREMU FERANMI JOSEPH</div>
-                            <div class="supporter-role">SU General Secretary</div>
-                            <div class="supporter-department">(Civil and Environmental Engineering Dpt.)</div>
+                            <img src="https://i.imghippo.com/files/fju5384dB.jpg" alt="AREMU FERANMI JOSEPH" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">AREMU FERANMI JOSEPH</div>
+                                <div class="supporter-role">General Secretary</div>
+                                <div class="supporter-department">(Civil and Environmental Engineering Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://i.imghippo.com/files/UM1119Q.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">3</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">VICTOR OLAYINKA OTITODUN</div>
-                            <div class="supporter-role">SU Public Relations Officer</div>
-                            <div class="supporter-department">(Animal Production Dpt.)</div>
+                            <img src="https://i.imghippo.com/files/UM1119Q.jpg" alt="VICTOR OLAYINKA OTITODUN" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">VICTOR OLAYINKA OTITODUN</div>
+                                <div class="supporter-role">Public Relations Officer</div>
+                                <div class="supporter-department">(Animal Production Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://i.imghippo.com/files/MDiT1250UU.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">4</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">ABDULAZEEZ USMAN ISIAQ</div>
-                            <div class="supporter-role">SU Welfare Director</div>
-                            <div class="supporter-department">(Biochemistry Dpt.)</div>
+                            <img src="https://i.imghippo.com/files/MDiT1250UU.jpg" alt="ABDULAZEEZ USMAN ISIAQ" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">ABDULAZEEZ USMAN ISIAQ</div>
+                                <div class="supporter-role">Welfare Director</div>
+                                <div class="supporter-department">(Biochemistry Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://i.imghippo.com/files/hJWH7439SIE.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">5</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">KEWULERE MUSTAPHA ADETAYO</div>
-                            <div class="supporter-role">SU Welfare Director 2</div>
-                            <div class="supporter-department">(Politics and Governance Dpt.)</div>
+                            <img src="https://i.imghippo.com/files/hJWH7439SIE.jpg" alt="KEWULERE MUSTAPHA ADETAYO" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">KEWULERE MUSTAPHA ADETAYO</div>
+                                <div class="supporter-role">Welfare Director 2</div>
+                                <div class="supporter-department">(Politics and Governance Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter6/400/300.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">6</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">Full Name Six</div>
-                            <div class="supporter-role">Beta Tester</div>
-                            <div class="supporter-department">(Mathematics Dpt.)</div>
+                            <img src="https://picsum.photos/seed/supporter6/400/300.jpg" alt="Full Name Six" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">Full Name Six</div>
+                                <div class="supporter-role">Beta Tester</div>
+                                <div class="supporter-department">(Mathematics Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter7/400/300.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">7</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">Full Name Seven</div>
-                            <div class="supporter-role">Marketing Support</div>
-                            <div class="supporter-department">(Business Admin Dpt.)</div>
+                            <img src="https://picsum.photos/seed/supporter7/400/300.jpg" alt="Full Name Seven" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">Full Name Seven</div>
+                                <div class="supporter-role">Marketing Support</div>
+                                <div class="supporter-department">(Business Admin Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter8/400/300.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">8</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">Full Name Eight</div>
-                            <div class="supporter-role">Documentation</div>
-                            <div class="supporter-department">(Library Science Dpt.)</div>
+                            <img src="https://picsum.photos/seed/supporter8/400/300.jpg" alt="Full Name Eight" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">Full Name Eight</div>
+                                <div class="supporter-role">Documentation</div>
+                                <div class="supporter-department">(Library Science Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter9/400/300.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">9</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">Full Name Nine</div>
-                            <div class="supporter-role">Feedback Provider</div>
-                            <div class="supporter-department">(Psychology Dpt.)</div>
+                            <img src="https://picsum.photos/seed/supporter9/400/300.jpg" alt="Full Name Nine" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">Full Name Nine</div>
+                                <div class="supporter-role">Feedback Provider</div>
+                                <div class="supporter-department">(Psychology Dpt.)</div>
+                            </div>
                         </div>
                         
-                        <div class="supporter-card" style="background-image: url('https://picsum.photos/seed/supporter10/400/300.jpg');">
+                        <div class="supporter-card">
                             <div class="supporter-badge">10</div>
-                            <div class="supporter-avatar">FN</div>
-                            <div class="supporter-name">Full Name Ten</div>
-                            <div class="supporter-role">Evangelist</div>
-                            <div class="supporter-department">(Political Science Dpt.)</div>
+                            <img src="https://picsum.photos/seed/supporter10/400/300.jpg" alt="Full Name Ten" class="supporter-image">
+                            <div class="supporter-info">
+                                <div class="supporter-name">Full Name Ten</div>
+                                <div class="supporter-role">Evangelist</div>
+                                <div class="supporter-department">(Political Science Dpt.)</div>
+                            </div>
                         </div>
                     </div>
                 </div>
