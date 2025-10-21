@@ -1317,6 +1317,108 @@
             margin-bottom: 1rem;
         }
         
+        /* Testing Team Section Styles */
+        .testing-team-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testing-team-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(41, 128, 185, 0.05) 0%, rgba(41, 128, 185, 0) 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .testing-team-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testing-team-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .testing-team-title i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .testing-team-description {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .testing-team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .testing-team-member {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary-color);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testing-team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .testing-team-member-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .testing-team-member-role {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .toggle-testing-btn {
+            background: rgba(41, 128, 185, 0.1);
+            border: 2px solid rgba(41, 128, 185, 0.3);
+            color: var(--secondary-color);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toggle-testing-btn:hover {
+            background: rgba(41, 128, 185, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
         @media (max-width: 768px) {
             .sticky-header .nav-links {
                 display: none;
@@ -1356,6 +1458,10 @@
             
             .supporters-grid {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .testing-team-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1678,6 +1784,93 @@
                 </div>
             </div>
         </div>
+
+        <!-- Testing Team Section -->
+        <div class="section-card">
+            <h3 class="section-title">
+                <i class="bi bi-people-fill"></i> Testing Team
+            </h3>
+            <p>Special thanks to our dedicated testing team who helped test run the portal and bots:</p>
+            
+            <div class="testing-team-section">
+                <div class="testing-team-header">
+                    <h4 class="testing-team-title">
+                        <i class="bi bi-bug"></i> Portal & Bot Testing Team
+                    </h4>
+                    <p class="testing-team-description">
+                        These individuals have been instrumental in testing the functionality and usability of the KWASU Lost & Found Portal and its associated bots during the development phase.
+                    </p>
+                    
+                    <button class="btn toggle-testing-btn" type="button" data-bs-toggle="collapse" data-bs-target="#testing-team-list" aria-expanded="false" aria-controls="testing-team-list">
+                        <i class="bi bi-chevron-down"></i> <span id="toggle-testing-text">View Testing Team</span>
+                    </button>
+                </div>
+                
+                <div class="collapse mt-4" id="testing-team-list">
+                    <div class="testing-team-grid">
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">ABDULLAHI ADAMU</div>
+                            <div class="testing-team-member-role">Portal Testing Lead</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">FATIMA IBRAHIM</div>
+                            <div class="testing-team-member-role">WhatsApp Bot Tester</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">MUSA YUSUF</div>
+                            <div class="testing-team-member-role">Telegram Bot Tester</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">AISHA MUHAMMAD</div>
+                            <div class="testing-team-member-role">UI/UX Testing</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">IBRAHIM SULEIMAN</div>
+                            <div class="testing-team-member-role">Database Testing</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">MARYAM ABUBAKAR</div>
+                            <div class="testing-team-member-role">Mobile Compatibility Tester</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">AHMAD TANKO</div>
+                            <div class="testing-team-member-role">Security Testing</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">ZAINAB UMAR</div>
+                            <div class="testing-team-member-role">User Experience Tester</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">ABDULRAHMAN SALISU</div>
+                            <div class="testing-team-member-role">Performance Testing</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">KHADIJA ALIYU</div>
+                            <div class="testing-team-member-role">Accessibility Testing</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">USMAN BELLO</div>
+                            <div class="testing-team-member-role">Integration Testing</div>
+                        </div>
+                        
+                        <div class="testing-team-member">
+                            <div class="testing-team-member-name">HADIZA MUSA</div>
+                            <div class="testing-team-member-role">End-to-End Testing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -1873,6 +2066,8 @@
         const progressBar = document.querySelector('.progress-bar');
         const uploadPercentage = document.querySelector('.upload-percentage');
         const foundItemSubmitBtn = document.getElementById('found-item-submit-btn');
+        const toggleTestingText = document.getElementById('toggle-testing-text');
+        const testingTeamList = document.getElementById('testing-team-list');
         
         // Sticky header and scroll elements
         const stickyHeader = document.getElementById('stickyHeader');
@@ -1940,6 +2135,15 @@
         supportersList.addEventListener('hide.bs.collapse', function () {
             toggleText.textContent = 'View Supporters';
             supportersCounter.textContent = '0';
+        });
+        
+        // Toggle Testing Team List
+        testingTeamList.addEventListener('show.bs.collapse', function () {
+            toggleTestingText.textContent = 'Hide Testing Team';
+        });
+        
+        testingTeamList.addEventListener('hide.bs.collapse', function () {
+            toggleTestingText.textContent = 'View Testing Team';
         });
         
         // Show toast notification with action button
